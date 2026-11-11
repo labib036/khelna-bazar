@@ -2,6 +2,23 @@ import { query } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
+async function addProduct(formData) {
+  'use server';
+  const name = formData.get('name');
+  const price = formData.get('price');
+  const category = formData.get('category');
+  const image_url = formData.get('image_url');
+
+  await query(
+    'INSERT INTO products (name, price, category, image_url) VALUES ($1, $2, $3, $4)',
+    [name, price, category, image_url]
+  );
+  revalidatePath('/');
+  revalidatePath('/admin');
+}
+
 export default async function AdminPanel() {
   let products = [];
   try {
@@ -9,21 +26,6 @@ export default async function AdminPanel() {
     products = result.rows;
   } catch (err) {
     console.log('Database not connected yet.');
-  }
-
-  async function addProduct(formData) {
-    'use server';
-    const name = formData.get('name');
-    const price = formData.get('price');
-    const category = formData.get('category');
-    const image_url = formData.get('image_url');
-
-    await query(
-      'INSERT INTO products (name, price, category, image_url) VALUES ($1, $2, $3, $4)',
-      [name, price, category, image_url]
-    );
-    revalidatePath('/');
-    revalidatePath('/admin');
   }
 
   return (
