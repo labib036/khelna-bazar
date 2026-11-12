@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Khelna Bazar Red Brand Palette & Joyful Warm Accents */
   --brand: #DC012B;

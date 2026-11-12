@@ -50,7 +50,7 @@ export function MobileBottomNav() {
         {/* Center Cart Trigger */}
         <button
           onClick={toggleCart}
-          className="relative -top-3 flex flex-col items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#DC012B] to-[#7B5CFA] text-white shadow-lg active:scale-95 transition-transform cursor-pointer"
+          className="relative -top-3 flex flex-col items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#DC012B] to-[#F59E0B] text-white shadow-lg active:scale-95 transition-transform cursor-pointer"
           aria-label="View Cart"
         >
           <ShoppingBag className="w-5 h-5" />

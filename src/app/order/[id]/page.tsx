@@ -126,7 +126,7 @@ function OrderConfirmationContent() {
                 <h4
                   className={`text-xs sm:text-sm font-bold ${
                     step.current
-                      ? "text-[#DC012B] dark:text-[#5B8CFF]"
+                      ? "text-[#DC012B] dark:text-[#FF6B81]"
                       : step.done
                       ? "text-[#18191F] dark:text-white"
                       : "text-slate-400"

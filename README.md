@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # KHELNA BAZAR (খেলনা বাজার)
 > **The Fastest, Most Joyful Toy Shopping Experience in Bangladesh**  
 > *Full-Stack Toy E-Commerce Platform with Customer & Admin Dashboards &bull; Cash on Delivery (COD) Only*
@@ -155,6 +154,3 @@ You can customize the logo and brand name in **one single place**:
 
 ## 📜 License
 Crafted with pride for **KHELNA BAZAR**. All rights reserved.
-=======
-# Khelna Bazar 
->>>>>>> baf5b8bcd9159ad6f0955d4fe8b2d3f28e62a13b

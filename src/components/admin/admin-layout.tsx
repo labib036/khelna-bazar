@@ -23,6 +23,7 @@ import {
   Truck,
 } from "lucide-react";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -74,13 +75,16 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             KHELNA <span className="text-[#DC012B]">ADMIN</span>
           </span>
         </Link>
-        <Link
-          href="/"
-          className="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 text-[#F59E0B] hover:bg-slate-700 flex items-center gap-1"
-        >
-          <span>Store</span>
-          <ExternalLink className="w-3 h-3" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link
+            href="/"
+            className="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 text-[#F59E0B] hover:bg-slate-700 flex items-center gap-1"
+          >
+            <span>Store</span>
+            <ExternalLink className="w-3 h-3" />
+          </Link>
+        </div>
       </header>
 
       {/* Spacious Sidebar Navigation */}
@@ -167,6 +171,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
         {/* Bottom Navigation Actions */}
         <div className="pt-6 border-t border-slate-800 space-y-2.5">
+          <div className="flex items-center justify-between px-4 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300">
+            <span>Theme Mode</span>
+            <ThemeToggle showDropdown />
+          </div>
+
           <Link
             href="/"
             className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold bg-slate-900 text-slate-200 hover:text-white hover:bg-slate-800 transition-colors border border-slate-800"

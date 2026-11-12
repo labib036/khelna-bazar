@@ -9,6 +9,7 @@ import { useCartStore } from "@/lib/cart-store";
 import { useWishlistStore } from "@/lib/wishlist-store";
 import { useAuthStore } from "@/lib/auth-store";
 import { formatPrice } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   Search,
   Mic,
@@ -42,6 +43,7 @@ export function Header() {
   const { user, logout } = useAuthStore();
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAgeMenuOpen, setIsAgeMenuOpen] = useState(false);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
@@ -134,8 +136,63 @@ export function Header() {
                 placeholder="Search toys by name, age, STEM, Lego, Barbie..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 250)}
                 className="w-full h-11 pl-5 pr-24 rounded-full border-2 border-[#DC012B] bg-[#FFF8F8] dark:bg-[#242531] text-sm text-[#18191F] dark:text-white placeholder:text-slate-400 focus:outline-none focus:bg-white dark:focus:bg-[#1B1C24] transition-colors"
               />
+
+              {/* Instant Search Suggestions Dropdown */}
+              {isSearchFocused && (
+                <div className="absolute top-13 left-0 right-0 bg-white dark:bg-[#1B1C24] rounded-2xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-xl p-3 z-50 text-xs animate-in fade-in slide-in-from-top-1">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 dark:border-slate-800 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                    <span>Popular Quick Searches</span>
+                    <span className="text-[#DC012B] font-bold">100% Cash on Delivery</span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pb-2.5">
+                    {[
+                      { label: "🔥 Flash Deals", href: "/deals" },
+                      { label: "🧱 Building Blocks", href: "/c/building-blocks" },
+                      { label: "🚀 STEM & Science", href: "/c/stem-science" },
+                      { label: "🏎️ RC Vehicles", href: "/c/rc-vehicles" },
+                      { label: "🧸 Montessori", href: "/c/baby-toddler" },
+                      { label: "🎁 Gift Quiz", href: "/gift-finder" },
+                    ].map((tag) => (
+                      <Link
+                        key={tag.href}
+                        href={tag.href}
+                        className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-[#DC012B] hover:text-white font-medium transition-colors"
+                      >
+                        {tag.label}
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="space-y-1 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] font-bold text-slate-400 block px-1">Trending Toys</span>
+                    {[
+                      { name: "Titan Rex Roaring Jurassic Dinosaur", price: "৳2,310", slug: "titan-rex-dinosaur" },
+                      { name: "Medieval Fortress Siege Dragon Citadel", price: "৳4,800", slug: "medieval-dragon-citadel" },
+                      { name: "Magnetic Castle Architect 3D Tiles (102 Pcs)", price: "৳2,970", slug: "magnetic-castle-tiles" },
+                      { name: "Solar Exploration Mars Coding Rover", price: "৳3,510", slug: "solar-mars-rover" },
+                    ].map((toy) => (
+                      <Link
+                        key={toy.slug}
+                        href={`/p/${toy.slug}`}
+                        className="flex items-center justify-between p-2 rounded-xl hover:bg-rose-50 dark:hover:bg-[#242531] group transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#DC012B]" />
+                          <span className="text-slate-700 dark:text-slate-200 group-hover:text-[#DC012B] font-medium truncate max-w-sm">
+                            {toy.name}
+                          </span>
+                        </div>
+                        <span className="font-bold text-[#DC012B] text-xs shrink-0">{toy.price}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Voice Search Button */}
               <button
@@ -177,6 +234,9 @@ export function Header() {
                 </span>
               )}
             </Link>
+
+            {/* Theme Mode Toggle (System/Dark/Light) */}
+            <ThemeToggle showDropdown />
 
             {/* User Account / Sign In / Create Account */}
             {mounted && !user ? (
@@ -499,6 +559,11 @@ export function Header() {
                 <ShieldCheck className="w-4 h-4 text-[#2EC4B6]" />
                 <span>Toy Safety & Certifications</span>
               </Link>
+
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Appearance Mode</span>
+                <ThemeToggle showDropdown />
+              </div>
             </div>
           </div>
         </div>

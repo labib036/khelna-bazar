@@ -329,7 +329,7 @@ export default function CartPage() {
 
               <div className="flex justify-between text-base font-black text-[#18191F] dark:text-white pt-3 border-t border-[#E8E2DE] dark:border-[#2E303E]">
                 <span>Total Amount Due</span>
-                <span className="text-xl text-[#DC012B] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
+                <span className="text-xl text-[#DC012B] dark:text-[#FF6B81]">{formatPrice(total)}</span>
               </div>
             </div>
 

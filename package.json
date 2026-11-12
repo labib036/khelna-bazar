@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-<<<<<<< HEAD
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
@@ -20,7 +19,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^1.16.0",
-    "next": "15.2.1",
+    "next": "^16.4.6",
     "next-auth": "5.0.0-beta.32",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -46,18 +45,3 @@
     "vitest": "^3.0.7"
   }
 }
-=======
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "next": "14.2.3",
-    "react": "^18",
-    "react-dom": "^18",
-    "pg": "^8.11.3",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3"
-  }
-}
->>>>>>> baf5b8bcd9159ad6f0955d4fe8b2d3f28e62a13b
