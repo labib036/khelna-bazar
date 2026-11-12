@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <defs>
+    <linearGradient id="kbBrandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E5BFF" />
+      <stop offset="100%" stop-color="#7B5CFA" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFC93C" />
+      <stop offset="100%" stop-color="#FF9E00" />
+    </linearGradient>
+  </defs>
+
+  <!-- Playful Toy Blocks Icon -->
+  <g transform="translate(10, 12)">
+    <!-- Base block blue -->
+    <rect x="0" y="24" width="30" height="30" rx="8" fill="url(#kbBrandGrad)" />
+    <text x="15" y="45" font-family="system-ui, sans-serif" font-size="18" font-weight="900" fill="#FFFFFF" text-anchor="middle">K</text>
+    
+    <!-- Top block yellow -->
+    <rect x="18" y="0" width="30" height="30" rx="8" fill="url(#sunGrad)" />
+    <text x="33" y="21" font-family="system-ui, sans-serif" font-size="18" font-weight="900" fill="#14213D" text-anchor="middle">B</text>
+
+    <!-- Star accent -->
+    <circle cx="48" cy="42" r="5" fill="#FF6B6B" />
+  </g>
+
+  <!-- Wordmark Text -->
+  <text x="76" y="38" font-family="'Baloo 2', 'Fredoka', system-ui, sans-serif" font-size="28" font-weight="800" fill="#14213D" letter-spacing="-0.5">
+    KHELNA
+  </text>
+  <text x="190" y="38" font-family="'Baloo 2', 'Fredoka', system-ui, sans-serif" font-size="28" font-weight="800" fill="#1E5BFF" letter-spacing="-0.5">
+    BAZAR
+  </text>
+  <text x="78" y="56" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#FF6B6B" letter-spacing="3.5">
+    TOYS &bull; JOY &bull; DISCOVERY
+  </text>
+</svg>

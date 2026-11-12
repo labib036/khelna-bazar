@@ -1,0 +1,629 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// -----------------------------------------------------------------------------
+// USER & AUTHENTICATION
+// -----------------------------------------------------------------------------
+
+enum Role {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  name             String?
+  passwordHash     String?
+  role             Role      @default(CUSTOMER)
+  emailVerified    DateTime?
+  image            String?
+  phone            String?
+  birthday         DateTime?
+  marketingConsent Boolean   @default(false)
+  totpSecret       String?
+  loyaltyPoints    Int       @default(100) // 100 welcome bonus points
+  tier             String    @default("BRONZE") // BRONZE, SILVER, GOLD
+  blocked          Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  // Relations
+  addresses        Address[]
+  orders           Order[]
+  reviews          Review[]
+  wishlists        Wishlist[]
+  cart             Cart?
+  loyaltyHistory   LoyaltyTransaction[]
+  questions        Question[]
+  auditLogs        AuditLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Address {
+  id                String   @id @default(cuid())
+  userId            String
+  label             String   @default("Home") // Home, Office, Other
+  fullName          String
+  phone             String
+  line1             String
+  line2             String?
+  city              String   // e.g. Banani, Gulshan, Dhanmondi
+  state             String   // District / Division e.g. Dhaka, Chittagong
+  postalCode        String?
+  country           String   @default("Bangladesh")
+  isDefaultShipping Boolean  @default(false)
+  isDefaultBilling  Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// -----------------------------------------------------------------------------
+// CATALOG: CATEGORIES, BRANDS, PRODUCTS
+// -----------------------------------------------------------------------------
+
+model Category {
+  id             String     @id @default(cuid())
+  name           String
+  slug           String     @unique
+  parentId       String?
+  image          String?
+  banner         String?
+  description    String?
+  sortOrder      Int        @default(0)
+  isFeatured     Boolean    @default(false)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  deletedAt      DateTime?
+
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  products Product[]  @relation("ProductCategories")
+
+  @@index([slug])
+  @@index([parentId])
+  @@index([isFeatured])
+}
+
+model Brand {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  logo        String?
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products Product[]
+
+  @@index([slug])
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model Product {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  brandId         String?
+  shortDesc       String?
+  descriptionHtml String
+  status          ProductStatus @default(ACTIVE)
+  
+  // Pricing in BDT (stored as integer Taka)
+  basePrice       Int
+  comparePrice    Int?
+  costPrice       Int?
+  taxClass        String        @default("STANDARD")
+  
+  // Toy Safety & Developmental Specs
+  minAgeMonths    Int           @default(36) // e.g. 36 months (3 years)
+  maxAgeMonths    Int           @default(144) // e.g. 144 months (12 years)
+  material        String?       // e.g. BPA-Free Plastic, Solid Wood, Organic Cotton
+  dimensions      String?       // e.g. 25 x 15 x 10 cm
+  weightGrams     Int?          // e.g. 450
+  batteryInfo     String?       // e.g. 2 x AA Required (Not Included)
+  chokingHazard   Boolean       @default(false)
+  chokingWarning  String?       @default("WARNING: CHOKING HAZARD - Small parts. Not for children under 3 years.")
+  certifications  String[]      @default(["ASTM F963", "EN71", "CE Certified"])
+  
+  // Metrics & Flags
+  ratingAvg       Float         @default(5.0)
+  ratingCount     Int           @default(0)
+  soldCount       Int           @default(0)
+  isFeatured      Boolean       @default(false)
+  isDeal          Boolean       @default(false)
+  
+  // SEO
+  seoTitle        String?
+  seoDescription  String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deletedAt       DateTime?
+
+  // Relations
+  brand           Brand?             @relation(fields: [brandId], references: [id])
+  categories      Category[]         @relation("ProductCategories")
+  variants        ProductVariant[]
+  images          ProductImage[]
+  attributes      ProductAttribute[]
+  reviews         Review[]
+  questions       Question[]
+  flashDeals      FlashDeal[]
+  wishlistItems   WishlistItem[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([brandId])
+  @@index([isFeatured])
+  @@index([isDeal])
+  @@index([basePrice])
+  @@index([soldCount])
+}
+
+model ProductVariant {
+  id                String   @id @default(cuid())
+  productId         String
+  sku               String   @unique
+  title             String   // e.g. "Red / Small" or "Standard Pack"
+  optionValues      Json?    // e.g. { "Color": "Blue", "Size": "Large" }
+  price             Int      // Price in Taka
+  comparePrice      Int?
+  stock             Int      @default(10)
+  lowStockThreshold Int      @default(5)
+  barcode           String?
+  imageUrl          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  product         Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartItems       CartItem[]
+  stockMovements  StockMovement[]
+
+  @@index([productId])
+  @@index([sku])
+  @@index([stock])
+}
+
+model ProductImage {
+  id           String   @id @default(cuid())
+  productId    String
+  url          String
+  alt          String   @default("Khelna Bazar Toy Image")
+  sortOrder    Int      @default(0)
+  isPrimary    Boolean  @default(false)
+  blurDataUrl  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([sortOrder])
+}
+
+model ProductAttribute {
+  id        String   @id @default(cuid())
+  productId String
+  name      String   // e.g. "Skill Development", "Theme", "Battery Included"
+  value     String   // e.g. "STEM / Logic", "Space & Galaxy", "Yes"
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([name, value])
+}
+
+// -----------------------------------------------------------------------------
+// CART & WISHLIST
+// -----------------------------------------------------------------------------
+
+model Cart {
+  id           String     @id @default(cuid())
+  userId       String?    @unique
+  sessionToken String?    @unique
+  couponCode   String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  expiresAt    DateTime?
+
+  user  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+
+  @@index([sessionToken])
+}
+
+model CartItem {
+  id          String   @id @default(cuid())
+  cartId      String
+  variantId   String
+  quantity    Int      @default(1)
+  giftWrap    Boolean  @default(false)
+  giftMessage String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cart    Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, variantId])
+  @@index([cartId])
+}
+
+model Wishlist {
+  id         String         @id @default(cuid())
+  userId     String
+  name       String         @default("My Toy Wishlist")
+  isPublic   Boolean        @default(false)
+  shareToken String         @unique @default(cuid())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items WishlistItem[]
+
+  @@index([userId])
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  wishlistId String
+  productId  String
+  note       String?
+  priceAtAdd Int
+  createdAt  DateTime @default(now())
+
+  wishlist Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([wishlistId, productId])
+  @@index([wishlistId])
+}
+
+// -----------------------------------------------------------------------------
+// ORDERS & CASH ON DELIVERY (COD) LIFECYCLE
+// -----------------------------------------------------------------------------
+
+enum OrderFulfillmentStatus {
+  PENDING_CONFIRMATION // Order placed by customer, pending phone or admin confirmation
+  CONFIRMED            // Order verified and confirmed by store staff
+  PROCESSING           // Items being picked from warehouse
+  PACKED               // Box packed and labeled for courier
+  SHIPPED              // Handed over to courier (e.g. Steadfast, Pathao, RedX)
+  OUT_FOR_DELIVERY     // Delivery agent currently carrying package to customer
+  DELIVERED            // Successfully delivered to customer
+  CANCELLED            // Cancelled by customer or staff
+  RETURNED             // Customer refused delivery or returned package
+}
+
+enum CodCollectionStatus {
+  UNCOLLECTED          // Cash not yet received from courier/customer
+  COLLECTED            // Full cash collected and verified
+  DISCREPANCY          // Courier collected partial amount or discrepancy noted
+  REFUNDED             // Money refunded to customer on verified return
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+}
+
+model Order {
+  id                 String                 @id @default(cuid())
+  orderNumber        String                 @unique // e.g. KB-100245
+  userId             String?
+  customerName       String
+  customerEmail      String
+  customerPhone      String
+  
+  // Statuses
+  status             OrderFulfillmentStatus @default(PENDING_CONFIRMATION)
+  codStatus          CodCollectionStatus    @default(UNCOLLECTED)
+  paymentMethod      PaymentMethod          @default(CASH_ON_DELIVERY)
+  
+  // Cash on Delivery Audit Details
+  codCollectedAmount Int?
+  codCollectionDate  DateTime?
+  codDiscrepancyNote String?
+
+  // Financial Breakdown (in Taka)
+  subtotal           Int
+  discount           Int                    @default(0)
+  shippingFee        Int                    @default(60)
+  giftWrapFee        Int                    @default(0)
+  tax                Int                    @default(0)
+  total              Int
+  currency           String                 @default("BDT")
+
+  // Delivery Details (Snapshots)
+  shippingAddress    Json
+  deliveryZone       String                 @default("Inside Dhaka")
+  shippingMethod     String                 @default("Standard Delivery")
+  trackingNumber     String?
+  carrier            String?                @default("Steadfast Courier")
+  
+  // Customer & Admin Notes
+  customerNotes      String?
+  adminNotes         String?
+  idempotencyKey     String?                @unique
+  placedAt           DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  // Relations
+  user           User?           @relation(fields: [userId], references: [id])
+  items          OrderItem[]
+  events         OrderEvent[]
+  returnRequests ReturnRequest[]
+
+  @@index([orderNumber])
+  @@index([status])
+  @@index([codStatus])
+  @@index([customerPhone])
+  @@index([placedAt])
+  @@index([userId])
+}
+
+model OrderItem {
+  id            String   @id @default(cuid())
+  orderId       String
+  productId     String?
+  variantId     String?
+  nameSnapshot  String
+  skuSnapshot   String
+  imageSnapshot String?
+  unitPrice     Int
+  quantity      Int
+  giftWrap      Boolean  @default(false)
+  lineTotal     Int
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  type      String   // e.g. "STATUS_CHANGE", "NOTE_ADDED", "COD_COLLECTED"
+  message   String
+  actorName String?  @default("System")
+  createdAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+// -----------------------------------------------------------------------------
+// PROMOTIONS, COUPONS & DEALS
+// -----------------------------------------------------------------------------
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
+  FREE_SHIPPING
+}
+
+model Coupon {
+  id           String     @id @default(cuid())
+  code         String     @unique
+  type         CouponType @default(PERCENTAGE)
+  value        Int        // e.g. 10 for 10%, or 200 for ৳200 off
+  minSpend     Int        @default(500)
+  maxDiscount  Int?       // e.g. max ৳500 for percentage
+  usageLimit   Int        @default(1000)
+  usageCount   Int        @default(0)
+  perUserLimit Int        @default(1)
+  startsAt     DateTime   @default(now())
+  endsAt       DateTime
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  @@index([code])
+  @@index([active])
+}
+
+model FlashDeal {
+  id              String   @id @default(cuid())
+  productId       String
+  discountPercent Int
+  startsAt        DateTime @default(now())
+  endsAt          DateTime
+  quantityCap     Int      @default(50)
+  sold            Int      @default(0)
+  active          Boolean  @default(true)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([active])
+}
+
+// -----------------------------------------------------------------------------
+// REVIEWS, Q&A & COMMUNITY
+// -----------------------------------------------------------------------------
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Review {
+  id               String       @id @default(cuid())
+  productId        String
+  userId           String
+  rating           Int          // 1 to 5
+  title            String?
+  body             String
+  images           String[]     @default([])
+  status           ReviewStatus @default(APPROVED)
+  helpfulCount     Int          @default(0)
+  verifiedPurchase Boolean      @default(true)
+  adminReply       String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([userId])
+  @@index([status])
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  productId String
+  userId    String
+  text      String
+  answers   Json?    // Array of { answer: string, author: string, isOfficial: boolean, date: string }
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ReturnRequest {
+  id           String   @id @default(cuid())
+  orderId      String
+  reason       String
+  details      String?
+  items        Json     // Snapshot of returned items & qty
+  status       String   @default("REQUESTED") // REQUESTED, APPROVED, RECEIVED, REJECTED, REFUNDED
+  refundAmount Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+// -----------------------------------------------------------------------------
+// LOYALTY, INVENTORY MOVEMENTS, MARKETING & CMS
+// -----------------------------------------------------------------------------
+
+model LoyaltyTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  points    Int      // Positive for earned, negative for redeemed
+  reason    String   // e.g. "Order #KB-100245", "Review Bonus", "Sign Up Bonus"
+  orderId   String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model StockMovement {
+  id        String   @id @default(cuid())
+  variantId String
+  delta     Int      // e.g. +50 for restock, -1 for purchase, +1 for return
+  reason    String   // RESTOCK, ORDER_FULFILLMENT, DAMAGE, RETURN_RESTOCK, AUDIT
+  actorName String   @default("System")
+  orderId   String?
+  createdAt DateTime @default(now())
+
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([variantId])
+}
+
+model Banner {
+  id           String    @id @default(cuid())
+  placement    String    @default("HERO") // HERO, PROMO_SIDE, CATEGORY_STRIP
+  desktopImage String
+  mobileImage  String?
+  heading      String
+  text         String?
+  ctaLabel     String?   @default("Shop Now")
+  ctaUrl       String    @default("/c/all")
+  sortOrder    Int       @default(0)
+  active       Boolean   @default(true)
+  startsAt     DateTime  @default(now())
+  endsAt       DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([placement, active])
+}
+
+model Announcement {
+  id        String    @id @default(cuid())
+  text      String
+  url       String?
+  active    Boolean   @default(true)
+  startsAt  DateTime  @default(now())
+  endsAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Page {
+  id             String    @id @default(cuid())
+  slug           String    @unique // e.g. "about", "terms", "toy-safety", "shipping"
+  title          String
+  contentHtml    String
+  published      Boolean   @default(true)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorEmail String?
+  action     String   // e.g. "PRODUCT_CREATE", "ORDER_CONFIRM", "COD_COLLECT"
+  entityType String   // e.g. "Order", "Product", "Coupon"
+  entityId   String?
+  before     Json?
+  after      Json?
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
