@@ -25,7 +25,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#161D33]/95 backdrop-blur-md border-t border-[#E3E8F2] dark:border-[#263050] px-4 py-2"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#161D33]/95 backdrop-blur-md border-t border-[#E8E2DE] dark:border-[#263050] px-4 py-2"
     >
       <div className="flex items-center justify-around">
         {navItems.slice(0, 2).map((item) => {
@@ -37,8 +37,8 @@ export function MobileBottomNav() {
               href={item.href}
               className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
                 isActive
-                  ? "text-[#1E5BFF] font-bold"
-                  : "text-slate-500 dark:text-slate-400 hover:text-[#1E5BFF]"
+                  ? "text-[#DC012B] font-bold"
+                  : "text-slate-500 dark:text-slate-400 hover:text-[#DC012B]"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -50,12 +50,12 @@ export function MobileBottomNav() {
         {/* Center Cart Trigger */}
         <button
           onClick={toggleCart}
-          className="relative -top-3 flex flex-col items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#1E5BFF] to-[#7B5CFA] text-white shadow-lg active:scale-95 transition-transform cursor-pointer"
+          className="relative -top-3 flex flex-col items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#DC012B] to-[#7B5CFA] text-white shadow-lg active:scale-95 transition-transform cursor-pointer"
           aria-label="View Cart"
         >
           <ShoppingBag className="w-5 h-5" />
           {count > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#FFC93C] text-[#14213D] text-[10px] font-black flex items-center justify-center shadow-xs">
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#FFC93C] text-[#18191F] text-[10px] font-black flex items-center justify-center shadow-xs">
               {count}
             </span>
           )}
@@ -70,8 +70,8 @@ export function MobileBottomNav() {
               href={item.href}
               className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
                 isActive
-                  ? "text-[#1E5BFF] font-bold"
-                  : "text-slate-500 dark:text-slate-400 hover:text-[#1E5BFF]"
+                  ? "text-[#DC012B] font-bold"
+                  : "text-slate-500 dark:text-slate-400 hover:text-[#DC012B]"
               }`}
             >
               <Icon className="w-5 h-5" />

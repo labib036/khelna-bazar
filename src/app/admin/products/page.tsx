@@ -109,7 +109,7 @@ export default function AdminProductsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
               Toy Product Catalog ({products.length})
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -129,43 +129,43 @@ export default function AdminProductsPage() {
         </div>
 
         {/* Search */}
-        <div className="bg-white dark:bg-[#161D33] p-4 rounded-2xl border border-[#E3E8F2] dark:border-[#263050]">
+        <div className="bg-white dark:bg-[#1B1C24] p-5 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
           <div className="relative w-full sm:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search products by title or department..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-9 pl-9 pr-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1E5BFF]"
+              className="w-full h-10 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-[#DC012B] bg-[#FAF8F6] dark:bg-[#242531]"
             />
           </div>
         </div>
 
         {/* Products Table */}
-        <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] overflow-hidden shadow-xs">
+        <div className="bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] overflow-hidden shadow-sm">
           <table className="w-full text-xs text-left">
             <thead>
-              <tr className="border-b border-[#E3E8F2] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-slate-400 font-bold uppercase tracking-wider">
-                <th className="p-4">Toy Image &amp; Title</th>
-                <th className="p-4">Category</th>
-                <th className="p-4">Age Range</th>
-                <th className="p-4">Price (৳)</th>
-                <th className="p-4">Stock</th>
-                <th className="p-4">Choking Warning</th>
-                <th className="p-4 text-right">Actions</th>
+              <tr className="border-b border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#242531] text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <th className="p-5">Toy Image &amp; Title</th>
+                <th className="p-5">Category</th>
+                <th className="p-5">Age Range</th>
+                <th className="p-5">Price (৳)</th>
+                <th className="p-5">Stock</th>
+                <th className="p-5">Choking Warning</th>
+                <th className="p-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {filtered.map((prod) => (
-                <tr key={prod.id} className="hover:bg-slate-50 dark:hover:bg-[#1E2742] transition-colors">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
+                <tr key={prod.id} className="hover:bg-[#FAF8F6] dark:hover:bg-[#242531] transition-colors">
+                  <td className="p-5">
+                    <div className="flex items-center gap-3.5">
+                      <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
                         <Image src={prod.images[0]} alt={prod.name} fill className="object-cover" sizes="48px" />
                       </div>
                       <div className="min-w-0 max-w-xs">
-                        <span className="font-bold text-[#14213D] dark:text-white line-clamp-1 block">
+                        <span className="font-bold text-[#18191F] dark:text-white line-clamp-1 block text-xs">
                           {prod.name}
                         </span>
                         <span className="text-[10px] text-slate-400 font-mono">
@@ -175,15 +175,15 @@ export default function AdminProductsPage() {
                     </div>
                   </td>
 
-                  <td className="p-4 text-slate-600 dark:text-slate-300 font-medium">
+                  <td className="p-5 text-slate-600 dark:text-slate-300 font-medium">
                     {prod.category}
                   </td>
 
-                  <td className="p-4 font-semibold text-[#14213D] dark:text-white">
+                  <td className="p-4 font-semibold text-[#18191F] dark:text-white">
                     {Math.floor(prod.minAgeMonths / 12)}+ Yrs
                   </td>
 
-                  <td className="p-4 font-black text-sm text-[#1E5BFF]">
+                  <td className="p-4 font-black text-sm text-[#DC012B]">
                     {formatPrice(prod.basePrice)}
                   </td>
 
@@ -236,7 +236,7 @@ export default function AdminProductsPage() {
               className="relative w-full max-w-lg bg-white dark:bg-[#161D33] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 z-10 max-h-[90vh] overflow-y-auto"
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-                <h3 className="font-heading font-black text-lg text-[#14213D] dark:text-white">
+                <h3 className="font-heading font-black text-lg text-[#18191F] dark:text-white">
                   Add New Toy Product
                 </h3>
                 <button onClick={() => setShowAddModal(false)} className="p-1.5 text-slate-400">

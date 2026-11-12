@@ -51,15 +51,15 @@ export function AnnouncementBar() {
   };
 
   return (
-    <aside aria-label="Store Announcement" className="relative bg-[#14213D] text-white text-xs py-2 px-4 select-none z-50">
+    <aside aria-label="Store Announcement" className="relative bg-[#18191F] text-white text-xs py-2 px-4 select-none z-50 border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex-1 flex items-center justify-center gap-2 text-center overflow-hidden">
-          <Sparkles className="w-3.5 h-3.5 text-[#FFC93C] shrink-0 animate-pulse" />
+          <Sparkles className="w-3.5 h-3.5 text-[#F59E0B] shrink-0 animate-pulse" />
           <p className="truncate font-medium text-slate-100">{current.text}</p>
           {current.link && (
             <Link
               href={current.link}
-              className="hidden sm:inline-flex items-center gap-1 font-bold text-[#FFC93C] hover:underline ml-1 shrink-0"
+              className="hidden sm:inline-flex items-center gap-1 font-bold text-[#F59E0B] hover:underline ml-1 shrink-0"
             >
               <span>{current.cta}</span>
               <ChevronRight className="w-3 h-3" />

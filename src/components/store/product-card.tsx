@@ -85,7 +85,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
   return (
     <div
-      className="group relative bg-white dark:bg-[#161D33] rounded-2xl border border-[#E3E8F2] dark:border-[#263050] overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+      className="group relative bg-white dark:bg-[#161D33] rounded-2xl border border-[#E8E2DE] dark:border-[#263050] overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -126,12 +126,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           onClick={handleToggleWishlist}
           className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150 z-10 shadow-xs cursor-pointer ${
             inWishlist
-              ? "bg-[#FFF0F0] text-[#FF6B6B]"
-              : "bg-white/90 text-slate-400 hover:text-[#FF6B6B] hover:scale-110"
+              ? "bg-[#FFF0F2] text-[#DC012B]"
+              : "bg-white/90 text-slate-400 hover:text-[#DC012B] hover:scale-110"
           }`}
           aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
-          <Heart className={`w-4 h-4 ${inWishlist ? "fill-[#FF6B6B]" : ""}`} />
+          <Heart className={`w-4 h-4 ${inWishlist ? "fill-[#DC012B]" : ""}`} />
         </button>
       </div>
 
@@ -140,7 +140,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <div>
           {/* Brand & Age Hint */}
           <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-            <span className="font-bold uppercase tracking-wider text-[#7B5CFA] truncate">
+            <span className="font-bold uppercase tracking-wider text-[#F59E0B] truncate">
               {product.brand}
             </span>
             <span className="shrink-0 font-medium bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[10px]">
@@ -149,15 +149,15 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </div>
 
           {/* Title */}
-          <Link href={`/p/${product.slug}`} className="block group-hover:text-[#1E5BFF] transition-colors">
-            <h3 className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white line-clamp-2 leading-snug">
+          <Link href={`/p/${product.slug}`} className="block group-hover:text-[#DC012B] transition-colors">
+            <h3 className="text-xs sm:text-sm font-bold text-[#18191F] dark:text-white line-clamp-2 leading-snug">
               {product.name}
             </h3>
           </Link>
 
           {/* Rating */}
           <div className="flex items-center gap-1 mt-1.5 text-xs">
-            <div className="flex items-center text-[#FFC93C]">
+            <div className="flex items-center text-[#F59E0B]">
               <Star className="w-3.5 h-3.5 fill-current" />
             </div>
             <span className="font-bold text-slate-700 dark:text-slate-200 text-xs">
@@ -168,10 +168,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         </div>
 
         {/* Pricing & Add to Cart */}
-        <div className="mt-3 pt-2.5 border-t border-[#E3E8F2] dark:border-[#263050]">
+        <div className="mt-3 pt-2.5 border-t border-[#E8E2DE] dark:border-[#2E303E]">
           {/* Price */}
           <div className="flex items-baseline gap-1.5 mb-2.5">
-            <span className="text-base sm:text-lg font-black text-[#14213D] dark:text-white">
+            <span className="text-base sm:text-lg font-black text-[#18191F] dark:text-white">
               {formatPrice(product.basePrice)}
             </span>
             {product.comparePrice && product.comparePrice > product.basePrice && (
@@ -189,18 +189,18 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
           {/* Add to Cart Button or Stepper */}
           {cartItem ? (
-            <div className="flex items-center justify-between w-full h-9 rounded-full bg-[#EBF1FF] dark:bg-[#1E2D5A] border border-[#1E5BFF] px-2">
+            <div className="flex items-center justify-between w-full h-9 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] border border-[#DC012B] px-2">
               <button
                 onClick={(e) => {
                   e.preventDefault();
                   updateQuantity(cartItem.id, -1);
                 }}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-[#1E5BFF] hover:bg-white dark:hover:bg-[#161D33] transition-colors"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-[#DC012B] hover:bg-white dark:hover:bg-[#1B1C24] transition-colors"
                 aria-label="Decrease quantity"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="text-xs font-bold text-[#1E5BFF] dark:text-white">
+              <span className="text-xs font-bold text-[#DC012B] dark:text-white">
                 {cartItem.quantity} in Basket
               </span>
               <button
@@ -208,7 +208,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                   e.preventDefault();
                   updateQuantity(cartItem.id, 1);
                 }}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-[#1E5BFF] hover:bg-white dark:hover:bg-[#161D33] transition-colors"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-[#DC012B] hover:bg-white dark:hover:bg-[#1B1C24] transition-colors"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-3.5 h-3.5" />

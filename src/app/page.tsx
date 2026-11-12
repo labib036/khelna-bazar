@@ -44,28 +44,28 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Main Hero Banner (Col 1-2) */}
-          <div className="lg:col-span-2 relative min-h-[380px] sm:min-h-[460px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#1E5BFF] via-[#356EFF] to-[#7B5CFA] text-white p-6 sm:p-12 flex flex-col justify-between shadow-lg">
+          <div className="lg:col-span-2 relative min-h-[380px] sm:min-h-[460px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#DC012B] via-[#E63946] to-[#F59E0B] text-white p-6 sm:p-12 flex flex-col justify-between shadow-lg">
             <div className="relative z-10 max-w-xl space-y-4">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold tracking-wide uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-[#FFC93C]" />
-                Bangladesh's Trusted Toy Boutique
+                <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                Bangladesh's Trusted Online Toy Store
               </span>
               <h1 className="font-heading text-3xl sm:text-5xl font-black leading-tight tracking-tight">
                 Where Pure Joy &amp; Curiosity Begin!
               </h1>
-              <p className="text-sm sm:text-base text-blue-100 max-w-md">
+              <p className="text-sm sm:text-base text-rose-50 max-w-md">
                 Certified safe toys, building blocks, STEM robotics kits, and snuggly plushies. Pay easily with{" "}
-                <strong className="text-[#FFC93C]">Cash on Delivery</strong> nationwide.
+                <strong className="text-[#FBBF24]">Cash on Delivery</strong> nationwide.
               </p>
               <div className="pt-2 flex flex-wrap gap-3">
                 <Link href="/c/building-blocks">
-                  <Button variant="sun" size="lg" className="shadow-md">
+                  <Button variant="sun" size="lg" className="shadow-md bg-[#F59E0B] hover:bg-[#D97706] text-slate-900 font-extrabold">
                     <span>Shop Building Sets</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
                 <Link href="/gift-finder">
-                  <Button variant="secondary" size="lg" className="bg-white/90 text-[#14213D] hover:bg-white">
+                  <Button variant="secondary" size="lg" className="bg-white/95 text-[#18191F] hover:bg-white font-bold">
                     <span>Gift Finder Quiz</span>
                   </Button>
                 </Link>
@@ -73,9 +73,9 @@ export default async function HomePage() {
             </div>
 
             {/* Subtle Delivery Badge in Hero */}
-            <div className="relative z-10 flex items-center gap-2 pt-6 text-xs text-blue-200">
-              <Truck className="w-4 h-4 text-[#2EC4B6]" />
-              <span>Fast 24–48 hour delivery inside Dhaka &bull; Nationwide COD</span>
+            <div className="relative z-10 flex items-center gap-2 pt-6 text-xs text-rose-100">
+              <Truck className="w-4 h-4 text-[#10B981]" />
+              <span>Fast 24–48 hour delivery inside Dhaka &bull; Nationwide Cash on Delivery</span>
             </div>
 
             {/* Background Decorative Graphic */}
@@ -129,7 +129,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
               Shop by Child's Age
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -143,12 +143,12 @@ export default async function HomePage() {
             <Link
               key={item.query}
               href={`/c/all?age=${item.query}`}
-              className="group p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col items-center text-center cursor-pointer"
+              className="group p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col items-center text-center cursor-pointer"
             >
               <div className="w-14 h-14 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 {item.emoji}
               </div>
-              <h3 className="font-heading font-bold text-xs sm:text-sm text-[#14213D] dark:text-white mt-3">
+              <h3 className="font-heading font-bold text-xs sm:text-sm text-[#18191F] dark:text-white mt-3">
                 {item.label}
               </h3>
               <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">{item.sub}</p>
@@ -168,7 +168,7 @@ export default async function HomePage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-heading text-xl sm:text-2xl font-black text-[#14213D] dark:text-white">
+                    <h2 className="font-heading text-xl sm:text-2xl font-black text-[#18191F] dark:text-white">
                       Today's Flash Deals
                     </h2>
                     <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#FF6B6B] text-white">
@@ -202,7 +202,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
               Explore Popular Categories
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -211,7 +211,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/c/all"
-            className="text-xs sm:text-sm font-bold text-[#1E5BFF] hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-bold text-[#DC012B] hover:underline flex items-center gap-1"
           >
             <span>View All</span>
             <ChevronRight className="w-4 h-4" />
@@ -223,7 +223,7 @@ export default async function HomePage() {
             <Link
               key={cat.slug}
               href={`/c/${cat.slug}`}
-              className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all hover:shadow-md flex flex-col"
+              className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all hover:shadow-md flex flex-col"
             >
               <div className="relative aspect-4/3 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 <Image
@@ -235,7 +235,7 @@ export default async function HomePage() {
                 />
               </div>
               <div className="p-3 text-center">
-                <h3 className="font-heading font-bold text-xs sm:text-sm text-[#14213D] dark:text-white line-clamp-1 group-hover:text-[#1E5BFF] transition-colors">
+                <h3 className="font-heading font-bold text-xs sm:text-sm text-[#18191F] dark:text-white line-clamp-1 group-hover:text-[#DC012B] transition-colors">
                   {cat.name}
                 </h3>
                 <span className="text-[11px] text-slate-400 font-medium">
@@ -249,7 +249,7 @@ export default async function HomePage() {
 
       {/* 5. GIFT FINDER QUIZ CTA BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#7B5CFA] via-[#6343E0] to-[#1E5BFF] text-white p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#7B5CFA] via-[#6343E0] to-[#DC012B] text-white p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-3 max-w-xl text-center sm:text-left">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold">
               <Gift className="w-3.5 h-3.5 text-[#FFC93C]" /> Interactive Gift Assistant
@@ -274,7 +274,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
               Trending Best Sellers
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -283,7 +283,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/c/all?sort=bestselling"
-            className="text-xs sm:text-sm font-bold text-[#1E5BFF] hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-bold text-[#DC012B] hover:underline flex items-center gap-1"
           >
             <span>See All</span>
             <ChevronRight className="w-4 h-4" />
@@ -300,7 +300,7 @@ export default async function HomePage() {
       {/* 7. BUDGET PICKS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
             Shop by Budget
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -311,46 +311,46 @@ export default async function HomePage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Link
             href="/c/all?maxPrice=1000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pocket Friendly</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#14213D] dark:text-white mt-1 group-hover:text-[#1E5BFF]">
+            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
               Under ৳1,000
             </h3>
-            <span className="text-xs text-[#1E5BFF] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
+            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
           </Link>
 
           <Link
             href="/c/all?minPrice=1000&maxPrice=2000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Popular Range</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#14213D] dark:text-white mt-1 group-hover:text-[#1E5BFF]">
+            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
               ৳1,000 – ৳2,000
             </h3>
-            <span className="text-xs text-[#1E5BFF] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
+            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
           </Link>
 
           <Link
             href="/c/all?minPrice=2000&maxPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Free Delivery Tier</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#14213D] dark:text-white mt-1 group-hover:text-[#1E5BFF]">
+            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
               ৳2,000 – ৳3,500
             </h3>
-            <span className="text-xs text-[#1E5BFF] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
+            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
           </Link>
 
           <Link
             href="/c/all?minPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Collector &amp; Deluxe</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#14213D] dark:text-white mt-1 group-hover:text-[#1E5BFF]">
+            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
               Above ৳3,500
             </h3>
-            <span className="text-xs text-[#1E5BFF] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
+            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
           </Link>
         </div>
       </section>
@@ -358,7 +358,7 @@ export default async function HomePage() {
       {/* 8. CUSTOMER LOVE / VERIFIED REVIEWS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-8">
-          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
             Loved by Parents, Adored by Kids
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -367,7 +367,7 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
@@ -378,12 +378,12 @@ export default async function HomePage() {
               The blocks click firmly together just like authentic Lego. Very safe, no sharp edges!"
             </p>
             <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#14213D] dark:text-white block">Dr. Farhana Islam</span>
+              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Dr. Farhana Islam</span>
               <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Dhaka</span>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
@@ -394,12 +394,12 @@ export default async function HomePage() {
               The 4WD RC Buggy is lightning fast! Best online toy shop experience in BD."
             </p>
             <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#14213D] dark:text-white block">Rashidul Karim</span>
+              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Rashidul Karim</span>
               <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Chittagong</span>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
@@ -410,7 +410,7 @@ export default async function HomePage() {
               plays with it for hours. Highly recommended for toddler parents!"
             </p>
             <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#14213D] dark:text-white block">Nusrat Jahan</span>
+              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Nusrat Jahan</span>
               <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Uttara</span>
             </div>
           </div>

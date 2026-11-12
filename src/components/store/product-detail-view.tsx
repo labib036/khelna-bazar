@@ -147,15 +147,15 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-500">
-        <Link href="/" className="hover:text-[#1E5BFF]">
+        <Link href="/" className="hover:text-[#DC012B]">
           Home
         </Link>
         <span>/</span>
-        <Link href={`/c/${product.categorySlug}`} className="hover:text-[#1E5BFF]">
+        <Link href={`/c/${product.categorySlug}`} className="hover:text-[#DC012B]">
           {product.category}
         </Link>
         <span>/</span>
-        <span className="text-[#14213D] dark:text-white font-medium truncate max-w-xs">
+        <span className="text-[#18191F] dark:text-white font-medium truncate max-w-xs">
           {product.name}
         </span>
       </nav>
@@ -173,8 +173,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   onClick={() => setActiveImageIndex(idx)}
                   className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-slate-50 border-2 transition-all cursor-pointer ${
                     activeImageIndex === idx
-                      ? "border-[#1E5BFF] shadow-sm scale-105"
-                      : "border-[#E3E8F2] dark:border-[#263050] hover:border-slate-400"
+                      ? "border-[#DC012B] shadow-sm scale-105"
+                      : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-400"
                   }`}
                   aria-label={`View image angle ${idx + 1}`}
                 >
@@ -185,7 +185,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           )}
 
           {/* Main Hero Image */}
-          <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-sm">
+          <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
             <Image
               src={product.images[activeImageIndex] || product.images[0]}
               alt={product.name}
@@ -219,7 +219,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               </span>
             </div>
 
-            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white leading-tight">
+            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white leading-tight">
               {product.name}
             </h1>
 
@@ -243,9 +243,9 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
 
           {/* Pricing Block */}
-          <div className="p-4 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E3E8F2] dark:border-[#263050]">
+          <div className="p-4 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E8E2DE] dark:border-[#263050]">
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-black text-[#14213D] dark:text-white">
+              <span className="text-3xl font-black text-[#18191F] dark:text-white">
                 {formatPrice(currentVariant.price)}
               </span>
               {currentVariant.comparePrice && currentVariant.comparePrice > currentVariant.price && (
@@ -278,8 +278,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                     onClick={() => setSelectedVariantId(v.id)}
                     className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                       selectedVariantId === v.id
-                        ? "bg-[#1E5BFF] text-white border-[#1E5BFF] shadow-xs"
-                        : "border-[#E3E8F2] dark:border-[#263050] text-[#14213D] dark:text-white hover:border-[#1E5BFF]"
+                        ? "bg-[#DC012B] text-white border-[#DC012B] shadow-xs"
+                        : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                     }`}
                   >
                     <span>{v.title}</span>
@@ -294,7 +294,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           <div className="space-y-3 pt-2">
             <div className="flex items-center gap-4">
               <span className="text-xs font-bold uppercase text-slate-500">Qty:</span>
-              <div className="flex items-center border border-[#E3E8F2] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
+              <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
@@ -302,7 +302,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="px-4 text-sm font-bold text-[#14213D] dark:text-white select-none">
+                <span className="px-4 text-sm font-bold text-[#18191F] dark:text-white select-none">
                   {quantity}
                 </span>
                 <button
@@ -321,7 +321,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
             {/* Gift Wrap Toggle */}
             <div className="p-3 rounded-xl border border-dashed border-[#FFC93C] bg-[#FFFDF5] dark:bg-[#2B230B]/40 space-y-2">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#14213D] dark:text-white">
+              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#18191F] dark:text-white">
                 <input
                   type="checkbox"
                   checked={giftWrap}
@@ -338,7 +338,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   placeholder="Enter custom gift message (optional)"
                   value={giftMessage}
                   onChange={(e) => setGiftMessage(e.target.value)}
-                  className="w-full text-xs h-8 px-3 rounded-lg border border-[#E3E8F2] dark:border-[#263050] bg-white dark:bg-[#161D33] text-black dark:text-white placeholder:text-slate-400 focus:outline-none"
+                  className="w-full text-xs h-8 px-3 rounded-lg border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-black dark:text-white placeholder:text-slate-400 focus:outline-none"
                 />
               )}
             </div>
@@ -375,7 +375,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
               <button
                 onClick={handleShare}
-                className="flex items-center gap-1.5 hover:text-[#1E5BFF] transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 hover:text-[#DC012B] transition-colors cursor-pointer"
               >
                 <Share2 className="w-4 h-4" />
                 <span>Share</span>
@@ -384,7 +384,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
 
           {/* Delivery & Trust Highlights */}
-          <div className="space-y-2.5 pt-4 border-t border-[#E3E8F2] dark:border-[#263050] text-xs text-slate-600 dark:text-slate-300">
+          <div className="space-y-2.5 pt-4 border-t border-[#E8E2DE] dark:border-[#263050] text-xs text-slate-600 dark:text-slate-300">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#2EC4B6] shrink-0" />
               <span>
@@ -392,7 +392,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#1E5BFF] shrink-0" />
+              <ShieldCheck className="w-4 h-4 text-[#DC012B] shrink-0" />
               <span>
                 <strong>Zero-Risk Guarantee:</strong> Inspect package upon delivery before paying the courier.
               </span>
@@ -409,7 +409,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           {product.chokingHazard && (
             <div className="p-3.5 rounded-2xl bg-[#FFF0F0] dark:bg-[#3D1414] border border-[#FF6B6B]/40 flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-[#FF6B6B] shrink-0 mt-0.5" />
-              <div className="text-xs text-[#14213D] dark:text-slate-200">
+              <div className="text-xs text-[#18191F] dark:text-slate-200">
                 <strong className="text-[#FF6B6B] block">SAFETY NOTICE: CHOKING HAZARD</strong>
                 <span>{product.chokingWarning || "Small parts. Not suitable for children under 3 years old."}</span>
               </div>
@@ -419,14 +419,14 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
       </div>
 
       {/* TABS: Description, Specs, Safety & Certifications, Reviews */}
-      <div className="pt-8 border-t border-[#E3E8F2] dark:border-[#263050]">
-        <div className="flex border-b border-[#E3E8F2] dark:border-[#263050] overflow-x-auto gap-4 text-sm font-bold">
+      <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#263050]">
+        <div className="flex border-b border-[#E8E2DE] dark:border-[#263050] overflow-x-auto gap-4 text-sm font-bold">
           <button
             onClick={() => setActiveTab("desc")}
             className={`pb-3 transition-colors cursor-pointer ${
               activeTab === "desc"
-                ? "border-b-2 border-[#1E5BFF] text-[#1E5BFF]"
-                : "text-slate-500 hover:text-[#14213D] dark:hover:text-white"
+                ? "border-b-2 border-[#DC012B] text-[#DC012B]"
+                : "text-slate-500 hover:text-[#18191F] dark:hover:text-white"
             }`}
           >
             Product Description
@@ -435,8 +435,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
             onClick={() => setActiveTab("specs")}
             className={`pb-3 transition-colors cursor-pointer ${
               activeTab === "specs"
-                ? "border-b-2 border-[#1E5BFF] text-[#1E5BFF]"
-                : "text-slate-500 hover:text-[#14213D] dark:hover:text-white"
+                ? "border-b-2 border-[#DC012B] text-[#DC012B]"
+                : "text-slate-500 hover:text-[#18191F] dark:hover:text-white"
             }`}
           >
             Specifications
@@ -445,8 +445,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
             onClick={() => setActiveTab("safety")}
             className={`pb-3 transition-colors cursor-pointer ${
               activeTab === "safety"
-                ? "border-b-2 border-[#1E5BFF] text-[#1E5BFF]"
-                : "text-slate-500 hover:text-[#14213D] dark:hover:text-white"
+                ? "border-b-2 border-[#DC012B] text-[#DC012B]"
+                : "text-slate-500 hover:text-[#18191F] dark:hover:text-white"
             }`}
           >
             Safety &amp; Compliance
@@ -455,8 +455,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
             onClick={() => setActiveTab("reviews")}
             className={`pb-3 transition-colors cursor-pointer ${
               activeTab === "reviews"
-                ? "border-b-2 border-[#1E5BFF] text-[#1E5BFF]"
-                : "text-slate-500 hover:text-[#14213D] dark:hover:text-white"
+                ? "border-b-2 border-[#DC012B] text-[#DC012B]"
+                : "text-slate-500 hover:text-[#18191F] dark:hover:text-white"
             }`}
           >
             Customer Reviews ({product.ratingCount})
@@ -473,29 +473,29 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           )}
 
           {activeTab === "specs" && (
-            <div className="max-w-2xl divide-y divide-[#E3E8F2] dark:divide-[#263050] text-xs">
+            <div className="max-w-2xl divide-y divide-[#E8E2DE] dark:divide-[#263050] text-xs">
               <div className="py-2.5 flex justify-between">
                 <span className="text-slate-400 font-medium">Recommended Age</span>
-                <span className="font-bold text-[#14213D] dark:text-white">
+                <span className="font-bold text-[#18191F] dark:text-white">
                   {Math.floor(product.minAgeMonths / 12)} to {Math.floor(product.maxAgeMonths / 12)} Years
                 </span>
               </div>
               <div className="py-2.5 flex justify-between">
                 <span className="text-slate-400 font-medium">Materials</span>
-                <span className="font-bold text-[#14213D] dark:text-white">{product.material}</span>
+                <span className="font-bold text-[#18191F] dark:text-white">{product.material}</span>
               </div>
               <div className="py-2.5 flex justify-between">
                 <span className="text-slate-400 font-medium">Battery Requirements</span>
-                <span className="font-bold text-[#14213D] dark:text-white">{product.batteryInfo}</span>
+                <span className="font-bold text-[#18191F] dark:text-white">{product.batteryInfo}</span>
               </div>
               <div className="py-2.5 flex justify-between">
                 <span className="text-slate-400 font-medium">SKU</span>
-                <span className="font-mono text-[#14213D] dark:text-white">{currentVariant.sku}</span>
+                <span className="font-mono text-[#18191F] dark:text-white">{currentVariant.sku}</span>
               </div>
               {product.attributes.map((a, i) => (
                 <div key={i} className="py-2.5 flex justify-between">
                   <span className="text-slate-400 font-medium">{a.name}</span>
-                  <span className="font-bold text-[#14213D] dark:text-white">{a.value}</span>
+                  <span className="font-bold text-[#18191F] dark:text-white">{a.value}</span>
                 </div>
               ))}
             </div>
@@ -537,7 +537,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               <div className="p-5 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-3xl font-black text-[#14213D] dark:text-white">
+                    <span className="text-3xl font-black text-[#18191F] dark:text-white">
                       {product.ratingAvg.toFixed(1)}
                     </span>
                     <div className="flex text-[#FFC93C]">
@@ -552,9 +552,9 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
               {/* Sample verified review cards */}
               <div className="space-y-4">
-                <div className="p-4 rounded-xl border border-[#E3E8F2] dark:border-[#263050] space-y-2">
+                <div className="p-4 rounded-xl border border-[#E8E2DE] dark:border-[#263050] space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#14213D] dark:text-white">Farhana I.</span>
+                    <span className="font-bold text-xs text-[#18191F] dark:text-white">Farhana I.</span>
                     <span className="text-[10px] text-slate-400">2 days ago</span>
                   </div>
                   <div className="flex text-[#FFC93C]">
@@ -576,8 +576,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
       {/* CROSS SELL: RELATED TOYS */}
       {relatedProducts.length > 0 && (
-        <div className="pt-8 border-t border-[#E3E8F2] dark:border-[#263050]">
-          <h2 className="font-heading text-xl sm:text-2xl font-black text-[#14213D] dark:text-white mb-6">
+        <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#263050]">
+          <h2 className="font-heading text-xl sm:text-2xl font-black text-[#18191F] dark:text-white mb-6">
             You May Also Love These Toys
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

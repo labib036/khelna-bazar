@@ -25,10 +25,10 @@ export default function TrackOrderPage() {
   return (
     <div className="max-w-xl mx-auto px-4 sm:px-6 py-12 sm:py-20 space-y-8">
       <div className="text-center space-y-2">
-        <div className="w-16 h-16 rounded-full bg-[#EBF1FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
+        <div className="w-16 h-16 rounded-full bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center mx-auto">
           <Package className="w-8 h-8" />
         </div>
-        <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+        <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
           Track Your Delivery
         </h1>
         <p className="text-xs sm:text-sm text-slate-500">
@@ -36,7 +36,7 @@ export default function TrackOrderPage() {
         </p>
       </div>
 
-      <div className="bg-white dark:bg-[#161D33] p-6 sm:p-8 rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-sm">
+      <div className="bg-white dark:bg-[#161D33] p-6 sm:p-8 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
         <form onSubmit={handleTrack} className="space-y-4">
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">

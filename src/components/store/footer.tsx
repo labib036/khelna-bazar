@@ -35,12 +35,12 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-[#14213D] text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <footer className="bg-[#18191F] text-slate-300 pt-16 pb-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Value Props & Trust Badges Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-12 border-b border-slate-800">
           <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
-            <div className="p-3 rounded-xl bg-[#EBF1FF] text-[#1E5BFF] shrink-0">
+            <div className="p-3 rounded-xl bg-[#FFF0F2] text-[#DC012B] shrink-0">
               <Truck className="w-6 h-6" />
             </div>
             <div>
@@ -84,18 +84,24 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Info & Contact */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white p-0.5 shrink-0 shadow-xs">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-11 h-11 rounded-full overflow-hidden bg-white p-0.5 shrink-0 shadow-sm border border-[#DC012B]/40 movable-logo">
                 <Image
-                  src="/images/khelna-bazar-logo.png"
+                  src="/images/khelna-bazar-logo.gif"
                   alt="Khelna Bazar Logo"
                   fill
+                  unoptimized
                   className="object-contain"
                 />
               </div>
-              <span className="font-heading font-black text-2xl text-white">
-                KHELNA <span className="text-[#1E5BFF]">BAZAR</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="font-heading font-black text-2xl text-white leading-none">
+                  KHELNA <span className="text-[#DC012B]">BAZAR</span>
+                </span>
+                <span className="text-[9px] font-bold tracking-widest text-[#DC012B] uppercase mt-0.5">
+                  khelnabazar.com.bd
+                </span>
+              </div>
             </Link>
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
               The fastest, most joyful toy shopping experience in Bangladesh. Every product is handpicked to nurture
@@ -108,7 +114,7 @@ export function Footer() {
                 <span className="font-semibold text-white">{siteConfig.contact.phone}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#1E5BFF]" />
+                <Mail className="w-4 h-4 text-[#DC012B]" />
                 <span>{siteConfig.contact.email}</span>
               </div>
               <div className="flex items-start gap-2">
@@ -169,37 +175,37 @@ export function Footer() {
             <h4 className="font-heading font-bold text-sm text-white">Customer Support</h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/track-order" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/track-order" className="hover:text-[#DC012B] transition-colors">
                   Track Delivery Order
                 </Link>
               </li>
               <li>
-                <Link href="/pages/shipping-policy" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/shipping-policy" className="hover:text-[#DC012B] transition-colors">
                   Cash on Delivery Info
                 </Link>
               </li>
               <li>
-                <Link href="/pages/returns-policy" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/returns-policy" className="hover:text-[#DC012B] transition-colors">
                   7-Day Returns Policy
                 </Link>
               </li>
               <li>
-                <Link href="/pages/toy-safety" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/toy-safety" className="hover:text-[#DC012B] transition-colors">
                   Child Safety Standards
                 </Link>
               </li>
               <li>
-                <Link href="/pages/about-us" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/about-us" className="hover:text-[#DC012B] transition-colors">
                   About Khelna Bazar
                 </Link>
               </li>
               <li>
-                <Link href="/pages/privacy-policy" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/privacy-policy" className="hover:text-[#DC012B] transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/pages/terms" className="hover:text-[#1E5BFF] transition-colors">
+                <Link href="/pages/terms" className="hover:text-[#DC012B] transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
@@ -227,7 +233,7 @@ export function Footer() {
                     placeholder="Enter your email"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="w-full h-10 px-3.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#1E5BFF]"
+                    className="w-full h-10 px-3.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#DC012B]"
                   />
                 </div>
                 <Button type="submit" variant="primary" size="sm" className="w-full text-xs font-semibold h-9 gap-1.5">

@@ -7,12 +7,12 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 export function Badge({ className, variant = "brand", children, ...props }: BadgeProps) {
   const variants = {
-    brand: "bg-[#EBF1FF] text-[#1E5BFF] dark:bg-[#1E2D5A] dark:text-[#BFD1FF]",
-    sun: "bg-[#FFF8E6] text-[#B88700] dark:bg-[#3D3008] dark:text-[#FFD76A]",
-    coral: "bg-[#FFF0F0] text-[#FF6B6B] dark:bg-[#471515] dark:text-[#FFA3A3]",
-    mint: "bg-[#E6FAF8] text-[#229D92] dark:bg-[#0E3834] dark:text-[#4DD9CB]",
-    grape: "bg-[#F3EFFF] text-[#7B5CFA] dark:bg-[#2A1D57] dark:text-[#9C84FF]",
-    outline: "border border-[#E3E8F2] text-[#5B6577] dark:border-[#263050] dark:text-[#A8B1C4]",
+    brand: "bg-[#FFF0F2] text-[#DC012B] dark:bg-[#450A14] dark:text-[#FFAAB4]",
+    sun: "bg-[#FFFBEB] text-[#B45309] dark:bg-[#451A03] dark:text-[#FCD34D]",
+    coral: "bg-[#FFF0F2] text-[#FF4757] dark:bg-[#450A14] dark:text-[#FFA4B1]",
+    mint: "bg-[#ECFDF5] text-[#059669] dark:bg-[#064E3B] dark:text-[#6EE7B7]",
+    grape: "bg-[#F5F3FF] text-[#7C3AED] dark:bg-[#2E1065] dark:text-[#C4B5FD]",
+    outline: "border border-[#E8E2DE] text-[#64748B] dark:border-[#2E303E] dark:text-[#94A3B8]",
   };
 
   return (

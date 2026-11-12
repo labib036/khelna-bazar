@@ -87,7 +87,7 @@ export default function AddressesPage() {
         <div className="flex-1 space-y-6 w-full">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="font-heading text-2xl font-black text-[#14213D] dark:text-white">
+              <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
                 Saved Delivery Addresses
               </h1>
               <p className="text-xs text-slate-500 mt-1">
@@ -110,9 +110,9 @@ export default function AddressesPage() {
           {showAddForm && (
             <form
               onSubmit={handleAddAddress}
-              className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#1E5BFF] shadow-sm space-y-4 animate-in fade-in"
+              className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#DC012B] shadow-sm space-y-4 animate-in fade-in"
             >
-              <h3 className="font-heading font-black text-sm text-[#14213D] dark:text-white">
+              <h3 className="font-heading font-black text-sm text-[#18191F] dark:text-white">
                 Add New Delivery Coordinates
               </h3>
 
@@ -167,11 +167,11 @@ export default function AddressesPage() {
             {addresses.map((a) => (
               <div
                 key={a.id}
-                className="p-5 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-3 shadow-xs flex flex-col justify-between"
+                className="p-5 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-3 shadow-xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <span className="font-heading font-black text-xs text-[#1E5BFF] flex items-center gap-1.5 uppercase tracking-wide">
+                    <span className="font-heading font-black text-xs text-[#DC012B] flex items-center gap-1.5 uppercase tracking-wide">
                       {a.label === "Home" ? <Home className="w-3.5 h-3.5" /> : <Building className="w-3.5 h-3.5" />}
                       {a.label}
                     </span>
@@ -182,7 +182,7 @@ export default function AddressesPage() {
                     )}
                   </div>
 
-                  <h3 className="font-heading font-bold text-sm text-[#14213D] dark:text-white mt-2">{a.name}</h3>
+                  <h3 className="font-heading font-bold text-sm text-[#18191F] dark:text-white mt-2">{a.name}</h3>
                   <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">{a.line1}</p>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {a.city}, {a.state} &bull; {a.phone}
@@ -193,7 +193,7 @@ export default function AddressesPage() {
                   {!a.isDefault && (
                     <button
                       onClick={() => handleSetDefault(a.id)}
-                      className="text-[#1E5BFF] hover:underline font-bold cursor-pointer"
+                      className="text-[#DC012B] hover:underline font-bold cursor-pointer"
                     >
                       Set as Default
                     </button>

@@ -1,60 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  /* Design Tokens - Light Theme */
-  --brand: #1E5BFF;
-  --brand-hover: #1546CC;
-  --brand-ink: #0B2A7A;
-  --sun: #FFC93C;
-  --sun-hover: #EBB224;
-  --coral: #FF6B6B;
-  --coral-hover: #E85050;
-  --mint: #2EC4B6;
-  --mint-hover: #229D92;
-  --grape: #7B5CFA;
-  --grape-hover: #6343E0;
+  /* Khelna Bazar Red Brand Palette & Joyful Warm Accents */
+  --brand: #DC012B;
+  --brand-hover: #B80023;
+  --brand-ink: #8A0018;
+  --brand-light: #FFF0F2;
+  --sun: #F59E0B;
+  --sun-hover: #D97706;
+  --coral: #FF4757;
+  --coral-hover: #E03646;
+  --mint: #10B981;
+  --mint-hover: #059669;
+  --grape: #8B5CF6;
+  --grape-hover: #7C3AED;
   
-  --ink: #14213D;
-  --muted: #5B6577;
-  --bg: #F7F9FC;
+  --ink: #18191F;
+  --muted: #64748B;
+  --bg: #FAF8F6;
   --surface: #FFFFFF;
-  --surface-alt: #F1F4F9;
-  --line: #E3E8F2;
+  --surface-alt: #F4EFEB;
+  --line: #E8E2DE;
 
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 6px -1px rgba(20, 33, 61, 0.05);
-  --shadow-md: 0 8px 24px -4px rgba(30, 91, 255, 0.08);
-  --shadow-lg: 0 16px 36px -6px rgba(30, 91, 255, 0.12);
+  --shadow-sm: 0 2px 6px -1px rgba(220, 1, 43, 0.05);
+  --shadow-md: 0 8px 24px -4px rgba(220, 1, 43, 0.08);
+  --shadow-lg: 0 16px 36px -6px rgba(220, 1, 43, 0.12);
 }
 
 .dark {
   /* Design Tokens - Dark Theme */
-  --brand: #5B8CFF;
-  --brand-hover: #77A0FF;
-  --brand-ink: #BFD1FF;
-  --sun: #FFD76A;
-  --sun-hover: #FFE28F;
-  --coral: #FF8A8A;
-  --coral-hover: #FFA3A3;
-  --mint: #4DD9CB;
-  --mint-hover: #6BE2D6;
-  --grape: #9C84FF;
-  --grape-hover: #B29FFF;
+  --brand: #FF3B56;
+  --brand-hover: #FF6B81;
+  --brand-ink: #FFE5E9;
+  --brand-light: #3D000B;
+  --sun: #FBBF24;
+  --sun-hover: #FCD34D;
+  --coral: #FF6B81;
+  --coral-hover: #FFA4B1;
+  --mint: #34D399;
+  --mint-hover: #6EE7B7;
+  --grape: #A78BFA;
+  --grape-hover: #C4B5FD;
   
-  --ink: #F3F6FF;
-  --muted: #A8B1C4;
-  --bg: #0E1424;
-  --surface: #161D33;
-  --surface-alt: #1E2742;
-  --line: #263050;
+  --ink: #F9FAFB;
+  --muted: #94A3B8;
+  --bg: #121318;
+  --surface: #1B1C24;
+  --surface-alt: #242531;
+  --line: #2E303E;
 
-  --shadow-sm: 0 2px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 36px -6px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 2px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 36px -6px rgba(0, 0, 0, 0.7);
 }
 
 * {

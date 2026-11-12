@@ -169,18 +169,23 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-[#F7F9FC] dark:bg-[#0E1424] py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Secure Checkout Header */}
-        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E3E8F2] dark:border-[#263050]">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white shrink-0 shadow-xs">
-              <Image src="/images/khelna-bazar-logo.png" alt="Logo" fill className="object-contain" />
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8E2DE] dark:border-[#2E303E]">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative w-11 h-11 rounded-full overflow-hidden bg-white shrink-0 shadow-xs border border-[#DC012B]/30 movable-logo">
+              <Image src="/images/khelna-bazar-logo.gif" alt="Logo" fill unoptimized className="object-contain" />
             </div>
-            <span className="font-heading font-black text-xl text-[#14213D] dark:text-white">
-              KHELNA <span className="text-[#1E5BFF]">BAZAR</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="font-heading font-black text-xl text-[#18191F] dark:text-white leading-none">
+                KHELNA <span className="text-[#DC012B]">BAZAR</span>
+              </span>
+              <span className="text-[9px] font-bold tracking-widest text-[#DC012B] uppercase mt-0.5">
+                Secure COD Checkout
+              </span>
+            </div>
           </Link>
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+          <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800">
             <Lock className="w-3.5 h-3.5" />
-            <span>Secure Cash on Delivery Checkout</span>
+            <span>Pay Cash on Delivery</span>
           </div>
         </div>
 
@@ -188,12 +193,12 @@ export default function CheckoutPage() {
           {/* Left: Shipping & COD Details (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
             {/* Step 1: Customer Contact Info */}
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
-                <div className="w-7 h-7 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-xs">
+            <div className="bg-white dark:bg-[#1B1C24] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
+                <div className="w-7 h-7 rounded-full bg-[#DC012B] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                   1
                 </div>
-                <h2 className="font-heading font-black text-base text-[#14213D] dark:text-white">
+                <h2 className="font-heading font-black text-base text-[#18191F] dark:text-white">
                   Customer &amp; Contact Details
                 </h2>
               </div>
@@ -201,7 +206,7 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2 space-y-1">
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                    <User className="w-3.5 h-3.5 text-[#DC012B]" />
                     <span>Full Name *</span>
                   </label>
                   <Input
@@ -244,12 +249,12 @@ export default function CheckoutPage() {
             </div>
 
             {/* Step 2: Delivery Address & Zone */}
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
-                <div className="w-7 h-7 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-xs">
+            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+                <div className="w-7 h-7 rounded-full bg-[#DC012B] text-white flex items-center justify-center font-bold text-xs">
                   2
                 </div>
-                <h2 className="font-heading font-black text-base text-[#14213D] dark:text-white">
+                <h2 className="font-heading font-black text-base text-[#18191F] dark:text-white">
                   Delivery Destination
                 </h2>
               </div>
@@ -265,13 +270,13 @@ export default function CheckoutPage() {
                     onClick={() => handleDeliveryZoneChange("inside_dhaka")}
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
                       deliveryZone === "inside_dhaka"
-                        ? "bg-[#EBF1FF] dark:bg-[#1E2D5A] border-[#1E5BFF] text-[#1E5BFF]"
-                        : "border-[#E3E8F2] dark:border-[#263050] text-slate-600 dark:text-slate-300"
+                        ? "bg-[#FFF0F2] dark:bg-[#3D000B] border-[#DC012B] text-[#DC012B]"
+                        : "border-[#E8E2DE] dark:border-[#263050] text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span>Inside Dhaka City</span>
-                      <span className="text-[#1E5BFF] font-black">৳60</span>
+                      <span className="text-[#DC012B] font-black">৳60</span>
                     </div>
                     <p className="text-[11px] text-slate-500 font-normal mt-0.5">Delivered in 24–48 Hours</p>
                   </button>
@@ -281,13 +286,13 @@ export default function CheckoutPage() {
                     onClick={() => handleDeliveryZoneChange("outside_dhaka")}
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
                       deliveryZone === "outside_dhaka"
-                        ? "bg-[#EBF1FF] dark:bg-[#1E2D5A] border-[#1E5BFF] text-[#1E5BFF]"
-                        : "border-[#E3E8F2] dark:border-[#263050] text-slate-600 dark:text-slate-300"
+                        ? "bg-[#FFF0F2] dark:bg-[#3D000B] border-[#DC012B] text-[#DC012B]"
+                        : "border-[#E8E2DE] dark:border-[#263050] text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span>Outside Dhaka</span>
-                      <span className="text-[#1E5BFF] font-black">৳120</span>
+                      <span className="text-[#DC012B] font-black">৳120</span>
                     </div>
                     <p className="text-[11px] text-slate-500 font-normal mt-0.5">Nationwide: 2–4 Business Days</p>
                   </button>
@@ -303,7 +308,7 @@ export default function CheckoutPage() {
                   <select
                     value={division}
                     onChange={(e) => setDivision(e.target.value)}
-                    className="w-full h-11 px-3.5 rounded-2xl border border-[#E3E8F2] dark:border-[#263050] bg-white dark:bg-[#161D33] text-sm text-[#14213D] dark:text-white focus:outline-none focus:border-[#1E5BFF]"
+                    className="w-full h-11 px-3.5 rounded-2xl border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-sm text-[#18191F] dark:text-white focus:outline-none focus:border-[#DC012B]"
                   >
                     {BD_DIVISIONS.map((d) => (
                       <option key={d} value={d}>
@@ -354,11 +359,11 @@ export default function CheckoutPage() {
 
             {/* Step 3: Cash on Delivery Sole Payment Method */}
             <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border-2 border-[#2EC4B6] shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
                 <div className="w-7 h-7 rounded-full bg-[#2EC4B6] text-white flex items-center justify-center font-bold text-xs">
                   3
                 </div>
-                <h2 className="font-heading font-black text-base text-[#14213D] dark:text-white">
+                <h2 className="font-heading font-black text-base text-[#18191F] dark:text-white">
                   Payment Method: Cash on Delivery (COD)
                 </h2>
               </div>
@@ -381,8 +386,8 @@ export default function CheckoutPage() {
 
           {/* Right: Sticky Order Summary (5 Cols) */}
           <div className="lg:col-span-5 sticky top-24 space-y-4">
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-5">
-              <h2 className="font-heading font-black text-lg text-[#14213D] dark:text-white pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
+            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-5">
+              <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
                 Order Items ({items.reduce((acc, i) => acc + i.quantity, 0)})
               </h2>
 
@@ -394,14 +399,14 @@ export default function CheckoutPage() {
                       <Image src={item.image} alt={item.name} fill className="object-cover" sizes="48px" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs font-bold text-[#14213D] dark:text-white truncate">
+                      <h4 className="text-xs font-bold text-[#18191F] dark:text-white truncate">
                         {item.name}
                       </h4>
                       <p className="text-[11px] text-slate-500">
                         Qty: {item.quantity} &bull; {item.title}
                       </p>
                     </div>
-                    <span className="text-xs font-bold text-[#14213D] dark:text-white shrink-0">
+                    <span className="text-xs font-bold text-[#18191F] dark:text-white shrink-0">
                       {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
@@ -409,10 +414,10 @@ export default function CheckoutPage() {
               </div>
 
               {/* Breakdown */}
-              <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-3 border-t border-[#E3E8F2] dark:border-[#263050]">
+              <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-3 border-t border-[#E8E2DE] dark:border-[#263050]">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-bold text-[#14213D] dark:text-white">{formatPrice(subtotal)}</span>
+                  <span className="font-bold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>
                 </div>
 
                 {discount > 0 && (
@@ -431,24 +436,24 @@ export default function CheckoutPage() {
 
                 <div className="flex justify-between">
                   <span>Cash on Delivery Charge</span>
-                  <span className="font-bold text-[#14213D] dark:text-white">
+                  <span className="font-bold text-[#18191F] dark:text-white">
                     {shippingFee === 0 ? <strong className="text-[#2EC4B6]">FREE</strong> : formatPrice(shippingFee)}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-base font-black text-[#14213D] dark:text-white pt-3 border-t border-[#E3E8F2] dark:border-[#263050]">
+                <div className="flex justify-between text-base font-black text-[#18191F] dark:text-white pt-3 border-t border-[#E8E2DE] dark:border-[#2E303E]">
                   <span>Total Due on Delivery</span>
-                  <span className="text-xl text-[#1E5BFF] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
+                  <span className="text-xl text-[#DC012B] font-black">{formatPrice(total)}</span>
                 </div>
               </div>
 
               {/* Submit COD Order Button */}
               <Button
                 type="submit"
-                variant="sun"
+                variant="primary"
                 size="lg"
                 isLoading={isSubmitting}
-                className="w-full text-sm font-black shadow-lg"
+                className="w-full text-sm font-black shadow-lg bg-[#DC012B] hover:bg-[#B80023]"
               >
                 <span>Confirm Cash on Delivery Order</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />

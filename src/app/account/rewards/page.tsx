@@ -26,7 +26,7 @@ export default function RewardsPage() {
 
         <div className="flex-1 space-y-8 w-full">
           <div>
-            <h1 className="font-heading text-2xl font-black text-[#14213D] dark:text-white flex items-center gap-2">
+            <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-[#7B5CFA]" />
               <span>PlayPoints Loyalty Club</span>
             </h1>
@@ -36,7 +36,7 @@ export default function RewardsPage() {
           </div>
 
           {/* Balance & Tier Card */}
-          <div className="p-8 rounded-3xl bg-gradient-to-r from-[#7B5CFA] via-[#6343E0] to-[#1E5BFF] text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="p-8 rounded-3xl bg-gradient-to-r from-[#7B5CFA] via-[#6343E0] to-[#DC012B] text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="space-y-1 text-center sm:text-left">
               <span className="text-xs uppercase tracking-widest text-purple-200 font-extrabold">
                 Current Point Balance
@@ -58,26 +58,26 @@ export default function RewardsPage() {
 
           {/* Ways to Earn Points */}
           <div className="space-y-4">
-            <h2 className="font-heading font-black text-lg text-[#14213D] dark:text-white">
+            <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white">
               Ways to Collect More Points
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-[#EBF1FF] text-[#1E5BFF] flex items-center justify-center font-black">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-2">
+                <div className="w-10 h-10 rounded-xl bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center font-black">
                   🛍️
                 </div>
-                <h4 className="font-heading font-bold text-sm text-[#14213D] dark:text-white">
+                <h4 className="font-heading font-bold text-sm text-[#18191F] dark:text-white">
                   Place Any COD Order
                 </h4>
                 <p className="text-xs text-slate-500">Earn 1 PlayPoint for every ৳10 spent on our toys.</p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-2">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-2">
                 <div className="w-10 h-10 rounded-xl bg-[#FFF8E6] text-[#B88700] flex items-center justify-center font-black">
                   ⭐
                 </div>
-                <h4 className="font-heading font-bold text-sm text-[#14213D] dark:text-white">
+                <h4 className="font-heading font-bold text-sm text-[#18191F] dark:text-white">
                   Write Verified Reviews
                 </h4>
                 <p className="text-xs text-slate-500">
@@ -85,11 +85,11 @@ export default function RewardsPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-2">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-2">
                 <div className="w-10 h-10 rounded-xl bg-[#F3EFFF] text-[#7B5CFA] flex items-center justify-center font-black">
                   🎂
                 </div>
-                <h4 className="font-heading font-bold text-sm text-[#14213D] dark:text-white">
+                <h4 className="font-heading font-bold text-sm text-[#18191F] dark:text-white">
                   Child's Birthday Bonus
                 </h4>
                 <p className="text-xs text-slate-500">
@@ -100,9 +100,9 @@ export default function RewardsPage() {
           </div>
 
           {/* Referral Card */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-4 shadow-xs">
-            <h3 className="font-heading font-black text-base text-[#14213D] dark:text-white flex items-center gap-2">
-              <Share2 className="w-4 h-4 text-[#1E5BFF]" />
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-4 shadow-xs">
+            <h3 className="font-heading font-black text-base text-[#18191F] dark:text-white flex items-center gap-2">
+              <Share2 className="w-4 h-4 text-[#DC012B]" />
               <span>Invite Friends &amp; Family</span>
             </h3>
             <p className="text-xs text-slate-500">

@@ -85,14 +85,14 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white dark:bg-[#161D33] border-b border-[#E3E8F2] dark:border-[#263050] shadow-xs">
+    <header className="sticky top-0 z-40 bg-white dark:bg-[#161D33] border-b border-[#E8E2DE] dark:border-[#263050] shadow-xs">
       {/* Main Header Row */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 sm:h-20 gap-4 sm:gap-6">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2 text-slate-700 dark:text-slate-200 hover:text-[#1E5BFF] rounded-xl transition-colors cursor-pointer"
+            className="lg:hidden p-2 text-slate-700 dark:text-slate-200 hover:text-[#DC012B] rounded-xl transition-colors cursor-pointer"
             aria-label="Open mobile menu"
           >
             <Menu className="w-6 h-6" />
@@ -100,7 +100,7 @@ export function Header() {
 
           {/* Logo / Wordmark with Movable Animated Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white dark:bg-[#1E2742] p-0.5 border border-slate-200/80 dark:border-slate-700 shadow-sm movable-logo shrink-0">
+            <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white dark:bg-[#1B1C24] p-0.5 border-2 border-[#DC012B]/20 shadow-sm movable-logo shrink-0">
               <Image
                 src={siteConfig.logo.animatedGif || "/images/khelna-bazar-logo.gif"}
                 alt="Khelna Bazar Animated Logo"
@@ -111,10 +111,10 @@ export function Header() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-[#14213D] dark:text-white leading-none">
-                KHELNA <span className="text-[#1E5BFF]">BAZAR</span>
+              <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-[#18191F] dark:text-white leading-none">
+                KHELNA <span className="text-[#DC012B]">BAZAR</span>
               </span>
-              <span className="text-[9px] font-bold tracking-widest text-[#FF6B6B] uppercase leading-none mt-1">
+              <span className="text-[9px] font-bold tracking-widest text-[#DC012B] uppercase leading-none mt-1">
                 khelnabazar.com.bd
               </span>
             </div>
@@ -132,15 +132,15 @@ export function Header() {
                 placeholder="Search toys by name, age, STEM, Lego, Barbie..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 pl-5 pr-24 rounded-full border-2 border-[#1E5BFF] bg-[#F7F9FC] dark:bg-[#1E2742] text-sm text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:bg-white dark:focus:bg-[#161D33] transition-colors"
+                className="w-full h-11 pl-5 pr-24 rounded-full border-2 border-[#DC012B] bg-[#FFF8F8] dark:bg-[#242531] text-sm text-[#18191F] dark:text-white placeholder:text-slate-400 focus:outline-none focus:bg-white dark:focus:bg-[#1B1C24] transition-colors"
               />
 
               {/* Voice Search Button */}
               <button
                 type="button"
                 onClick={handleVoiceSearch}
-                className={`absolute right-12 p-2 rounded-full text-slate-400 hover:text-[#1E5BFF] transition-colors cursor-pointer ${
-                  isVoiceActive ? "text-[#FF6B6B] animate-pulse" : ""
+                className={`absolute right-12 p-2 rounded-full text-slate-400 hover:text-[#DC012B] transition-colors cursor-pointer ${
+                  isVoiceActive ? "text-[#DC012B] animate-pulse" : ""
                 }`}
                 title="Search by voice"
                 aria-label="Voice search"
@@ -151,7 +151,7 @@ export function Header() {
               {/* Search Submit Button */}
               <button
                 type="submit"
-                className="absolute right-1.5 h-8 px-4 rounded-full bg-[#1E5BFF] hover:bg-[#1546CC] text-white flex items-center justify-center transition-colors cursor-pointer"
+                className="absolute right-1.5 h-8 px-4 rounded-full bg-[#DC012B] hover:bg-[#B80023] text-white flex items-center justify-center transition-colors cursor-pointer shadow-xs"
                 aria-label="Search"
               >
                 <Search className="w-4 h-4" />
@@ -164,13 +164,13 @@ export function Header() {
             {/* Wishlist */}
             <Link
               href="/wishlist"
-              className="relative p-2.5 text-slate-700 dark:text-slate-200 hover:text-[#FF6B6B] rounded-full hover:bg-slate-100 dark:hover:bg-[#1E2742] transition-colors"
+              className="relative p-2.5 text-slate-700 dark:text-slate-200 hover:text-[#DC012B] rounded-full hover:bg-rose-50 dark:hover:bg-[#242531] transition-colors"
               title="My Wishlist"
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5" />
               {mounted && wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#FF6B6B] text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#DC012B] text-white text-[10px] font-bold flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
@@ -179,7 +179,7 @@ export function Header() {
             {/* Account */}
             <Link
               href="/account"
-              className="flex items-center gap-2 p-2 text-slate-700 dark:text-slate-200 hover:text-[#1E5BFF] rounded-full hover:bg-slate-100 dark:hover:bg-[#1E2742] transition-colors"
+              className="flex items-center gap-2 p-2 text-slate-700 dark:text-slate-200 hover:text-[#DC012B] rounded-full hover:bg-rose-50 dark:hover:bg-[#242531] transition-colors"
               title="My Account"
               aria-label="Account"
             >
@@ -190,19 +190,19 @@ export function Header() {
             {/* Cart Trigger */}
             <button
               onClick={toggleCart}
-              className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#EBF1FF] dark:bg-[#1E2D5A] text-[#1E5BFF] hover:bg-[#1E5BFF] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+              className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] text-[#DC012B] hover:bg-[#DC012B] hover:text-white transition-all cursor-pointer shadow-xs active:scale-95 border border-[#DC012B]/20"
               aria-label="View Cart"
             >
               <div className="relative">
                 <ShoppingBag className="w-5 h-5" />
                 {mounted && (
-                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#FFC93C] text-[#14213D] text-[10px] font-extrabold flex items-center justify-center shadow-xs">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#F59E0B] text-slate-900 text-[10px] font-extrabold flex items-center justify-center shadow-xs">
                     {getItemCount()}
                   </span>
                 )}
               </div>
               <div className="hidden sm:flex flex-col text-left leading-none">
-                <span className="text-[10px] uppercase font-bold opacity-75">Cash on Del.</span>
+                <span className="text-[10px] uppercase font-bold opacity-80">Cash on Del.</span>
                 <span className="text-xs font-black">
                   {mounted ? formatPrice(getSubtotal()) : "৳0"}
                 </span>
@@ -219,11 +219,11 @@ export function Header() {
               placeholder="Search toys, brands, age..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 pl-4 pr-10 rounded-full border border-[#E3E8F2] dark:border-[#263050] bg-[#F7F9FC] dark:bg-[#1E2742] text-xs text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-[#1E5BFF]"
+              className="w-full h-10 pl-4 pr-10 rounded-full border-2 border-[#DC012B] bg-[#FFF8F8] dark:bg-[#242531] text-xs text-[#18191F] dark:text-white placeholder:text-slate-400 focus:outline-none"
             />
             <button
               type="submit"
-              className="absolute right-3 text-slate-400 hover:text-[#1E5BFF]"
+              className="absolute right-3 text-[#DC012B]"
               aria-label="Search"
             >
               <Search className="w-4 h-4" />
@@ -233,7 +233,7 @@ export function Header() {
       </div>
 
       {/* Secondary Navigation Row (Desktop) */}
-      <nav aria-label="Secondary Navigation" className="hidden lg:block border-t border-[#E3E8F2] dark:border-[#263050] bg-[#F7F9FC]/70 dark:bg-[#1E2742]/50">
+      <nav aria-label="Secondary Navigation" className="hidden lg:block border-t border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#1B1C24]/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-11 text-xs font-semibold">
             {/* Departments & Dropdowns */}
@@ -241,9 +241,9 @@ export function Header() {
               {/* All Categories Mega Menu Link */}
               <Link
                 href="/c/all"
-                className="flex items-center gap-1.5 text-[#14213D] dark:text-white hover:text-[#1E5BFF] py-2"
+                className="flex items-center gap-1.5 text-[#18191F] dark:text-white hover:text-[#DC012B] py-2"
               >
-                <Layers className="w-4 h-4 text-[#1E5BFF]" />
+                <Layers className="w-4 h-4 text-[#DC012B]" />
                 <span>All Categories</span>
               </Link>
 
@@ -253,18 +253,18 @@ export function Header() {
                 onMouseEnter={() => setIsAgeMenuOpen(true)}
                 onMouseLeave={() => setIsAgeMenuOpen(false)}
               >
-                <button className="flex items-center gap-1 text-[#14213D] dark:text-white hover:text-[#1E5BFF] cursor-pointer">
+                <button className="flex items-center gap-1 text-[#18191F] dark:text-white hover:text-[#DC012B] cursor-pointer">
                   <span>Shop by Age</span>
                   <ChevronDown className="w-3.5 h-3.5" />
                 </button>
 
                 {isAgeMenuOpen && (
-                  <div className="absolute top-full left-0 w-56 bg-white dark:bg-[#161D33] rounded-2xl shadow-xl border border-[#E3E8F2] dark:border-[#263050] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 w-56 bg-white dark:bg-[#1B1C24] rounded-2xl shadow-xl border border-[#E8E2DE] dark:border-[#2E303E] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                     {AGE_RANGES.map((age) => (
                       <Link
                         key={age.query}
                         href={`/c/all?age=${age.query}`}
-                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-[#F7F9FC] dark:hover:bg-[#1E2742] text-slate-700 dark:text-slate-200 hover:text-[#1E5BFF] transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 hover:bg-[#FFF0F2] dark:hover:bg-[#242531] text-slate-700 dark:text-slate-200 hover:text-[#DC012B] transition-colors"
                       >
                         <span className="text-base">{age.icon}</span>
                         <span>{age.label}</span>
@@ -277,33 +277,33 @@ export function Header() {
               {/* Direct Department Links */}
               <Link
                 href="/deals"
-                className="flex items-center gap-1 text-[#FF6B6B] hover:underline"
+                className="flex items-center gap-1 text-[#DC012B] font-bold hover:underline"
               >
-                <Flame className="w-3.5 h-3.5 fill-current" />
+                <Flame className="w-3.5 h-3.5 fill-current text-[#DC012B]" />
                 <span>Flash Deals</span>
               </Link>
               <Link
                 href="/new-arrivals"
-                className="flex items-center gap-1 text-[#7B5CFA] hover:underline"
+                className="flex items-center gap-1 text-[#F59E0B] font-bold hover:underline"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>New Arrivals</span>
               </Link>
               <Link
                 href="/c/building-blocks"
-                className="text-slate-600 dark:text-slate-300 hover:text-[#1E5BFF]"
+                className="text-slate-700 dark:text-slate-300 hover:text-[#DC012B]"
               >
                 Building Blocks
               </Link>
               <Link
                 href="/c/stem-science"
-                className="text-slate-600 dark:text-slate-300 hover:text-[#1E5BFF]"
+                className="text-slate-700 dark:text-slate-300 hover:text-[#DC012B]"
               >
                 STEM & Robotics
               </Link>
               <Link
                 href="/c/rc-vehicles"
-                className="text-slate-600 dark:text-slate-300 hover:text-[#1E5BFF]"
+                className="text-slate-700 dark:text-slate-300 hover:text-[#DC012B]"
               >
                 RC Vehicles
               </Link>
@@ -313,16 +313,16 @@ export function Header() {
             <div className="flex items-center gap-4">
               <Link
                 href="/gift-finder"
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3EFFF] text-[#7B5CFA] hover:bg-[#7B5CFA] hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF0F2] text-[#DC012B] hover:bg-[#DC012B] hover:text-white transition-colors border border-[#DC012B]/20"
               >
                 <Gift className="w-3.5 h-3.5" />
                 <span>Gift Finder Quiz</span>
               </Link>
               <Link
                 href="/pages/toy-safety"
-                className="flex items-center gap-1 text-slate-500 hover:text-[#2EC4B6]"
+                className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-[#10B981]"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-[#2EC4B6]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
                 <span>Child Safety Certified</span>
               </Link>
             </div>
@@ -335,7 +335,7 @@ export function Header() {
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} />
           <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white dark:bg-[#161D33] shadow-2xl flex flex-col p-6 overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E3E8F2] dark:border-[#263050]">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E8E2DE] dark:border-[#263050]">
               <div className="flex items-center gap-2.5">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white dark:bg-[#1E2742] p-0.5 border border-slate-200 dark:border-slate-700 movable-logo shrink-0">
                   <Image
@@ -346,8 +346,8 @@ export function Header() {
                     className="object-contain"
                   />
                 </div>
-                <span className="font-heading font-black text-lg text-[#14213D] dark:text-white">
-                  KHELNA <span className="text-[#1E5BFF]">BAZAR</span>
+                <span className="font-heading font-black text-lg text-[#18191F] dark:text-white">
+                  KHELNA <span className="text-[#DC012B]">BAZAR</span>
                 </span>
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-slate-400">
@@ -360,28 +360,28 @@ export function Header() {
               <Link
                 href="/c/all"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 hover:text-[#1E5BFF]"
+                className="block py-1 hover:text-[#DC012B]"
               >
                 All Toys & Games
               </Link>
               <Link
                 href="/deals"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-[#FF6B6B]"
+                className="block py-1 text-[#DC012B] font-bold"
               >
                 🔥 Flash Deals
               </Link>
               <Link
                 href="/new-arrivals"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-[#7B5CFA]"
+                className="block py-1 text-[#F59E0B] font-bold"
               >
                 ✨ New Arrivals
               </Link>
               <Link
                 href="/gift-finder"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-[#1E5BFF]"
+                className="block py-1 text-[#DC012B]"
               >
                 🎁 Gift Finder Quiz
               </Link>
@@ -393,7 +393,7 @@ export function Header() {
                     key={age.query}
                     href={`/c/all?age=${age.query}`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 rounded-xl bg-[#F7F9FC] dark:bg-[#1E2742] text-xs font-medium flex items-center gap-1.5"
+                    className="p-2 rounded-xl bg-[#FAF8F6] dark:bg-[#242531] text-xs font-medium flex items-center gap-1.5"
                   >
                     <span>{age.icon}</span>
                     <span>{age.label}</span>
@@ -407,7 +407,7 @@ export function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2 py-1"
               >
-                <User className="w-4 h-4 text-[#1E5BFF]" />
+                <User className="w-4 h-4 text-[#DC012B]" />
                 <span>My Account</span>
               </Link>
               <Link

@@ -30,18 +30,19 @@ export const useAuthStore = create<AuthState>()(
         tier: "BRONZE",
       }, // Pre-populated with customer demo for immediate joyful testing
 
-      login: (email, role = "CUSTOMER", name) => {
+      login: (identifier, role = "CUSTOMER", name) => {
+        const cleanId = (identifier || "").trim().toLowerCase();
         let assignedRole: "CUSTOMER" | "STAFF" | "ADMIN" = role;
-        let assignedName = name || "Demo User";
+        let assignedName = name || identifier.split("@")[0] || "Valued Customer";
         let points = 100;
         let tier: "BRONZE" | "SILVER" | "GOLD" = "BRONZE";
 
-        if (email.toLowerCase().includes("admin")) {
+        if (cleanId.includes("admin") || cleanId === "owner") {
           assignedRole = "ADMIN";
           assignedName = "Khelna Bazar Owner";
           points = 5000;
           tier = "GOLD";
-        } else if (email.toLowerCase().includes("staff")) {
+        } else if (cleanId.includes("staff")) {
           assignedRole = "STAFF";
           assignedName = "Operations Manager";
           points = 1200;
@@ -52,7 +53,7 @@ export const useAuthStore = create<AuthState>()(
           user: {
             id: `usr-${Date.now()}`,
             name: assignedName,
-            email,
+            email: identifier.includes("@") ? identifier : `${identifier}@khelnabazar.com`,
             role: assignedRole,
             loyaltyPoints: points,
             tier,

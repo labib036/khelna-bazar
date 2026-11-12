@@ -63,7 +63,7 @@ export default function GiftFinderPage() {
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3EFFF] text-[#7B5CFA] text-xs font-bold uppercase tracking-wider">
           <Gift className="w-3.5 h-3.5" /> Interactive Toy Gift Matcher
         </span>
-        <h1 className="font-heading text-3xl sm:text-5xl font-black text-[#14213D] dark:text-white">
+        <h1 className="font-heading text-3xl sm:text-5xl font-black text-[#18191F] dark:text-white">
           Find the Perfect Gift in 30 Seconds
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
@@ -73,7 +73,7 @@ export default function GiftFinderPage() {
       </div>
 
       {!showResults ? (
-        <div className="bg-white dark:bg-[#161D33] p-6 sm:p-10 rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-md space-y-8">
+        <div className="bg-white dark:bg-[#161D33] p-6 sm:p-10 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-md space-y-8">
           {/* Progress Indicator */}
           <div className="flex items-center justify-between text-xs font-bold text-slate-400 pb-4 border-b border-slate-100 dark:border-slate-800">
             <span>Question {step} of 4</span>
@@ -92,7 +92,7 @@ export default function GiftFinderPage() {
           {/* STEP 1: Recipient */}
           {step === 1 && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <h2 className="font-heading font-black text-xl text-[#14213D] dark:text-white text-center">
+              <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white text-center">
                 Who are you shopping for?
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -108,11 +108,11 @@ export default function GiftFinderPage() {
                     className={`p-6 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all cursor-pointer ${
                       targetRecipient === item.id
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm scale-105"
-                        : "border-[#E3E8F2] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
                     }`}
                   >
                     <span className="text-4xl">{item.icon}</span>
-                    <span className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white">
+                    <span className="text-xs sm:text-sm font-bold text-[#18191F] dark:text-white">
                       {item.label}
                     </span>
                   </button>
@@ -124,7 +124,7 @@ export default function GiftFinderPage() {
           {/* STEP 2: Age */}
           {step === 2 && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <h2 className="font-heading font-black text-xl text-[#14213D] dark:text-white text-center">
+              <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white text-center">
                 How old is the child?
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -142,10 +142,10 @@ export default function GiftFinderPage() {
                     className={`p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                       targetAge === age.id
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm"
-                        : "border-[#E3E8F2] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
                     }`}
                   >
-                    <span className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white block">
+                    <span className="text-xs sm:text-sm font-bold text-[#18191F] dark:text-white block">
                       {age.label}
                     </span>
                     <span className="text-[11px] text-slate-500">{age.sub}</span>
@@ -158,7 +158,7 @@ export default function GiftFinderPage() {
           {/* STEP 3: Interests */}
           {step === 3 && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <h2 className="font-heading font-black text-xl text-[#14213D] dark:text-white text-center">
+              <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white text-center">
                 What do they enjoy doing most? (Pick 1 or more)
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -171,11 +171,11 @@ export default function GiftFinderPage() {
                       className={`p-4 rounded-2xl border-2 flex items-center gap-3 transition-all cursor-pointer ${
                         selected
                           ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm"
-                          : "border-[#E3E8F2] dark:border-[#263050] hover:border-slate-300"
+                          : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
                       }`}
                     >
                       <span className="text-2xl">{opt.emoji}</span>
-                      <span className="text-xs font-bold text-[#14213D] dark:text-white text-left flex-1">
+                      <span className="text-xs font-bold text-[#18191F] dark:text-white text-left flex-1">
                         {opt.label}
                       </span>
                       {selected && <Check className="w-4 h-4 text-[#7B5CFA]" />}
@@ -189,7 +189,7 @@ export default function GiftFinderPage() {
           {/* STEP 4: Budget */}
           {step === 4 && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <h2 className="font-heading font-black text-xl text-[#14213D] dark:text-white text-center">
+              <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white text-center">
                 What is your approximate budget?
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -204,10 +204,10 @@ export default function GiftFinderPage() {
                     className={`p-5 rounded-2xl border-2 text-center transition-all cursor-pointer ${
                       targetBudget === b.amount
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm scale-105"
-                        : "border-[#E3E8F2] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
                     }`}
                   >
-                    <span className="font-heading font-black text-lg text-[#14213D] dark:text-white block">
+                    <span className="font-heading font-black text-lg text-[#18191F] dark:text-white block">
                       {b.label}
                     </span>
                     <span className="text-xs text-slate-500 mt-1 block">{b.desc}</span>
@@ -243,9 +243,9 @@ export default function GiftFinderPage() {
       ) : (
         /* Results View */
         <div className="space-y-8 animate-in fade-in duration-300">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050]">
             <div>
-              <h2 className="font-heading font-black text-xl text-[#14213D] dark:text-white flex items-center gap-2">
+              <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#7B5CFA]" />
                 Top Handpicked Matches For You
               </h2>

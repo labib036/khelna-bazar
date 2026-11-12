@@ -49,7 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col bg-[#F7F9FC] dark:bg-[#0E1424] text-[#14213D] dark:text-[#F3F6FF] antialiased selection:bg-[#1E5BFF] selection:text-white pb-16 md:pb-0">
+      <body className="min-h-screen flex flex-col bg-[#F7F9FC] dark:bg-[#0E1424] text-[#18191F] dark:text-[#F3F6FF] antialiased selection:bg-[#DC012B] selection:text-white pb-16 md:pb-0">
         <AnnouncementBar />
         <Header />
         <main className="flex-1">{children}</main>

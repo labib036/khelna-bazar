@@ -169,7 +169,7 @@ export default function AdminOrdersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white">
+            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
               Order Fulfillment &amp; Cash on Delivery
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
@@ -179,15 +179,15 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Filter Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-[#161D33] p-4 rounded-2xl border border-[#E3E8F2] dark:border-[#263050]">
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-[#1B1C24] p-5 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
+          <div className="relative w-full sm:w-80">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by order ID, name, phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-9 pl-9 pr-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#1E5BFF]"
+              className="w-full h-10 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-[#DC012B] bg-[#FAF8F6] dark:bg-[#242531]"
             />
           </div>
 
@@ -197,10 +197,10 @@ export default function AdminOrdersPage() {
                 <button
                   key={st}
                   onClick={() => setFilterStatus(st)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-colors cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-colors cursor-pointer ${
                     filterStatus === st
-                      ? "bg-[#1E5BFF] text-white"
-                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
+                      ? "bg-[#DC012B] text-white shadow-xs"
+                      : "bg-[#FAF8F6] dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-[#DC012B]"
                   }`}
                 >
                   {st.replace("_", " ")}
@@ -211,42 +211,42 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Orders Table */}
-        <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] overflow-hidden shadow-xs">
+        <div className="bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] overflow-hidden shadow-sm">
           <table className="w-full text-xs text-left">
             <thead>
-              <tr className="border-b border-[#E3E8F2] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-slate-400 font-bold uppercase tracking-wider">
-                <th className="p-4">Order ID</th>
-                <th className="p-4">Customer</th>
-                <th className="p-4">Items</th>
-                <th className="p-4">Due (৳)</th>
-                <th className="p-4">Fulfillment</th>
-                <th className="p-4">COD Cash Status</th>
-                <th className="p-4 text-right">Actions</th>
+              <tr className="border-b border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#242531] text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <th className="p-5">Order ID</th>
+                <th className="p-5">Customer & Contact</th>
+                <th className="p-5">Items</th>
+                <th className="p-5">Due (৳)</th>
+                <th className="p-5">Fulfillment Status</th>
+                <th className="p-5">COD Cash</th>
+                <th className="p-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {filteredOrders.map((ord) => (
-                <tr key={ord.id} className="hover:bg-slate-50 dark:hover:bg-[#1E2742] transition-colors">
-                  <td className="p-4 font-mono font-bold text-[#1E5BFF]">{ord.id}</td>
-                  <td className="p-4">
-                    <span className="font-bold text-[#14213D] dark:text-white block">
+                <tr key={ord.id} className="hover:bg-[#FAF8F6] dark:hover:bg-[#242531] transition-colors">
+                  <td className="p-5 font-mono font-bold text-[#DC012B] text-sm">{ord.id}</td>
+                  <td className="p-5">
+                    <span className="font-bold text-[#18191F] dark:text-white block">
                       {ord.customerName}
                     </span>
                     <span className="text-[11px] text-slate-400">{ord.phone}</span>
                   </td>
-                  <td className="p-4 max-w-[220px] truncate text-slate-700 dark:text-slate-300">
+                  <td className="p-5 max-w-[240px] truncate text-slate-700 dark:text-slate-300 font-medium">
                     {ord.items}
                   </td>
-                  <td className="p-4 font-black text-sm text-[#14213D] dark:text-white">
+                  <td className="p-5 font-black text-sm text-[#18191F] dark:text-white">
                     {formatPrice(ord.total)}
                   </td>
-                  <td className="p-4">
+                  <td className="p-5">
                     <select
                       value={ord.status}
                       onChange={(e) =>
                         handleUpdateFulfillment(ord.id, e.target.value as AdminOrder["status"])
                       }
-                      className="px-2.5 py-1 rounded-lg border border-slate-200 text-xs font-bold bg-white dark:bg-[#161D33] focus:outline-none"
+                      className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold bg-white dark:bg-[#1B1C24] focus:outline-none focus:border-[#DC012B]"
                     >
                       <option value="PENDING_CONFIRMATION">Pending Confirmation</option>
                       <option value="CONFIRMED">Confirmed</option>
@@ -257,26 +257,24 @@ export default function AdminOrdersPage() {
                       <option value="CANCELLED">Cancelled</option>
                     </select>
                   </td>
-                  <td className="p-4">
+                  <td className="p-5">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                      className={`inline-block px-3 py-1 rounded-full text-[11px] font-extrabold ${
                         ord.codStatus === "COLLECTED"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-amber-100 text-amber-800"
+                          ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                          : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
                       }`}
                     >
                       {ord.codStatus}
                     </span>
                   </td>
-                  <td className="p-4 text-right space-x-2">
-                    <Button
+                  <td className="p-5 text-right space-x-2">
+                    <button
                       onClick={() => setSelectedOrder(ord)}
-                      variant="primary"
-                      size="sm"
-                      className="text-xs h-7"
+                      className="px-3.5 py-1.5 rounded-xl bg-[#DC012B] text-white font-bold text-xs hover:bg-[#B80023] transition-colors cursor-pointer shadow-xs"
                     >
                       Inspect / Collect
-                    </Button>
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -292,10 +290,10 @@ export default function AdminOrdersPage() {
             <div className="relative w-full max-w-xl bg-white dark:bg-[#161D33] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 z-10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <div>
-                  <span className="text-xs font-mono font-bold text-[#1E5BFF]">
+                  <span className="text-xs font-mono font-bold text-[#DC012B]">
                     {selectedOrder.id}
                   </span>
-                  <h3 className="font-heading font-black text-lg text-[#14213D] dark:text-white">
+                  <h3 className="font-heading font-black text-lg text-[#18191F] dark:text-white">
                     Order Details &amp; COD Cash Audit
                   </h3>
                 </div>
@@ -311,7 +309,7 @@ export default function AdminOrdersPage() {
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
                   <span className="text-slate-400 block font-semibold">Customer</span>
-                  <span className="font-bold text-[#14213D] dark:text-white">{selectedOrder.customerName}</span>
+                  <span className="font-bold text-[#18191F] dark:text-white">{selectedOrder.customerName}</span>
                   <span className="block text-slate-500">{selectedOrder.phone}</span>
                   <span className="block text-slate-500">{selectedOrder.email}</span>
                 </div>
@@ -326,10 +324,10 @@ export default function AdminOrdersPage() {
               {/* Items & Financials */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 space-y-2 text-xs">
                 <span className="font-bold text-slate-400 uppercase tracking-wider block">Items</span>
-                <p className="font-semibold text-[#14213D] dark:text-white">{selectedOrder.items}</p>
+                <p className="font-semibold text-[#18191F] dark:text-white">{selectedOrder.items}</p>
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between font-bold text-sm">
                   <span>Total Due on Delivery:</span>
-                  <span className="text-[#1E5BFF]">{formatPrice(selectedOrder.total)}</span>
+                  <span className="text-[#DC012B] font-black">{formatPrice(selectedOrder.total)}</span>
                 </div>
               </div>
 

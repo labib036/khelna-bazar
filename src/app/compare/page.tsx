@@ -16,7 +16,7 @@ export default function ComparePage() {
         <div className="w-20 h-20 rounded-full bg-[#F3EFFF] text-[#7B5CFA] flex items-center justify-center mx-auto">
           <Scale className="w-10 h-10" />
         </div>
-        <h1 className="font-heading text-2xl font-black text-[#14213D] dark:text-white">
+        <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
           No Toys to Compare
         </h1>
         <p className="text-xs sm:text-sm text-slate-500">
@@ -33,9 +33,9 @@ export default function ComparePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-      <div className="flex items-center justify-between pb-6 border-b border-[#E3E8F2] dark:border-[#263050]">
+      <div className="flex items-center justify-between pb-6 border-b border-[#E8E2DE] dark:border-[#263050]">
         <div>
-          <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white flex items-center gap-2.5">
+          <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white flex items-center gap-2.5">
             <Scale className="w-6 h-6 text-[#7B5CFA]" />
             <span>Toy Feature Comparison ({products.length}/4)</span>
           </h1>
@@ -48,11 +48,11 @@ export default function ComparePage() {
       </div>
 
       {/* Comparison Table */}
-      <div className="overflow-x-auto bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] shadow-xs">
-        <table className="w-full text-xs text-left divide-y divide-[#E3E8F2] dark:divide-[#263050]">
+      <div className="overflow-x-auto bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-xs">
+        <table className="w-full text-xs text-left divide-y divide-[#E8E2DE] dark:divide-[#263050]">
           <tbody>
             {/* Row 1: Header / Product Cards */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 w-44 bg-slate-50 dark:bg-[#1E2742]">
                 Toy
               </td>
@@ -71,7 +71,7 @@ export default function ComparePage() {
                     </div>
                     <Link
                       href={`/p/${p.slug}`}
-                      className="font-heading font-bold text-xs text-[#14213D] dark:text-white hover:text-[#1E5BFF] line-clamp-2 text-center"
+                      className="font-heading font-bold text-xs text-[#18191F] dark:text-white hover:text-[#DC012B] line-clamp-2 text-center"
                     >
                       {p.name}
                     </Link>
@@ -81,17 +81,17 @@ export default function ComparePage() {
             </tr>
 
             {/* Row 2: Price */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">Price</td>
               {products.map((p) => (
-                <td key={p.id} className="p-4 font-black text-sm text-[#1E5BFF]">
+                <td key={p.id} className="p-4 font-black text-sm text-[#DC012B]">
                   {formatPrice(p.price)}
                 </td>
               ))}
             </tr>
 
             {/* Row 3: Rating */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">Rating</td>
               {products.map((p) => (
                 <td key={p.id} className="p-4">
@@ -105,19 +105,19 @@ export default function ComparePage() {
             </tr>
 
             {/* Row 4: Recommended Age */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">
                 Recommended Age
               </td>
               {products.map((p) => (
-                <td key={p.id} className="p-4 font-semibold text-[#14213D] dark:text-white">
+                <td key={p.id} className="p-4 font-semibold text-[#18191F] dark:text-white">
                   {Math.floor(p.minAgeMonths / 12)} to {Math.floor(p.maxAgeMonths / 12)} Years
                 </td>
               ))}
             </tr>
 
             {/* Row 5: Materials */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">Materials</td>
               {products.map((p) => (
                 <td key={p.id} className="p-4 text-slate-600 dark:text-slate-300">
@@ -127,7 +127,7 @@ export default function ComparePage() {
             </tr>
 
             {/* Row 6: Choking Hazard */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">
                 Choking Warning
               </td>
@@ -147,7 +147,7 @@ export default function ComparePage() {
             </tr>
 
             {/* Row 7: Action */}
-            <tr className="divide-x divide-[#E3E8F2] dark:divide-[#263050]">
+            <tr className="divide-x divide-[#E8E2DE] dark:divide-[#263050]">
               <td className="p-4 font-bold text-slate-400 bg-slate-50 dark:bg-[#1E2742]">Action</td>
               {products.map((p) => (
                 <td key={p.id} className="p-4">

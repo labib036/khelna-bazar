@@ -82,11 +82,11 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="max-w-md mx-auto text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-sm">
-          <div className="w-20 h-20 rounded-full bg-[#EBF1FF] dark:bg-[#1E2D5A] text-[#1E5BFF] flex items-center justify-center mx-auto">
+        <div className="max-w-md mx-auto text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
+          <div className="w-20 h-20 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] text-[#DC012B] flex items-center justify-center mx-auto">
             <ShoppingBag className="w-10 h-10" />
           </div>
-          <h1 className="font-heading text-2xl font-black text-[#14213D] dark:text-white">
+          <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
             Your Toy Basket is Empty
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
@@ -107,7 +107,7 @@ export default function CartPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
       {/* Page Title */}
       <div>
-        <h1 className="font-heading text-2xl sm:text-4xl font-black text-[#14213D] dark:text-white">
+        <h1 className="font-heading text-2xl sm:text-4xl font-black text-[#18191F] dark:text-white">
           Review Your Toy Basket
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -116,13 +116,13 @@ export default function CartPage() {
       </div>
 
       {/* Free Shipping Progress Box */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs">
+      <div className="p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs">
         <div className="flex items-center justify-between text-xs font-semibold mb-2">
           <div className="flex items-center gap-2">
             <Truck className="w-4 h-4 text-[#2EC4B6]" />
             {freeShippingRemaining > 0 ? (
               <span>
-                Add <strong className="text-[#1E5BFF]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
+                Add <strong className="text-[#DC012B]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
                 <strong className="text-[#2EC4B6]">FREE Nationwide Delivery</strong>!
               </span>
             ) : (
@@ -144,11 +144,11 @@ export default function CartPage() {
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left: Line Items (8 Cols) */}
-        <div className="lg:col-span-8 bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] divide-y divide-[#E3E8F2] dark:divide-[#263050] shadow-xs">
+        <div className="lg:col-span-8 bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] divide-y divide-[#E8E2DE] dark:divide-[#263050] shadow-xs">
           {items.map((item) => (
             <div key={item.id} className="p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6">
               {/* Product Thumbnail */}
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-[#E3E8F2] dark:border-[#263050]">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#263050]">
                 <Image src={item.image} alt={item.name} fill className="object-cover" sizes="120px" />
               </div>
 
@@ -158,7 +158,7 @@ export default function CartPage() {
                   <div>
                     <Link
                       href={`/p/${item.productId}`}
-                      className="font-heading text-sm sm:text-base font-bold text-[#14213D] dark:text-white hover:text-[#1E5BFF] transition-colors line-clamp-1"
+                      className="font-heading text-sm sm:text-base font-bold text-[#18191F] dark:text-white hover:text-[#DC012B] transition-colors line-clamp-1"
                     >
                       {item.name}
                     </Link>
@@ -192,7 +192,7 @@ export default function CartPage() {
 
                 {/* Price and Stepper Row */}
                 <div className="flex items-center justify-between pt-2">
-                  <div className="flex items-center border border-[#E3E8F2] dark:border-[#263050] rounded-full bg-slate-50 dark:bg-[#1E2742] overflow-hidden">
+                  <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-slate-50 dark:bg-[#1E2742] overflow-hidden">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
                       className="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
@@ -200,7 +200,7 @@ export default function CartPage() {
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="px-3 text-xs font-bold text-[#14213D] dark:text-white select-none">
+                    <span className="px-3 text-xs font-bold text-[#18191F] dark:text-white select-none">
                       {item.quantity}
                     </span>
                     <button
@@ -213,7 +213,7 @@ export default function CartPage() {
                   </div>
 
                   <div className="text-right">
-                    <span className="text-base sm:text-lg font-black text-[#14213D] dark:text-white">
+                    <span className="text-base sm:text-lg font-black text-[#18191F] dark:text-white">
                       {formatPrice(item.price * item.quantity)}
                     </span>
                     {item.quantity > 1 && (
@@ -230,8 +230,8 @@ export default function CartPage() {
 
         {/* Right: Sticky Summary Box (4 Cols) */}
         <div className="lg:col-span-4 sticky top-24 space-y-4">
-          <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] p-6 shadow-xs space-y-5">
-            <h2 className="font-heading text-lg font-black text-[#14213D] dark:text-white pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
+          <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] p-6 shadow-xs space-y-5">
+            <h2 className="font-heading text-lg font-black text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
               Order Summary
             </h2>
 
@@ -245,8 +245,8 @@ export default function CartPage() {
                   onClick={() => setDeliveryZone("inside_dhaka")}
                   className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                     deliveryZone === "inside_dhaka"
-                      ? "bg-[#1E5BFF] text-white border-[#1E5BFF]"
-                      : "border-[#E3E8F2] dark:border-[#263050] text-[#14213D] dark:text-white hover:border-[#1E5BFF]"
+                      ? "bg-[#DC012B] text-white border-[#DC012B]"
+                      : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                   }`}
                 >
                   Inside Dhaka (৳60)
@@ -255,8 +255,8 @@ export default function CartPage() {
                   onClick={() => setDeliveryZone("outside_dhaka")}
                   className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                     deliveryZone === "outside_dhaka"
-                      ? "bg-[#1E5BFF] text-white border-[#1E5BFF]"
-                      : "border-[#E3E8F2] dark:border-[#263050] text-[#14213D] dark:text-white hover:border-[#1E5BFF]"
+                      ? "bg-[#DC012B] text-white border-[#DC012B]"
+                      : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                   }`}
                 >
                   Outside Dhaka (৳120)
@@ -274,7 +274,7 @@ export default function CartPage() {
                     placeholder="Coupon code (e.g. PLAY10)"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
-                    className="w-full text-xs h-10 pl-9 pr-3 rounded-xl border border-[#E3E8F2] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-[#14213D] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#1E5BFF]"
+                    className="w-full text-xs h-10 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
                   />
                 </div>
                 <Button type="submit" variant="secondary" size="sm" className="rounded-xl h-10">
@@ -300,10 +300,10 @@ export default function CartPage() {
             </div>
 
             {/* Breakdown */}
-            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-[#E3E8F2] dark:border-[#263050]">
+            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-[#E8E2DE] dark:border-[#263050]">
               <div className="flex justify-between">
                 <span>Items Subtotal</span>
-                <span className="font-bold text-[#14213D] dark:text-white">{formatPrice(subtotal)}</span>
+                <span className="font-bold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>
               </div>
 
               {discount > 0 && (
@@ -322,14 +322,14 @@ export default function CartPage() {
 
               <div className="flex justify-between">
                 <span>Cash on Delivery Fee</span>
-                <span className="font-bold text-[#14213D] dark:text-white">
+                <span className="font-bold text-[#18191F] dark:text-white">
                   {shippingFee === 0 ? <strong className="text-[#2EC4B6]">FREE</strong> : formatPrice(shippingFee)}
                 </span>
               </div>
 
-              <div className="flex justify-between text-base font-black text-[#14213D] dark:text-white pt-3 border-t border-[#E3E8F2] dark:border-[#263050]">
+              <div className="flex justify-between text-base font-black text-[#18191F] dark:text-white pt-3 border-t border-[#E8E2DE] dark:border-[#263050]">
                 <span>Total Amount Due</span>
-                <span className="text-xl text-[#1E5BFF] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
+                <span className="text-xl text-[#DC012B] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
               </div>
             </div>
 
@@ -348,7 +348,7 @@ export default function CartPage() {
                 <span>Pay cash directly to courier at your door</span>
               </div>
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#DC012B]" />
                 <span>100% Genuine, tested, and child-safe toys</span>
               </div>
             </div>

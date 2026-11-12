@@ -29,7 +29,7 @@ export default function AccountOverviewPage() {
         {/* Right Dashboard Content */}
         <div className="flex-1 space-y-8 w-full">
           {/* Welcome Card */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#1E5BFF] to-[#7B5CFA] text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#DC012B] to-[#7B5CFA] text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs uppercase tracking-wider font-extrabold text-blue-200">
                 Customer Dashboard
@@ -54,63 +54,63 @@ export default function AccountOverviewPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Link
               href="/account/orders"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#1E5BFF] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all hover:shadow-sm group"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#EBF1FF] text-[#1E5BFF] flex items-center justify-center mb-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center mb-3">
                 <Package className="w-5 h-5" />
               </div>
               <span className="text-xs text-slate-400 font-bold block">Recent Orders</span>
-              <span className="font-heading font-black text-xl text-[#14213D] dark:text-white mt-1 block group-hover:text-[#1E5BFF]">
+              <span className="font-heading font-black text-xl text-[#18191F] dark:text-white mt-1 block group-hover:text-[#DC012B]">
                 2 Orders
               </span>
             </Link>
 
             <Link
               href="/wishlist"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#FF6B6B] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#FF6B6B] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#FFF0F0] text-[#FF6B6B] flex items-center justify-center mb-3">
                 <Heart className="w-5 h-5" />
               </div>
               <span className="text-xs text-slate-400 font-bold block">Saved Wishlist</span>
-              <span className="font-heading font-black text-xl text-[#14213D] dark:text-white mt-1 block group-hover:text-[#FF6B6B]">
+              <span className="font-heading font-black text-xl text-[#18191F] dark:text-white mt-1 block group-hover:text-[#FF6B6B]">
                 {wishlistCount} Toys
               </span>
             </Link>
 
             <Link
               href="/account/rewards"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#7B5CFA] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#7B5CFA] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#F3EFFF] text-[#7B5CFA] flex items-center justify-center mb-3">
                 <Sparkles className="w-5 h-5" />
               </div>
               <span className="text-xs text-slate-400 font-bold block">PlayPoints</span>
-              <span className="font-heading font-black text-xl text-[#14213D] dark:text-white mt-1 block group-hover:text-[#7B5CFA]">
+              <span className="font-heading font-black text-xl text-[#18191F] dark:text-white mt-1 block group-hover:text-[#7B5CFA]">
                 {user?.loyaltyPoints || 350} Pts
               </span>
             </Link>
 
             <Link
               href="/account/addresses"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] hover:border-[#2EC4B6] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#2EC4B6] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#E6FAF8] text-[#2EC4B6] flex items-center justify-center mb-3">
                 <MapPin className="w-5 h-5" />
               </div>
               <span className="text-xs text-slate-400 font-bold block">Saved Addresses</span>
-              <span className="font-heading font-black text-xl text-[#14213D] dark:text-white mt-1 block group-hover:text-[#2EC4B6]">
+              <span className="font-heading font-black text-xl text-[#18191F] dark:text-white mt-1 block group-hover:text-[#2EC4B6]">
                 2 Locations
               </span>
             </Link>
           </div>
 
           {/* Active Order Tracker Widget */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E3E8F2] dark:border-[#263050]">
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
               <div className="flex items-center gap-2">
                 <Truck className="w-5 h-5 text-[#2EC4B6]" />
-                <h3 className="font-heading font-black text-sm text-[#14213D] dark:text-white">
+                <h3 className="font-heading font-black text-sm text-[#18191F] dark:text-white">
                   Active Cash on Delivery Package: #KB-100242
                 </h3>
               </div>

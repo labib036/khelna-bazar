@@ -59,20 +59,20 @@ function OrderConfirmationContent() {
   return (
     <div className="space-y-8">
       {/* Success Celebration Card */}
-      <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] text-center space-y-4 shadow-sm">
+      <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] text-center space-y-4 shadow-sm">
         <div className="w-20 h-20 rounded-full bg-[#E6FAF8] text-[#2EC4B6] flex items-center justify-center mx-auto shadow-sm">
           <CheckCircle2 className="w-10 h-10" />
         </div>
 
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF1FF] text-[#1E5BFF] text-xs font-bold uppercase mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF0F2] text-[#DC012B] text-xs font-bold uppercase mb-2">
             <Sparkles className="w-3.5 h-3.5" /> Cash on Delivery Order Confirmed
           </span>
-          <h1 className="font-heading text-2xl sm:text-4xl font-black text-[#14213D] dark:text-white">
+          <h1 className="font-heading text-2xl sm:text-4xl font-black text-[#18191F] dark:text-white">
             Thank You for Your Order!
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto">
-            Order Number: <strong className="text-[#14213D] dark:text-white font-mono">{orderId}</strong>. We've
+            Order Number: <strong className="text-[#18191F] dark:text-white font-mono">{orderId}</strong>. We've
             received your order and our team will contact you shortly to confirm delivery.
           </p>
         </div>
@@ -101,13 +101,13 @@ function OrderConfirmationContent() {
       </div>
 
       {/* Order Status & Tracking Timeline */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] space-y-6 shadow-xs">
-        <h2 className="font-heading font-black text-lg text-[#14213D] dark:text-white flex items-center gap-2">
-          <Clock className="w-5 h-5 text-[#1E5BFF]" />
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-6 shadow-xs">
+        <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white flex items-center gap-2">
+          <Clock className="w-5 h-5 text-[#DC012B]" />
           <span>Fulfillment &amp; Delivery Progress</span>
         </h2>
 
-        <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-2.5 sm:before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E3E8F2] dark:before:bg-[#263050]">
+        <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-2.5 sm:before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E8E2DE] dark:before:bg-[#263050]">
           {steps.map((step, idx) => (
             <div key={idx} className="relative flex items-start gap-3">
               <div
@@ -115,8 +115,8 @@ function OrderConfirmationContent() {
                   step.done
                     ? "bg-[#2EC4B6] text-white"
                     : step.current
-                    ? "bg-[#1E5BFF] text-white ring-4 ring-[#1E5BFF]/20 animate-pulse"
-                    : "bg-[#E3E8F2] dark:bg-[#263050] text-slate-400"
+                    ? "bg-[#DC012B] text-white ring-4 ring-[#DC012B]/20 animate-pulse"
+                    : "bg-[#E8E2DE] dark:bg-[#263050] text-slate-400"
                 }`}
               >
                 {step.done ? "✓" : idx + 1}
@@ -126,9 +126,9 @@ function OrderConfirmationContent() {
                 <h4
                   className={`text-xs sm:text-sm font-bold ${
                     step.current
-                      ? "text-[#1E5BFF] dark:text-[#5B8CFF]"
+                      ? "text-[#DC012B] dark:text-[#5B8CFF]"
                       : step.done
-                      ? "text-[#14213D] dark:text-white"
+                      ? "text-[#18191F] dark:text-white"
                       : "text-slate-400"
                   }`}
                 >
@@ -142,16 +142,16 @@ function OrderConfirmationContent() {
       </div>
 
       {/* Need Help Strip */}
-      <div className="p-6 rounded-3xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E3E8F2] dark:border-[#263050] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div className="p-6 rounded-3xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E8E2DE] dark:border-[#263050] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         <div className="flex items-center gap-3">
-          <Phone className="w-5 h-5 text-[#1E5BFF]" />
+          <Phone className="w-5 h-5 text-[#DC012B]" />
           <div>
-            <h4 className="font-bold text-[#14213D] dark:text-white">Need to update your delivery address or time?</h4>
+            <h4 className="font-bold text-[#18191F] dark:text-white">Need to update your delivery address or time?</h4>
             <p className="text-slate-500">Call our customer care hotline: {siteConfig.contact.phone}</p>
           </div>
         </div>
         <Link href="/pages/shipping-policy">
-          <span className="font-bold text-[#1E5BFF] hover:underline flex items-center gap-1">
+          <span className="font-bold text-[#DC012B] hover:underline flex items-center gap-1">
             Shipping FAQ <ChevronRight className="w-4 h-4" />
           </span>
         </Link>

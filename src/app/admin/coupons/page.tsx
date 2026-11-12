@@ -105,65 +105,72 @@ export default function AdminCouponsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#14213D] dark:text-white flex items-center gap-2">
-              <Tag className="w-6 h-6 text-[#1E5BFF]" />
+            <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white flex items-center gap-2.5">
+              <Tag className="w-6 h-6 text-[#DC012B]" />
               <span>Promotional Coupons &amp; Discounts</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Create discount promo codes for flash campaigns and newsletter welcome gifts.
+              Create discount promo codes for flash campaigns and customer loyalty rewards.
             </p>
           </div>
 
-          <Button onClick={() => setShowAddModal(true)} variant="primary" size="sm" className="gap-1.5 shadow-xs">
+          <Button
+            onClick={() => setShowAddModal(true)}
+            variant="primary"
+            size="sm"
+            className="gap-1.5 shadow-sm bg-[#DC012B] hover:bg-[#B80023] text-white"
+          >
             <Plus className="w-4 h-4" />
             <span>Create Coupon</span>
           </Button>
         </div>
 
         {/* Coupons Table */}
-        <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E3E8F2] dark:border-[#263050] overflow-hidden shadow-xs">
+        <div className="bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] overflow-hidden shadow-sm">
           <table className="w-full text-xs text-left">
             <thead>
-              <tr className="border-b border-[#E3E8F2] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-slate-400 font-bold uppercase tracking-wider">
-                <th className="p-4">Coupon Code</th>
-                <th className="p-4">Discount Type</th>
-                <th className="p-4">Benefit</th>
-                <th className="p-4">Min. Spend</th>
-                <th className="p-4">Validity</th>
-                <th className="p-4">Active</th>
-                <th className="p-4 text-right">Delete</th>
+              <tr className="border-b border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#242531] text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <th className="p-5">Coupon Code</th>
+                <th className="p-5">Discount Type</th>
+                <th className="p-5">Benefit</th>
+                <th className="p-5">Min. Spend</th>
+                <th className="p-5">Validity</th>
+                <th className="p-5">Active Status</th>
+                <th className="p-5 text-right">Delete</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {coupons.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-[#1E2742] transition-colors">
-                  <td className="p-4 font-mono font-black text-sm text-[#1E5BFF]">{c.code}</td>
-                  <td className="p-4 text-slate-600 dark:text-slate-300 font-semibold">{c.type}</td>
-                  <td className="p-4 font-bold text-[#14213D] dark:text-white">
+                <tr key={c.id} className="hover:bg-[#FAF8F6] dark:hover:bg-[#242531] transition-colors">
+                  <td className="p-5 font-mono font-black text-sm text-[#DC012B]">{c.code}</td>
+                  <td className="p-5 text-slate-600 dark:text-slate-300 font-semibold">{c.type}</td>
+                  <td className="p-5 font-bold text-[#18191F] dark:text-white">
                     {c.type === "PERCENTAGE"
                       ? `${c.value}% OFF`
                       : c.type === "FIXED"
                       ? `${formatPrice(c.value)} OFF`
                       : "FREE Delivery"}
                   </td>
-                  <td className="p-4 font-semibold text-slate-600 dark:text-slate-300">
+                  <td className="p-5 font-semibold text-slate-600 dark:text-slate-300">
                     {formatPrice(c.minSpend)}
                   </td>
-                  <td className="p-4 text-slate-500">{c.expiresIn}</td>
-                  <td className="p-4">
+                  <td className="p-5 text-slate-500">{c.expiresIn}</td>
+                  <td className="p-5">
                     <button
                       onClick={() => handleToggle(c.id)}
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold cursor-pointer transition-colors ${
-                        c.active ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-500"
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold cursor-pointer transition-colors ${
+                        c.active
+                          ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                          : "bg-slate-200 text-slate-500"
                       }`}
                     >
                       {c.active ? "Active" : "Disabled"}
                     </button>
                   </td>
-                  <td className="p-4 text-right">
+                  <td className="p-5 text-right">
                     <button
                       onClick={() => handleDelete(c.id, c.code)}
-                      className="p-1.5 text-slate-400 hover:text-[#FF6B6B] transition-colors cursor-pointer"
+                      className="p-1.5 text-slate-400 hover:text-[#DC012B] transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -183,7 +190,7 @@ export default function AdminCouponsPage() {
               className="relative w-full max-w-md bg-white dark:bg-[#161D33] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 z-10"
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 className="font-heading font-black text-base text-[#14213D] dark:text-white">
+                <h3 className="font-heading font-black text-base text-[#18191F] dark:text-white">
                   Create Promotional Code
                 </h3>
                 <button onClick={() => setShowAddModal(false)} className="p-1 text-slate-400">

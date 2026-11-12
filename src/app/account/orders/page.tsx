@@ -37,7 +37,7 @@ export default function CustomerOrdersPage() {
 
         <div className="flex-1 space-y-6 w-full">
           <div>
-            <h1 className="font-heading text-2xl font-black text-[#14213D] dark:text-white">
+            <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
               My Orders &amp; Delivery Tracking
             </h1>
             <p className="text-xs text-slate-500 mt-1">
@@ -49,11 +49,11 @@ export default function CustomerOrdersPage() {
             {sampleOrders.map((ord) => (
               <div
                 key={ord.id}
-                className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E3E8F2] dark:border-[#263050] shadow-xs space-y-4"
+                className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-4"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono font-black text-sm text-[#1E5BFF]">{ord.id}</span>
+                    <span className="font-mono font-black text-sm text-[#DC012B]">{ord.id}</span>
                     <span className="text-xs text-slate-400">&bull; Placed on {ord.date}</span>
                   </div>
 
@@ -81,7 +81,7 @@ export default function CustomerOrdersPage() {
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white">
+                    <h3 className="text-xs sm:text-sm font-bold text-[#18191F] dark:text-white">
                       {ord.items}
                     </h3>
                     <p className="text-xs text-slate-500 mt-0.5">
@@ -92,7 +92,7 @@ export default function CustomerOrdersPage() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <span className="text-xs text-slate-400 block">Total Due</span>
-                      <span className="text-sm sm:text-base font-black text-[#14213D] dark:text-white">
+                      <span className="text-sm sm:text-base font-black text-[#18191F] dark:text-white">
                         {formatPrice(ord.total)}
                       </span>
                     </div>

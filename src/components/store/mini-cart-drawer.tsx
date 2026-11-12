@@ -72,10 +72,10 @@ export function MiniCartDrawer() {
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
         <div className="w-screen max-w-md bg-white dark:bg-[#161D33] shadow-2xl flex flex-col">
           {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-[#E3E8F2] dark:border-[#263050] flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#1E5BFF]" />
-              <h2 className="text-lg font-bold font-heading text-[#14213D] dark:text-white">
+          <div className="p-4 sm:p-5 border-b border-[#E8E2DE] dark:border-[#2E303E] flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <ShoppingBag className="w-5 h-5 text-[#DC012B]" />
+              <h2 className="text-lg font-bold font-heading text-[#18191F] dark:text-white">
                 Your Toy Basket ({items.reduce((acc, i) => acc + i.quantity, 0)})
               </h2>
             </div>
@@ -89,26 +89,26 @@ export function MiniCartDrawer() {
           </div>
 
           {/* Free Shipping Progress Bar */}
-          <div className="bg-[#F7F9FC] dark:bg-[#1E2742] px-5 py-3 border-b border-[#E3E8F2] dark:border-[#263050]">
+          <div className="bg-[#FAF8F6] dark:bg-[#1B1C24] px-5 py-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
             <div className="flex items-center justify-between text-xs mb-1.5 font-medium">
-              <div className="flex items-center gap-1.5 text-[#14213D] dark:text-slate-200">
-                <Truck className="w-4 h-4 text-[#2EC4B6]" />
+              <div className="flex items-center gap-1.5 text-[#18191F] dark:text-slate-200">
+                <Truck className="w-4 h-4 text-[#10B981]" />
                 {freeShippingRemaining > 0 ? (
                   <span>
-                    Add <strong className="text-[#1E5BFF]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
-                    <strong className="text-[#2EC4B6]">FREE Delivery</strong>!
+                    Add <strong className="text-[#DC012B]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
+                    <strong className="text-[#10B981]">FREE Delivery</strong>!
                   </span>
                 ) : (
-                  <span className="text-[#2EC4B6] font-bold flex items-center gap-1">
+                  <span className="text-[#10B981] font-bold flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5" /> Congratulations! You unlocked FREE Delivery.
                   </span>
                 )}
               </div>
               <span className="font-bold text-slate-500">{progressPercent}%</span>
             </div>
-            <div className="w-full bg-[#E3E8F2] dark:bg-[#263050] h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-[#E8E2DE] dark:border-[#2E303E] h-2 rounded-full overflow-hidden">
               <div
-                className="bg-[#2EC4B6] h-full rounded-full transition-all duration-300"
+                className="bg-[#10B981] h-full rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -118,11 +118,11 @@ export function MiniCartDrawer() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
-                <div className="w-20 h-20 rounded-full bg-[#EBF1FF] dark:bg-[#1E2D5A] flex items-center justify-center text-[#1E5BFF]">
+                <div className="w-20 h-20 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] flex items-center justify-center text-[#DC012B]">
                   <ShoppingBag className="w-10 h-10 stroke-[1.5]" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-bold text-[#14213D] dark:text-white">
+                  <h3 className="font-heading text-lg font-bold text-[#18191F] dark:text-white">
                     Your basket is feeling lonely!
                   </h3>
                   <p className="text-sm text-slate-500 mt-1 max-w-xs">
@@ -137,10 +137,10 @@ export function MiniCartDrawer() {
               items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-3 pb-4 border-b border-[#E3E8F2] dark:border-[#263050] last:border-0"
+                  className="flex gap-3 pb-4 border-b border-[#E8E2DE] dark:border-[#263050] last:border-0"
                 >
                   {/* Thumbnail */}
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-[#E3E8F2] dark:border-[#263050]">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#263050]">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -157,13 +157,13 @@ export function MiniCartDrawer() {
                         <Link
                           href={`/p/${item.productId}`}
                           onClick={closeCart}
-                          className="text-sm font-semibold text-[#14213D] dark:text-white hover:text-[#1E5BFF] line-clamp-1"
+                          className="text-sm font-semibold text-[#18191F] dark:text-white hover:text-[#DC012B] line-clamp-1"
                         >
                           {item.name}
                         </Link>
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-slate-400 hover:text-[#FF6B6B] transition-colors p-1"
+                          className="text-slate-400 hover:text-[#DC012B] transition-colors p-1"
                           title="Remove item"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -189,12 +189,12 @@ export function MiniCartDrawer() {
 
                     {/* Price and Stepper */}
                     <div className="flex items-center justify-between mt-1">
-                      <span className="font-bold text-sm text-[#1E5BFF] dark:text-[#5B8CFF]">
+                      <span className="font-bold text-sm text-[#DC012B]">
                         {formatPrice(item.price * item.quantity)}
                       </span>
 
                       {/* Quantity Stepper */}
-                      <div className="flex items-center border border-[#E3E8F2] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
+                      <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
                           className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1E2742] transition-colors cursor-pointer"
@@ -202,7 +202,7 @@ export function MiniCartDrawer() {
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="px-2 text-xs font-bold text-[#14213D] dark:text-white select-none">
+                        <span className="px-2 text-xs font-bold text-[#18191F] dark:text-white select-none">
                           {item.quantity}
                         </span>
                         <button
@@ -222,7 +222,7 @@ export function MiniCartDrawer() {
 
           {/* Footer & Order Summary */}
           {items.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-[#E3E8F2] dark:border-[#263050] bg-[#F7F9FC] dark:bg-[#1E2742] space-y-3">
+            <div className="p-4 sm:p-5 border-t border-[#E8E2DE] dark:border-[#263050] bg-[#F7F9FC] dark:bg-[#1E2742] space-y-3">
               {/* Coupon Form */}
               <form onSubmit={handleApplyCoupon} className="flex gap-2">
                 <div className="relative flex-1">
@@ -232,7 +232,7 @@ export function MiniCartDrawer() {
                     placeholder="Enter coupon (e.g. PLAY10)"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
-                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[#E3E8F2] dark:border-[#263050] bg-white dark:bg-[#161D33] text-[#14213D] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#1E5BFF]"
+                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
                   />
                 </div>
                 <Button type="submit" variant="secondary" size="sm" className="rounded-xl h-9">
@@ -268,7 +268,7 @@ export function MiniCartDrawer() {
               <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-[#14213D] dark:text-white">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-[#2EC4B6]">
@@ -286,16 +286,16 @@ export function MiniCartDrawer() {
                   <span>Cash on Delivery (Estimated)</span>
                   <span>{shippingFee === 0 ? <strong className="text-[#2EC4B6]">FREE</strong> : formatPrice(shippingFee)}</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-[#14213D] dark:text-white pt-2 border-t border-[#E3E8F2] dark:border-[#263050]">
+                <div className="flex justify-between text-sm font-bold text-[#18191F] dark:text-white pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
                   <span>Total Amount</span>
-                  <span className="text-base text-[#1E5BFF] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
+                  <span className="text-base text-[#DC012B] font-black">{formatPrice(total)}</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="pt-2 space-y-2">
                 <Link href="/checkout" onClick={closeCart} className="block w-full">
-                  <Button variant="sun" size="lg" className="w-full text-sm font-bold shadow-md">
+                  <Button variant="primary" size="lg" className="w-full text-sm font-bold shadow-md bg-[#DC012B] hover:bg-[#B80023]">
                     <span>Proceed to Cash on Delivery</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
