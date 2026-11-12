@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { useCartStore } from "@/lib/cart-store";
 import { useWishlistStore } from "@/lib/wishlist-store";
+import { useAuthStore } from "@/lib/auth-store";
 import { formatPrice } from "@/lib/utils";
 import {
   Search,
@@ -38,6 +39,7 @@ export function Header() {
   const router = useRouter();
   const { toggleCart, getItemCount, getSubtotal } = useCartStore();
   const wishlistCount = useWishlistStore((state) => state.getCount());
+  const { user, logout } = useAuthStore();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -85,7 +87,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white dark:bg-[#161D33] border-b border-[#E8E2DE] dark:border-[#263050] shadow-xs">
+    <header className="sticky top-0 z-40 bg-white dark:bg-[#1B1C24] border-b border-[#E8E2DE] dark:border-[#2E303E] shadow-xs">
       {/* Main Header Row */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 sm:h-20 gap-4 sm:gap-6">
@@ -176,16 +178,45 @@ export function Header() {
               )}
             </Link>
 
-            {/* Account */}
-            <Link
-              href="/account"
-              className="flex items-center gap-2 p-2 text-slate-700 dark:text-slate-200 hover:text-[#DC012B] rounded-full hover:bg-rose-50 dark:hover:bg-[#242531] transition-colors"
-              title="My Account"
-              aria-label="Account"
-            >
-              <User className="w-5 h-5" />
-              <span className="hidden xl:inline text-xs font-semibold">Account</span>
-            </Link>
+            {/* User Account / Sign In / Create Account */}
+            {mounted && !user ? (
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Link
+                  href="/login"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-[#DC012B] hover:bg-rose-50 dark:hover:bg-[#242531] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="hidden sm:inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#DC012B] hover:bg-[#B80023] text-white shadow-xs transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                  <span>Create Account</span>
+                </Link>
+              </div>
+            ) : mounted && user ? (
+              <Link
+                href={user.role === "ADMIN" ? "/admin" : "/account"}
+                className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5 text-slate-700 dark:text-slate-200 hover:text-[#DC012B] rounded-full bg-slate-100 dark:bg-slate-800 transition-colors"
+                title={user.name}
+                aria-label="Account"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#DC012B] text-white flex items-center justify-center text-[10px] font-black">
+                  {user.name?.[0] || "U"}
+                </div>
+                <span className="hidden xl:inline text-xs font-semibold max-w-[90px] truncate">
+                  {user.name.split(" ")[0]}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="px-2.5 py-1.5 rounded-full text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-[#DC012B]"
+              >
+                Sign In
+              </Link>
+            )}
 
             {/* Cart Trigger */}
             <button
@@ -334,10 +365,10 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white dark:bg-[#161D33] shadow-2xl flex flex-col p-6 overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E8E2DE] dark:border-[#263050]">
+          <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white dark:bg-[#1B1C24] shadow-2xl flex flex-col p-6 overflow-y-auto">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E]">
               <div className="flex items-center gap-2.5">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white dark:bg-[#1E2742] p-0.5 border border-slate-200 dark:border-slate-700 movable-logo shrink-0">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white dark:bg-[#242531] p-0.5 border border-slate-200 dark:border-slate-700 movable-logo shrink-0">
                   <Image
                     src={siteConfig.logo.animatedGif || "/images/khelna-bazar-logo.gif"}
                     alt="Logo"
@@ -401,15 +432,57 @@ export function Header() {
                 ))}
               </div>
 
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold pt-4">Account & Help</p>
-              <Link
-                href="/account"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-1"
-              >
-                <User className="w-4 h-4 text-[#DC012B]" />
-                <span>My Account</span>
-              </Link>
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold pt-4">Account</p>
+              {!user ? (
+                <div className="space-y-2 pt-1">
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-[#DC012B] hover:text-[#DC012B] transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-[#DC012B] text-white text-xs font-bold hover:bg-[#B80023] shadow-xs transition-colors"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+                    <span>Create Account &bull; 100 Pts</span>
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-2 pt-1">
+                  <div className="p-3 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] border border-[#E8E2DE] dark:border-[#2E303E] flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#DC012B] text-white flex items-center justify-center font-bold text-xs">
+                      {user.name?.[0] || "U"}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-xs font-bold text-[#18191F] dark:text-white block truncate">{user.name}</span>
+                      <span className="text-[10px] text-emerald-600 font-semibold">{user.loyaltyPoints} PlayPoints</span>
+                    </div>
+                  </div>
+                  <Link
+                    href={user.role === "ADMIN" ? "/admin" : "/account"}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-2 py-1 text-slate-700 dark:text-slate-200 hover:text-[#DC012B]"
+                  >
+                    <User className="w-4 h-4 text-[#DC012B]" />
+                    <span>{user.role === "ADMIN" ? "Admin Console" : "My Account"}</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 py-1 text-xs text-rose-500 font-bold hover:underline cursor-pointer"
+                  >
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold pt-3">Help &amp; Safety</p>
               <Link
                 href="/track-order"
                 onClick={() => setIsMobileMenuOpen(false)}

@@ -36,7 +36,7 @@ export default function TrackOrderPage() {
         </p>
       </div>
 
-      <div className="bg-white dark:bg-[#161D33] p-6 sm:p-8 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
+      <div className="bg-white dark:bg-[#1B1C24] p-6 sm:p-8 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
         <form onSubmit={handleTrack} className="space-y-4">
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">

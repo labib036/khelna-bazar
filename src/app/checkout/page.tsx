@@ -166,7 +166,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] dark:bg-[#0E1424] py-8 sm:py-12">
+    <div className="min-h-screen bg-[#FAF8F6] dark:bg-[#121318] py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Secure Checkout Header */}
         <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8E2DE] dark:border-[#2E303E]">
@@ -249,8 +249,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* Step 2: Delivery Address & Zone */}
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+            <div className="bg-white dark:bg-[#1B1C24] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
                 <div className="w-7 h-7 rounded-full bg-[#DC012B] text-white flex items-center justify-center font-bold text-xs">
                   2
                 </div>
@@ -271,7 +271,7 @@ export default function CheckoutPage() {
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
                       deliveryZone === "inside_dhaka"
                         ? "bg-[#FFF0F2] dark:bg-[#3D000B] border-[#DC012B] text-[#DC012B]"
-                        : "border-[#E8E2DE] dark:border-[#263050] text-slate-600 dark:text-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -287,7 +287,7 @@ export default function CheckoutPage() {
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
                       deliveryZone === "outside_dhaka"
                         ? "bg-[#FFF0F2] dark:bg-[#3D000B] border-[#DC012B] text-[#DC012B]"
-                        : "border-[#E8E2DE] dark:border-[#263050] text-slate-600 dark:text-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -308,7 +308,7 @@ export default function CheckoutPage() {
                   <select
                     value={division}
                     onChange={(e) => setDivision(e.target.value)}
-                    className="w-full h-11 px-3.5 rounded-2xl border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-sm text-[#18191F] dark:text-white focus:outline-none focus:border-[#DC012B]"
+                    className="w-full h-11 px-3.5 rounded-2xl border border-[#E8E2DE] dark:border-[#2E303E] bg-white dark:bg-[#1B1C24] text-sm text-[#18191F] dark:text-white focus:outline-none focus:border-[#DC012B]"
                   >
                     {BD_DIVISIONS.map((d) => (
                       <option key={d} value={d}>
@@ -358,8 +358,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* Step 3: Cash on Delivery Sole Payment Method */}
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border-2 border-[#2EC4B6] shadow-xs space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+            <div className="bg-white dark:bg-[#1B1C24] p-6 rounded-3xl border-2 border-[#2EC4B6] shadow-xs space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
                 <div className="w-7 h-7 rounded-full bg-[#2EC4B6] text-white flex items-center justify-center font-bold text-xs">
                   3
                 </div>
@@ -386,8 +386,8 @@ export default function CheckoutPage() {
 
           {/* Right: Sticky Order Summary (5 Cols) */}
           <div className="lg:col-span-5 sticky top-24 space-y-4">
-            <div className="bg-white dark:bg-[#161D33] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-5">
-              <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+            <div className="bg-white dark:bg-[#1B1C24] p-6 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-5">
+              <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
                 Order Items ({items.reduce((acc, i) => acc + i.quantity, 0)})
               </h2>
 
@@ -414,7 +414,7 @@ export default function CheckoutPage() {
               </div>
 
               {/* Breakdown */}
-              <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-3 border-t border-[#E8E2DE] dark:border-[#263050]">
+              <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-3 border-t border-[#E8E2DE] dark:border-[#2E303E]">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span className="font-bold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>

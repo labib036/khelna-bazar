@@ -70,7 +70,7 @@ export function MiniCartDrawer() {
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-[#161D33] shadow-2xl flex flex-col">
+        <div className="w-screen max-w-md bg-white dark:bg-[#1B1C24] shadow-2xl flex flex-col">
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-[#E8E2DE] dark:border-[#2E303E] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -137,10 +137,10 @@ export function MiniCartDrawer() {
               items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-3 pb-4 border-b border-[#E8E2DE] dark:border-[#263050] last:border-0"
+                  className="flex gap-3 pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E] last:border-0"
                 >
                   {/* Thumbnail */}
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#263050]">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#2E303E]">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -194,10 +194,10 @@ export function MiniCartDrawer() {
                       </span>
 
                       {/* Quantity Stepper */}
-                      <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
+                      <div className="flex items-center border border-[#E8E2DE] dark:border-[#2E303E] rounded-full bg-white dark:bg-[#1B1C24] overflow-hidden">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
-                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1E2742] transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242531] transition-colors cursor-pointer"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-3 h-3" />
@@ -207,7 +207,7 @@ export function MiniCartDrawer() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, 1)}
-                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1E2742] transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242531] transition-colors cursor-pointer"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-3 h-3" />
@@ -222,7 +222,7 @@ export function MiniCartDrawer() {
 
           {/* Footer & Order Summary */}
           {items.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-[#E8E2DE] dark:border-[#263050] bg-[#F7F9FC] dark:bg-[#1E2742] space-y-3">
+            <div className="p-4 sm:p-5 border-t border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#242531] space-y-3">
               {/* Coupon Form */}
               <form onSubmit={handleApplyCoupon} className="flex gap-2">
                 <div className="relative flex-1">
@@ -232,7 +232,7 @@ export function MiniCartDrawer() {
                     placeholder="Enter coupon (e.g. PLAY10)"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
-                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
+                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#2E303E] bg-white dark:bg-[#1B1C24] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
                   />
                 </div>
                 <Button type="submit" variant="secondary" size="sm" className="rounded-xl h-9">

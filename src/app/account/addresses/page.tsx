@@ -1,13 +1,52 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AccountNav } from "@/components/account/account-nav";
+import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Plus, Check, Trash2, Home, Building } from "lucide-react";
+import { MapPin, Plus, Check, Trash2, Home, Building, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AddressesPage() {
+  const { user } = useAuthStore();
+
+  if (!user) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <AccountNav />
+          <div className="flex-1 bg-white dark:bg-[#1B1C24] p-8 sm:p-12 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] text-center space-y-5 shadow-sm w-full">
+            <div className="w-16 h-16 rounded-3xl bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center mx-auto shadow-xs">
+              <MapPin className="w-8 h-8" />
+            </div>
+            <div className="max-w-md mx-auto space-y-2">
+              <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
+                Sign In to Manage Addresses
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                Save your home and office delivery addresses for fast 1-click Cash on Delivery orders.
+              </p>
+            </div>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/login?redirect=/account/addresses">
+                <Button variant="primary" size="md" className="bg-[#DC012B] hover:bg-[#B80023] font-bold text-xs shadow-xs">
+                  <span>Sign In</span>
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="outline" size="md" className="text-xs font-bold border-[#DC012B] text-[#DC012B] hover:bg-[#DC012B] hover:text-white">
+                  <span>Create Account</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const [addresses, setAddresses] = useState([
     {
       id: "addr-1",
@@ -110,7 +149,7 @@ export default function AddressesPage() {
           {showAddForm && (
             <form
               onSubmit={handleAddAddress}
-              className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#DC012B] shadow-sm space-y-4 animate-in fade-in"
+              className="p-6 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#DC012B] shadow-sm space-y-4 animate-in fade-in"
             >
               <h3 className="font-heading font-black text-sm text-[#18191F] dark:text-white">
                 Add New Delivery Coordinates
@@ -167,7 +206,7 @@ export default function AddressesPage() {
             {addresses.map((a) => (
               <div
                 key={a.id}
-                className="p-5 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-3 shadow-xs flex flex-col justify-between"
+                className="p-5 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] space-y-3 shadow-xs flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">

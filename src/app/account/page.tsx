@@ -20,6 +20,42 @@ export default function AccountOverviewPage() {
   const { user } = useAuthStore();
   const wishlistCount = useWishlistStore((state) => state.getCount());
 
+  if (!user) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <AccountNav />
+          <div className="flex-1 bg-white dark:bg-[#1B1C24] p-8 sm:p-12 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] text-center space-y-5 shadow-sm w-full">
+            <div className="w-16 h-16 rounded-3xl bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center mx-auto shadow-xs">
+              <Sparkles className="w-8 h-8" />
+            </div>
+            <div className="max-w-md mx-auto space-y-2">
+              <h1 className="font-heading text-2xl font-black text-[#18191F] dark:text-white">
+                You Are Not Signed In
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                Sign in to check your Cash on Delivery orders, view saved delivery addresses, and track your PlayPoints rewards balance.
+              </p>
+            </div>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/login?redirect=/account">
+                <Button variant="primary" size="md" className="bg-[#DC012B] hover:bg-[#B80023] font-bold text-xs shadow-xs">
+                  <span>Sign In to Account</span>
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="outline" size="md" className="text-xs font-bold border-[#DC012B] text-[#DC012B] hover:bg-[#DC012B] hover:text-white">
+                  <span>Create Free Account (100 Pts)</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -54,7 +90,7 @@ export default function AccountOverviewPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Link
               href="/account/orders"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#FFF0F2] text-[#DC012B] flex items-center justify-center mb-3">
                 <Package className="w-5 h-5" />
@@ -67,7 +103,7 @@ export default function AccountOverviewPage() {
 
             <Link
               href="/wishlist"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#FF6B6B] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#FF6B6B] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#FFF0F0] text-[#FF6B6B] flex items-center justify-center mb-3">
                 <Heart className="w-5 h-5" />
@@ -80,7 +116,7 @@ export default function AccountOverviewPage() {
 
             <Link
               href="/account/rewards"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#7B5CFA] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#7B5CFA] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#F3EFFF] text-[#7B5CFA] flex items-center justify-center mb-3">
                 <Sparkles className="w-5 h-5" />
@@ -93,7 +129,7 @@ export default function AccountOverviewPage() {
 
             <Link
               href="/account/addresses"
-              className="p-5 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#2EC4B6] transition-all hover:shadow-sm group"
+              className="p-5 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#2EC4B6] transition-all hover:shadow-sm group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#E6FAF8] text-[#2EC4B6] flex items-center justify-center mb-3">
                 <MapPin className="w-5 h-5" />
@@ -106,8 +142,8 @@ export default function AccountOverviewPage() {
           </div>
 
           {/* Active Order Tracker Widget */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+          <div className="p-6 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
               <div className="flex items-center gap-2">
                 <Truck className="w-5 h-5 text-[#2EC4B6]" />
                 <h3 className="font-heading font-black text-sm text-[#18191F] dark:text-white">

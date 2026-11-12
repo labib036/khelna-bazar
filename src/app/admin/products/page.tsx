@@ -233,7 +233,7 @@ export default function AdminProductsPage() {
 
             <form
               onSubmit={handleCreateProduct}
-              className="relative w-full max-w-lg bg-white dark:bg-[#161D33] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 z-10 max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-lg bg-white dark:bg-[#1B1C24] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 z-10 max-h-[90vh] overflow-y-auto"
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <h3 className="font-heading font-black text-lg text-[#18191F] dark:text-white">

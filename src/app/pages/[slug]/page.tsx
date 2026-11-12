@@ -118,7 +118,7 @@ export default async function CmsPage({ params }: CmsPageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-6">
-      <h1 className="font-heading text-3xl sm:text-4xl font-black text-[#18191F] dark:text-white pb-4 border-b border-[#E8E2DE] dark:border-[#263050]">
+      <h1 className="font-heading text-3xl sm:text-4xl font-black text-[#18191F] dark:text-white pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E]">
         {pageData.title}
       </h1>
       <div

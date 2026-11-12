@@ -74,7 +74,7 @@ export default function AdminSettingsPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] text-xs text-slate-500 space-y-1">
+          <div className="p-4 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] text-xs text-slate-500 space-y-1">
             <strong className="text-[#18191F] dark:text-white block font-bold">Logo Customization Tip:</strong>
             <p>
               To replace the store logo with your own custom image later, place your logo file into{" "}
@@ -85,7 +85,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* 2. Cash on Delivery (COD) & Shipping Zones */}
-        <div className="bg-white dark:bg-[#161D33] p-6 sm:p-8 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] space-y-4 shadow-xs">
+        <div className="bg-white dark:bg-[#1B1C24] p-6 sm:p-8 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] space-y-4 shadow-xs">
           <h2 className="font-heading font-black text-base text-[#18191F] dark:text-white flex items-center gap-2">
             <Truck className="w-4 h-4 text-[#2EC4B6]" />
             <span>Cash on Delivery Zones &amp; Shipping Charges</span>

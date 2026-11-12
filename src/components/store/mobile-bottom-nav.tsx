@@ -25,7 +25,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#161D33]/95 backdrop-blur-md border-t border-[#E8E2DE] dark:border-[#263050] px-4 py-2"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-[#1B1C24]/95 backdrop-blur-md border-t border-[#E8E2DE] dark:border-[#2E303E] px-4 py-2"
     >
       <div className="flex items-center justify-around">
         {navItems.slice(0, 2).map((item) => {

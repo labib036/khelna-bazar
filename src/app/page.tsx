@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getProducts, getCategories } from "@/server/services/product-service";
 import { ProductCard } from "@/components/store/product-card";
+import { MarketingDashboard } from "@/components/store/marketing-dashboard";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -125,6 +126,9 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* 1.5. NEW VISITOR MARKETING DASHBOARD & REWARDS GATEWAY */}
+      <MarketingDashboard />
+
       {/* 2. SHOP BY AGE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
@@ -143,9 +147,9 @@ export default async function HomePage() {
             <Link
               key={item.query}
               href={`/c/all?age=${item.query}`}
-              className="group p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col items-center text-center cursor-pointer"
+              className="group p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col items-center text-center cursor-pointer"
             >
-              <div className="w-14 h-14 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 {item.emoji}
               </div>
               <h3 className="font-heading font-bold text-xs sm:text-sm text-[#18191F] dark:text-white mt-3">
@@ -182,7 +186,7 @@ export default async function HomePage() {
               </div>
 
               {/* Urgency Badge */}
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#161D33] border border-[#FF6B6B]/20 text-xs font-bold text-[#FF6B6B] shadow-xs shrink-0">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#1B1C24] border border-[#FF6B6B]/20 text-xs font-bold text-[#FF6B6B] shadow-xs shrink-0">
                 <Clock className="w-4 h-4 animate-spin text-[#FF6B6B]" />
                 <span>Ends in 14h 22m</span>
               </div>
@@ -223,7 +227,7 @@ export default async function HomePage() {
             <Link
               key={cat.slug}
               href={`/c/${cat.slug}`}
-              className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all hover:shadow-md flex flex-col"
+              className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all hover:shadow-md flex flex-col"
             >
               <div className="relative aspect-4/3 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 <Image
@@ -311,7 +315,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Link
             href="/c/all?maxPrice=1000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pocket Friendly</span>
             <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
@@ -322,7 +326,7 @@ export default async function HomePage() {
 
           <Link
             href="/c/all?minPrice=1000&maxPrice=2000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Popular Range</span>
             <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
@@ -333,7 +337,7 @@ export default async function HomePage() {
 
           <Link
             href="/c/all?minPrice=2000&maxPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Free Delivery Tier</span>
             <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
@@ -344,7 +348,7 @@ export default async function HomePage() {
 
           <Link
             href="/c/all?minPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
+            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
           >
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Collector &amp; Deluxe</span>
             <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
@@ -367,7 +371,7 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
@@ -383,7 +387,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
@@ -399,7 +403,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs space-y-3">
+          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
             <div className="flex items-center text-[#FFC93C]">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />

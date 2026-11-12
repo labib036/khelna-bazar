@@ -82,7 +82,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="max-w-md mx-auto text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
+        <div className="max-w-md mx-auto text-center space-y-4 p-8 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
           <div className="w-20 h-20 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] text-[#DC012B] flex items-center justify-center mx-auto">
             <ShoppingBag className="w-10 h-10" />
           </div>
@@ -116,7 +116,7 @@ export default function CartPage() {
       </div>
 
       {/* Free Shipping Progress Box */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-xs">
+      <div className="p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs">
         <div className="flex items-center justify-between text-xs font-semibold mb-2">
           <div className="flex items-center gap-2">
             <Truck className="w-4 h-4 text-[#2EC4B6]" />
@@ -144,11 +144,11 @@ export default function CartPage() {
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left: Line Items (8 Cols) */}
-        <div className="lg:col-span-8 bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] divide-y divide-[#E8E2DE] dark:divide-[#263050] shadow-xs">
+        <div className="lg:col-span-8 bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] divide-y divide-[#E8E2DE] dark:divide-[#2E303E] shadow-xs">
           {items.map((item) => (
             <div key={item.id} className="p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6">
               {/* Product Thumbnail */}
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#263050]">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#2E303E]">
                 <Image src={item.image} alt={item.name} fill className="object-cover" sizes="120px" />
               </div>
 
@@ -192,7 +192,7 @@ export default function CartPage() {
 
                 {/* Price and Stepper Row */}
                 <div className="flex items-center justify-between pt-2">
-                  <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-slate-50 dark:bg-[#1E2742] overflow-hidden">
+                  <div className="flex items-center border border-[#E8E2DE] dark:border-[#2E303E] rounded-full bg-slate-50 dark:bg-[#242531] overflow-hidden">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
                       className="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
@@ -230,8 +230,8 @@ export default function CartPage() {
 
         {/* Right: Sticky Summary Box (4 Cols) */}
         <div className="lg:col-span-4 sticky top-24 space-y-4">
-          <div className="bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] p-6 shadow-xs space-y-5">
-            <h2 className="font-heading text-lg font-black text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+          <div className="bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] p-6 shadow-xs space-y-5">
+            <h2 className="font-heading text-lg font-black text-[#18191F] dark:text-white pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
               Order Summary
             </h2>
 
@@ -246,7 +246,7 @@ export default function CartPage() {
                   className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                     deliveryZone === "inside_dhaka"
                       ? "bg-[#DC012B] text-white border-[#DC012B]"
-                      : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
+                      : "border-[#E8E2DE] dark:border-[#2E303E] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                   }`}
                 >
                   Inside Dhaka (৳60)
@@ -256,7 +256,7 @@ export default function CartPage() {
                   className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                     deliveryZone === "outside_dhaka"
                       ? "bg-[#DC012B] text-white border-[#DC012B]"
-                      : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
+                      : "border-[#E8E2DE] dark:border-[#2E303E] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                   }`}
                 >
                   Outside Dhaka (৳120)
@@ -274,7 +274,7 @@ export default function CartPage() {
                     placeholder="Coupon code (e.g. PLAY10)"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
-                    className="w-full text-xs h-10 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#263050] bg-slate-50 dark:bg-[#1E2742] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
+                    className="w-full text-xs h-10 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#2E303E] bg-slate-50 dark:bg-[#242531] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
                   />
                 </div>
                 <Button type="submit" variant="secondary" size="sm" className="rounded-xl h-10">
@@ -300,7 +300,7 @@ export default function CartPage() {
             </div>
 
             {/* Breakdown */}
-            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-[#E8E2DE] dark:border-[#263050]">
+            <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
               <div className="flex justify-between">
                 <span>Items Subtotal</span>
                 <span className="font-bold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>
@@ -327,7 +327,7 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <div className="flex justify-between text-base font-black text-[#18191F] dark:text-white pt-3 border-t border-[#E8E2DE] dark:border-[#263050]">
+              <div className="flex justify-between text-base font-black text-[#18191F] dark:text-white pt-3 border-t border-[#E8E2DE] dark:border-[#2E303E]">
                 <span>Total Amount Due</span>
                 <span className="text-xl text-[#DC012B] dark:text-[#5B8CFF]">{formatPrice(total)}</span>
               </div>

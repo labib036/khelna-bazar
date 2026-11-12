@@ -73,7 +73,7 @@ export default function GiftFinderPage() {
       </div>
 
       {!showResults ? (
-        <div className="bg-white dark:bg-[#161D33] p-6 sm:p-10 rounded-3xl border border-[#E8E2DE] dark:border-[#263050] shadow-md space-y-8">
+        <div className="bg-white dark:bg-[#1B1C24] p-6 sm:p-10 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-md space-y-8">
           {/* Progress Indicator */}
           <div className="flex items-center justify-between text-xs font-bold text-slate-400 pb-4 border-b border-slate-100 dark:border-slate-800">
             <span>Question {step} of 4</span>
@@ -108,7 +108,7 @@ export default function GiftFinderPage() {
                     className={`p-6 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all cursor-pointer ${
                       targetRecipient === item.id
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm scale-105"
-                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] hover:border-slate-300"
                     }`}
                   >
                     <span className="text-4xl">{item.icon}</span>
@@ -142,7 +142,7 @@ export default function GiftFinderPage() {
                     className={`p-4 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                       targetAge === age.id
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm"
-                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] hover:border-slate-300"
                     }`}
                   >
                     <span className="text-xs sm:text-sm font-bold text-[#18191F] dark:text-white block">
@@ -171,7 +171,7 @@ export default function GiftFinderPage() {
                       className={`p-4 rounded-2xl border-2 flex items-center gap-3 transition-all cursor-pointer ${
                         selected
                           ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm"
-                          : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
+                          : "border-[#E8E2DE] dark:border-[#2E303E] hover:border-slate-300"
                       }`}
                     >
                       <span className="text-2xl">{opt.emoji}</span>
@@ -204,7 +204,7 @@ export default function GiftFinderPage() {
                     className={`p-5 rounded-2xl border-2 text-center transition-all cursor-pointer ${
                       targetBudget === b.amount
                         ? "border-[#7B5CFA] bg-[#F3EFFF] dark:bg-[#2A1D57] shadow-sm scale-105"
-                        : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-300"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] hover:border-slate-300"
                     }`}
                   >
                     <span className="font-heading font-black text-lg text-[#18191F] dark:text-white block">
@@ -243,7 +243,7 @@ export default function GiftFinderPage() {
       ) : (
         /* Results View */
         <div className="space-y-8 animate-in fade-in duration-300">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E]">
             <div>
               <h2 className="font-heading font-black text-xl text-[#18191F] dark:text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#7B5CFA]" />

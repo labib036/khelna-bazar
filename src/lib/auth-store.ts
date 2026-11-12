@@ -21,14 +21,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-      user: {
-        id: "demo-cust-1",
-        name: "Tanzim Ahmed",
-        email: "customer@khelnabazar.com",
-        role: "CUSTOMER",
-        loyaltyPoints: 350,
-        tier: "BRONZE",
-      }, // Pre-populated with customer demo for immediate joyful testing
+      // In default: No user is logged in
+      user: null,
 
       login: (identifier, role = "CUSTOMER", name) => {
         const cleanId = (identifier || "").trim().toLowerCase();
@@ -68,7 +62,7 @@ export const useAuthStore = create<AuthState>()(
       isAdmin: () => get().user?.role === "ADMIN",
     }),
     {
-      name: "khelna_bazar_session_v1",
+      name: "khelna_bazar_session_v3",
     }
   )
 );

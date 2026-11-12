@@ -174,7 +174,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-slate-50 border-2 transition-all cursor-pointer ${
                     activeImageIndex === idx
                       ? "border-[#DC012B] shadow-sm scale-105"
-                      : "border-[#E8E2DE] dark:border-[#263050] hover:border-slate-400"
+                      : "border-[#E8E2DE] dark:border-[#2E303E] hover:border-slate-400"
                   }`}
                   aria-label={`View image angle ${idx + 1}`}
                 >
@@ -185,7 +185,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           )}
 
           {/* Main Hero Image */}
-          <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] shadow-sm">
+          <div className="relative flex-1 aspect-square rounded-3xl overflow-hidden bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
             <Image
               src={product.images[activeImageIndex] || product.images[0]}
               alt={product.name}
@@ -243,7 +243,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
 
           {/* Pricing Block */}
-          <div className="p-4 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E8E2DE] dark:border-[#263050]">
+          <div className="p-4 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] border border-[#E8E2DE] dark:border-[#2E303E]">
             <div className="flex items-baseline gap-3">
               <span className="text-3xl font-black text-[#18191F] dark:text-white">
                 {formatPrice(currentVariant.price)}
@@ -279,7 +279,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                     className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                       selectedVariantId === v.id
                         ? "bg-[#DC012B] text-white border-[#DC012B] shadow-xs"
-                        : "border-[#E8E2DE] dark:border-[#263050] text-[#18191F] dark:text-white hover:border-[#DC012B]"
+                        : "border-[#E8E2DE] dark:border-[#2E303E] text-[#18191F] dark:text-white hover:border-[#DC012B]"
                     }`}
                   >
                     <span>{v.title}</span>
@@ -294,7 +294,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           <div className="space-y-3 pt-2">
             <div className="flex items-center gap-4">
               <span className="text-xs font-bold uppercase text-slate-500">Qty:</span>
-              <div className="flex items-center border border-[#E8E2DE] dark:border-[#263050] rounded-full bg-white dark:bg-[#161D33] overflow-hidden">
+              <div className="flex items-center border border-[#E8E2DE] dark:border-[#2E303E] rounded-full bg-white dark:bg-[#1B1C24] overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-2 text-slate-500 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
@@ -338,7 +338,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   placeholder="Enter custom gift message (optional)"
                   value={giftMessage}
                   onChange={(e) => setGiftMessage(e.target.value)}
-                  className="w-full text-xs h-8 px-3 rounded-lg border border-[#E8E2DE] dark:border-[#263050] bg-white dark:bg-[#161D33] text-black dark:text-white placeholder:text-slate-400 focus:outline-none"
+                  className="w-full text-xs h-8 px-3 rounded-lg border border-[#E8E2DE] dark:border-[#2E303E] bg-white dark:bg-[#1B1C24] text-black dark:text-white placeholder:text-slate-400 focus:outline-none"
                 />
               )}
             </div>
@@ -384,7 +384,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
 
           {/* Delivery & Trust Highlights */}
-          <div className="space-y-2.5 pt-4 border-t border-[#E8E2DE] dark:border-[#263050] text-xs text-slate-600 dark:text-slate-300">
+          <div className="space-y-2.5 pt-4 border-t border-[#E8E2DE] dark:border-[#2E303E] text-xs text-slate-600 dark:text-slate-300">
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#2EC4B6] shrink-0" />
               <span>
@@ -419,8 +419,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
       </div>
 
       {/* TABS: Description, Specs, Safety & Certifications, Reviews */}
-      <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#263050]">
-        <div className="flex border-b border-[#E8E2DE] dark:border-[#263050] overflow-x-auto gap-4 text-sm font-bold">
+      <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#2E303E]">
+        <div className="flex border-b border-[#E8E2DE] dark:border-[#2E303E] overflow-x-auto gap-4 text-sm font-bold">
           <button
             onClick={() => setActiveTab("desc")}
             className={`pb-3 transition-colors cursor-pointer ${
@@ -473,7 +473,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           )}
 
           {activeTab === "specs" && (
-            <div className="max-w-2xl divide-y divide-[#E8E2DE] dark:divide-[#263050] text-xs">
+            <div className="max-w-2xl divide-y divide-[#E8E2DE] dark:divide-[#2E303E] text-xs">
               <div className="py-2.5 flex justify-between">
                 <span className="text-slate-400 font-medium">Recommended Age</span>
                 <span className="font-bold text-[#18191F] dark:text-white">
@@ -534,7 +534,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           {activeTab === "reviews" && (
             <div className="space-y-6 max-w-3xl">
               {/* Review summary block */}
-              <div className="p-5 rounded-2xl bg-[#F7F9FC] dark:bg-[#1E2742] flex items-center justify-between">
+              <div className="p-5 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-3xl font-black text-[#18191F] dark:text-white">
@@ -552,7 +552,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
               {/* Sample verified review cards */}
               <div className="space-y-4">
-                <div className="p-4 rounded-xl border border-[#E8E2DE] dark:border-[#263050] space-y-2">
+                <div className="p-4 rounded-xl border border-[#E8E2DE] dark:border-[#2E303E] space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-xs text-[#18191F] dark:text-white">Farhana I.</span>
                     <span className="text-[10px] text-slate-400">2 days ago</span>
@@ -576,7 +576,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
       {/* CROSS SELL: RELATED TOYS */}
       {relatedProducts.length > 0 && (
-        <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#263050]">
+        <div className="pt-8 border-t border-[#E8E2DE] dark:border-[#2E303E]">
           <h2 className="font-heading text-xl sm:text-2xl font-black text-[#18191F] dark:text-white mb-6">
             You May Also Love These Toys
           </h2>

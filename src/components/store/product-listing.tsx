@@ -116,7 +116,7 @@ function ProductListingContent({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Top Header & Result Counts */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#E8E2DE] dark:border-[#263050]">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#E8E2DE] dark:border-[#2E303E]">
         <div>
           <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
             {title}
@@ -133,7 +133,7 @@ function ProductListingContent({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileFilterOpen(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] text-xs font-bold text-[#18191F] dark:text-white shadow-xs cursor-pointer"
+            className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] text-xs font-bold text-[#18191F] dark:text-white shadow-xs cursor-pointer"
           >
             <Filter className="w-4 h-4 text-[#DC012B]" />
             <span>Filters ({hasActiveFilters ? "Active" : "0"})</span>
@@ -144,7 +144,7 @@ function ProductListingContent({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="h-10 px-3 rounded-xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] text-xs font-bold text-[#18191F] dark:text-white focus:outline-none focus:border-[#DC012B]"
+              className="h-10 px-3 rounded-xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] text-xs font-bold text-[#18191F] dark:text-white focus:outline-none focus:border-[#DC012B]"
             >
               <option value="bestselling">Best Selling</option>
               <option value="price-asc">Price: Low to High</option>
@@ -203,8 +203,8 @@ function ProductListingContent({
       {/* Main Grid & Sticky Filter Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 pt-6">
         {/* Left Filter Sidebar (Desktop) */}
-        <aside className="hidden lg:block space-y-6 self-start sticky top-24 bg-white dark:bg-[#161D33] p-5 rounded-2xl border border-[#E8E2DE] dark:border-[#263050]">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E8E2DE] dark:border-[#263050]">
+        <aside className="hidden lg:block space-y-6 self-start sticky top-24 bg-white dark:bg-[#1B1C24] p-5 rounded-2xl border border-[#E8E2DE] dark:border-[#2E303E]">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
             <span className="font-heading font-black text-sm text-[#18191F] dark:text-white flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-[#DC012B]" /> Filters
             </span>
@@ -231,7 +231,7 @@ function ProductListingContent({
                   className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                     selectedAge === age.value
                       ? "bg-[#DC012B] text-white"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1E2742]"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#242531]"
                   }`}
                 >
                   <span>{age.label}</span>
@@ -242,7 +242,7 @@ function ProductListingContent({
           </div>
 
           {/* Price Range Presets */}
-          <div className="space-y-2 pt-2 border-t border-[#E8E2DE] dark:border-[#263050]">
+          <div className="space-y-2 pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
               Price (BDT ৳)
             </span>
@@ -254,7 +254,7 @@ function ProductListingContent({
                   className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                     selectedPricePreset === idx
                       ? "bg-[#FFC93C] text-[#18191F]"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1E2742]"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#242531]"
                   }`}
                 >
                   <span>{preset.label}</span>
@@ -266,7 +266,7 @@ function ProductListingContent({
 
           {/* Brands Filter */}
           {availableBrands.length > 0 && (
-            <div className="space-y-2 pt-2 border-t border-[#E8E2DE] dark:border-[#263050]">
+            <div className="space-y-2 pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
                 Brand
               </span>
@@ -278,7 +278,7 @@ function ProductListingContent({
                     className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
                       selectedBrand === b
                         ? "bg-[#7B5CFA] text-white"
-                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1E2742]"
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#242531]"
                     }`}
                   >
                     <span>{b}</span>
@@ -290,7 +290,7 @@ function ProductListingContent({
           )}
 
           {/* Stock Toggle */}
-          <div className="pt-2 border-t border-[#E8E2DE] dark:border-[#263050]">
+          <div className="pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
             <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#18191F] dark:text-white select-none">
               <input
                 type="checkbox"
@@ -306,7 +306,7 @@ function ProductListingContent({
         {/* Product Grid Area (Col 2-4) */}
         <div className="lg:col-span-3">
           {filteredProducts.length === 0 ? (
-            <div className="text-center py-16 px-4 bg-white dark:bg-[#161D33] rounded-3xl border border-[#E8E2DE] dark:border-[#263050] space-y-4">
+            <div className="text-center py-16 px-4 bg-white dark:bg-[#1B1C24] rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] space-y-4">
               <div className="w-16 h-16 rounded-full bg-[#FFF0F0] text-[#FF6B6B] flex items-center justify-center mx-auto">
                 <ShoppingBag className="w-8 h-8" />
               </div>
@@ -334,8 +334,8 @@ function ProductListingContent({
       {isMobileFilterOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileFilterOpen(false)} />
-          <div className="fixed inset-y-0 right-0 w-4/5 max-w-sm bg-white dark:bg-[#161D33] p-6 shadow-2xl flex flex-col overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E8E2DE] dark:border-[#263050]">
+          <div className="fixed inset-y-0 right-0 w-4/5 max-w-sm bg-white dark:bg-[#1B1C24] p-6 shadow-2xl flex flex-col overflow-y-auto">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E]">
               <h3 className="font-heading font-black text-lg text-[#18191F] dark:text-white">
                 Filter Toys
               </h3>
@@ -390,7 +390,7 @@ function ProductListingContent({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-[#E8E2DE] dark:border-[#263050] flex gap-3">
+            <div className="pt-4 border-t border-[#E8E2DE] dark:border-[#2E303E] flex gap-3">
               <Button
                 onClick={() => {
                   clearAllFilters();

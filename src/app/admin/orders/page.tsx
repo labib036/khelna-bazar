@@ -287,7 +287,7 @@ export default function AdminOrdersPage() {
           <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={() => setSelectedOrder(null)} />
 
-            <div className="relative w-full max-w-xl bg-white dark:bg-[#161D33] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 z-10 max-h-[90vh] overflow-y-auto">
+            <div className="relative w-full max-w-xl bg-white dark:bg-[#1B1C24] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 z-10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <div>
                   <span className="text-xs font-mono font-bold text-[#DC012B]">

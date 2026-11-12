@@ -59,7 +59,7 @@ function OrderConfirmationContent() {
   return (
     <div className="space-y-8">
       {/* Success Celebration Card */}
-      <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] text-center space-y-4 shadow-sm">
+      <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] text-center space-y-4 shadow-sm">
         <div className="w-20 h-20 rounded-full bg-[#E6FAF8] text-[#2EC4B6] flex items-center justify-center mx-auto shadow-sm">
           <CheckCircle2 className="w-10 h-10" />
         </div>
@@ -101,13 +101,13 @@ function OrderConfirmationContent() {
       </div>
 
       {/* Order Status & Tracking Timeline */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#161D33] border border-[#E8E2DE] dark:border-[#263050] space-y-6 shadow-xs">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] space-y-6 shadow-xs">
         <h2 className="font-heading font-black text-lg text-[#18191F] dark:text-white flex items-center gap-2">
           <Clock className="w-5 h-5 text-[#DC012B]" />
           <span>Fulfillment &amp; Delivery Progress</span>
         </h2>
 
-        <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-2.5 sm:before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E8E2DE] dark:before:bg-[#263050]">
+        <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-2.5 sm:before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#E8E2DE] dark:before:bg-[#2E303E]">
           {steps.map((step, idx) => (
             <div key={idx} className="relative flex items-start gap-3">
               <div
@@ -116,7 +116,7 @@ function OrderConfirmationContent() {
                     ? "bg-[#2EC4B6] text-white"
                     : step.current
                     ? "bg-[#DC012B] text-white ring-4 ring-[#DC012B]/20 animate-pulse"
-                    : "bg-[#E8E2DE] dark:bg-[#263050] text-slate-400"
+                    : "bg-[#E8E2DE] dark:bg-[#2E303E] text-slate-400"
                 }`}
               >
                 {step.done ? "✓" : idx + 1}
@@ -142,7 +142,7 @@ function OrderConfirmationContent() {
       </div>
 
       {/* Need Help Strip */}
-      <div className="p-6 rounded-3xl bg-[#F7F9FC] dark:bg-[#1E2742] border border-[#E8E2DE] dark:border-[#263050] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div className="p-6 rounded-3xl bg-[#FAF8F6] dark:bg-[#242531] border border-[#E8E2DE] dark:border-[#2E303E] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         <div className="flex items-center gap-3">
           <Phone className="w-5 h-5 text-[#DC012B]" />
           <div>

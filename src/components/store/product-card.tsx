@@ -85,12 +85,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
   return (
     <div
-      className="group relative bg-white dark:bg-[#161D33] rounded-2xl border border-[#E8E2DE] dark:border-[#263050] overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+      className="group relative bg-white dark:bg-[#1B1C24] rounded-2xl border border-[#E8E2DE] dark:border-[#2E303E] overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container with Badges & Wishlist */}
-      <div className="relative aspect-square w-full overflow-hidden bg-slate-50 dark:bg-[#1E2742]">
+      <div className="relative aspect-square w-full overflow-hidden bg-slate-50 dark:bg-[#242531]">
         <Link href={`/p/${product.slug}`} className="block w-full h-full">
           <Image
             src={isHovered && product.images[1] ? product.images[1] : product.images[0]}
