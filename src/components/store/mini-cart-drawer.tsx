@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useCartStore } from "@/lib/cart-store";
+import { useCartStore, SHIPPING_CONFIG } from "@/lib/cart-store";
+import { useLockBodyScroll } from "@/lib/use-lock-body-scroll";
 import { formatPrice } from "@/lib/utils";
-import { siteConfig } from "@/config/site";
+import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
+import { EmptyCartIllustration } from "@/components/ui/illustrations";
+import { toast } from "sonner";
+import confetti from "canvas-confetti";
 import {
   X,
   ShoppingBag,
@@ -21,6 +25,7 @@ import {
 } from "lucide-react";
 
 export function MiniCartDrawer() {
+  const { t, locale } = useLanguage();
   const {
     items,
     isOpen,
@@ -37,12 +42,25 @@ export function MiniCartDrawer() {
     getGiftWrapFee,
     getTotal,
     getFreeShippingRemaining,
+    undoRemove,
   } = useCartStore();
 
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState<{ text: string; isError: boolean } | null>(null);
+  const [hasCelebratedFreeShipping, setHasCelebratedFreeShipping] = useState(false);
 
-  if (!isOpen) return null;
+  // Reference counted safe scroll lock
+  useLockBodyScroll(isOpen);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeCart();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, closeCart]);
 
   const subtotal = getSubtotal();
   const discount = getDiscount();
@@ -50,65 +68,95 @@ export function MiniCartDrawer() {
   const giftWrapFee = getGiftWrapFee();
   const total = getTotal();
   const freeShippingRemaining = getFreeShippingRemaining();
-  const threshold = siteConfig.shippingDefaults.freeShippingThreshold;
-  const progressPercent = Math.min(100, Math.round(((threshold - freeShippingRemaining) / threshold) * 100));
+  const threshold = SHIPPING_CONFIG.freeShippingThreshold;
+  const progressPercent = Math.min(100, Math.max(0, Math.round(((threshold - freeShippingRemaining) / threshold) * 100)));
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  // Free shipping celebration trigger
+  useEffect(() => {
+    if (freeShippingRemaining === 0 && !hasCelebratedFreeShipping && items.length > 0) {
+      setHasCelebratedFreeShipping(true);
+      try {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!prefersReducedMotion) {
+          confetti({
+            particleCount: 40,
+            spread: 60,
+            origin: { y: 0.25, x: 0.8 },
+            colors: ["#D71921", "#FCB812", "#1E5BFF", "#059669"],
+          });
+        }
+      } catch {
+        // Confetti unsupported
+      }
+    } else if (freeShippingRemaining > 0 && hasCelebratedFreeShipping) {
+      setHasCelebratedFreeShipping(false);
+    }
+  }, [freeShippingRemaining, hasCelebratedFreeShipping, items.length]);
+
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!couponInput.trim()) return;
-    const res = applyCoupon(couponInput);
+    const res = await applyCoupon(couponInput);
     setCouponMessage({ text: res.message, isError: !res.success });
     if (res.success) setCouponInput("");
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Your Toy Basket"
+      className="fixed inset-0 z-50 overflow-hidden"
+    >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300"
         onClick={closeCart}
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-[#1B1C24] shadow-2xl flex flex-col">
+        <div className="w-screen max-w-md bg-[var(--surface)] rounded-l-3xl border-l border-[var(--border)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300">
           {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-[#E8E2DE] dark:border-[#2E303E] flex items-center justify-between">
+          <div className="p-4 sm:p-5 border-b border-[var(--border)] bg-[var(--surface-container-low)] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <ShoppingBag className="w-5 h-5 text-[#DC012B]" />
-              <h2 className="text-lg font-bold font-heading text-[#18191F] dark:text-white">
+              <ShoppingBag className="w-5 h-5 text-[var(--primary)]" />
+              <h2 className="text-lg font-bold font-heading text-[var(--text-primary)]">
                 Your Toy Basket ({items.reduce((acc, i) => acc + i.quantity, 0)})
               </h2>
             </div>
             <button
+              type="button"
               onClick={closeCart}
-              className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-full transition-colors cursor-pointer"
-              aria-label="Close cart"
+              className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] rounded-full transition-colors cursor-pointer"
+              aria-label="Close cart drawer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Free Shipping Progress Bar */}
-          <div className="bg-[#FAF8F6] dark:bg-[#1B1C24] px-5 py-3 border-b border-[#E8E2DE] dark:border-[#2E303E]">
+          <div className="bg-[var(--surface)] px-5 py-3 border-b border-[var(--border)]">
             <div className="flex items-center justify-between text-xs mb-1.5 font-medium">
-              <div className="flex items-center gap-1.5 text-[#18191F] dark:text-slate-200">
-                <Truck className="w-4 h-4 text-[#10B981]" />
+              <div className="flex items-center gap-1.5 text-[var(--text-primary)]">
+                <Truck className="w-4 h-4 text-[var(--success)]" />
                 {freeShippingRemaining > 0 ? (
                   <span>
-                    Add <strong className="text-[#DC012B]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
-                    <strong className="text-[#10B981]">FREE Delivery</strong>!
+                    Add <strong className="text-[var(--primary)]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
+                    <strong className="text-[var(--success)]">FREE Delivery</strong>!
                   </span>
                 ) : (
-                  <span className="text-[#10B981] font-bold flex items-center gap-1">
+                  <span className="text-[var(--success)] font-bold flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5" /> Congratulations! You unlocked FREE Delivery.
                   </span>
                 )}
               </div>
-              <span className="font-bold text-slate-500">{progressPercent}%</span>
+              <span className="font-bold text-[var(--text-muted)]">{progressPercent}%</span>
             </div>
-            <div className="w-full bg-[#E8E2DE] dark:border-[#2E303E] h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-[var(--border)] h-2 rounded-full overflow-hidden">
               <div
-                className="bg-[#10B981] h-full rounded-full transition-all duration-300"
+                className="bg-[var(--success)] h-full rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -118,121 +166,151 @@ export function MiniCartDrawer() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
-                <div className="w-20 h-20 rounded-full bg-[#FFF0F2] dark:bg-[#3D000B] flex items-center justify-center text-[#DC012B]">
-                  <ShoppingBag className="w-10 h-10 stroke-[1.5]" />
-                </div>
-                <div>
-                  <h3 className="font-heading text-lg font-bold text-[#18191F] dark:text-white">
-                    Your basket is feeling lonely!
+                <EmptyCartIllustration className="w-36 h-36" />
+                <div className="space-y-1">
+                  <h3 className="font-heading text-lg font-bold text-[var(--text-primary)]">
+                    {locale === "bn" ? "আপনার ঝুড়িটি এখনো খালি!" : "Your basket is feeling lonely!"}
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1 max-w-xs">
-                    Explore our certified safe toys, STEM robotics, and wooden blocks to fill it with joy.
+                  <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs">
+                    {locale === "bn"
+                      ? "আমাদের নিরাপদ খেলনা, রোবটিক্স কিট এবং কাঠের খেলনাগুলো দেখুন।"
+                      : "Explore our certified safe toys, STEM robotics, and wooden blocks to fill it with joy."}
                   </p>
                 </div>
-                <Button onClick={closeCart} variant="primary" size="md">
-                  Start Toy Shopping
+                <Button onClick={closeCart} variant="primary" size="md" className="rounded-xl">
+                  {locale === "bn" ? "খেলনা কেনাকাটা শুরু করুন" : "Start Toy Shopping"}
                 </Button>
               </div>
             ) : (
-              items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-3 pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E] last:border-0"
-                >
-                  {/* Thumbnail */}
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-[#E8E2DE] dark:border-[#2E303E]">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  </div>
+              <>
+                {items.map((item) => {
+                  const isAtMaxStock = item.maxStock !== undefined && item.quantity >= item.maxStock;
 
-                  {/* Details */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-start justify-between gap-2">
-                        <Link
-                          href={`/p/${item.productId}`}
-                          onClick={closeCart}
-                          className="text-sm font-semibold text-[#18191F] dark:text-white hover:text-[#DC012B] line-clamp-1"
-                        >
-                          {item.name}
-                        </Link>
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="text-slate-400 hover:text-[#DC012B] transition-colors p-1"
-                          title="Remove item"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex gap-3 pb-4 border-b border-[var(--border)] last:border-0"
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-[var(--surface)] shrink-0 border border-[var(--border)]">
+                        <Image
+                          src={item.image || "/images/placeholder.png"}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
                       </div>
-                      <p className="text-xs text-slate-500">{item.title}</p>
-                    </div>
 
-                    {/* Gift Wrap Toggle */}
-                    <div className="flex items-center gap-1.5 my-1">
-                      <button
-                        onClick={() => toggleGiftWrap(item.id)}
-                        className={`text-xs inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
-                          item.giftWrap
-                            ? "bg-[#FFF8E6] text-[#B88700] font-semibold border border-[#FFC93C]"
-                            : "text-slate-400 hover:text-slate-600"
-                        }`}
-                      >
-                        <Gift className="w-3 h-3" />
-                        {item.giftWrap ? `Gift Wrapped (+${formatPrice(50)})` : "Add Gift Wrap (+৳50)"}
-                      </button>
-                    </div>
+                      {/* Details */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-start justify-between gap-2">
+                            <Link
+                              href={`/p/${item.productId}`}
+                              onClick={closeCart}
+                              className="text-sm font-semibold text-[var(--text-primary)] hover:text-[var(--primary)] line-clamp-1"
+                            >
+                              {item.name}
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                removeItem(item.id);
+                                toast.info(
+                                  locale === "bn" ? `${item.name} ঝুড়ি থেকে সরানো হয়েছে` : `Removed ${item.name} from basket`,
+                                  {
+                                    action: {
+                                      label: locale === "bn" ? "পূর্বাবস্থায় আনুন" : "Undo",
+                                      onClick: () => undoRemove(),
+                                    },
+                                  }
+                                );
+                              }}
+                              className="text-[var(--text-muted)] hover:text-[var(--danger)] transition-colors p-1 cursor-pointer"
+                              title="Remove item"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <p className="text-xs text-[var(--text-muted)]">{item.title}</p>
+                        </div>
 
-                    {/* Price and Stepper */}
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="font-bold text-sm text-[#DC012B]">
-                        {formatPrice(item.price * item.quantity)}
-                      </span>
+                        {/* Gift Wrap Toggle */}
+                        <div className="flex items-center gap-1.5 my-1">
+                          <button
+                            type="button"
+                            onClick={() => toggleGiftWrap(item.id)}
+                            className={`text-xs inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
+                              item.giftWrap
+                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 font-semibold border border-amber-400"
+                                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                            }`}
+                          >
+                            <Gift className="w-3 h-3" />
+                            {item.giftWrap ? `Gift Wrapped (+${formatPrice(50)})` : "Add Gift Wrap (+৳50)"}
+                          </button>
+                        </div>
 
-                      {/* Quantity Stepper */}
-                      <div className="flex items-center border border-[#E8E2DE] dark:border-[#2E303E] rounded-full bg-white dark:bg-[#1B1C24] overflow-hidden">
-                        <button
-                          onClick={() => updateQuantity(item.id, -1)}
-                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242531] transition-colors cursor-pointer"
-                          aria-label="Decrease quantity"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="px-2 text-xs font-bold text-[#18191F] dark:text-white select-none">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, 1)}
-                          className="p-1.5 text-slate-500 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#242531] transition-colors cursor-pointer"
-                          aria-label="Increase quantity"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
+                        {/* Price and Stepper */}
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="font-bold text-sm text-[var(--primary)]">
+                            {formatPrice(item.price * item.quantity)}
+                          </span>
+
+                          {/* Quantity Stepper */}
+                          <div className="flex items-center border border-[var(--border)] rounded-full bg-[var(--surface)] overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => updateQuantity(item.id, -1)}
+                              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] transition-colors cursor-pointer"
+                              aria-label="Decrease quantity"
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="px-2 text-xs font-bold text-[var(--text-primary)] select-none">
+                              {item.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (!isAtMaxStock) updateQuantity(item.id, 1);
+                              }}
+                              disabled={isAtMaxStock}
+                              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] transition-colors disabled:opacity-30 cursor-pointer"
+                              aria-label="Increase quantity"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+
+                        {isAtMaxStock && (
+                          <span className="text-[10px] text-[var(--danger)] font-semibold mt-0.5">
+                            Max available stock reached
+                          </span>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))
+                  );
+                })}
+              </>
             )}
           </div>
 
           {/* Footer & Order Summary */}
           {items.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-[#E8E2DE] dark:border-[#2E303E] bg-[#FAF8F6] dark:bg-[#242531] space-y-3">
+            <div className="p-4 sm:p-5 border-t border-[var(--border)] bg-[var(--surface)] space-y-3">
               {/* Coupon Form */}
               <form onSubmit={handleApplyCoupon} className="flex gap-2">
                 <div className="relative flex-1">
-                  <Tag className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Tag className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     placeholder="Enter coupon (e.g. PLAY10)"
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
-                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[#E8E2DE] dark:border-[#2E303E] bg-white dark:bg-[#1B1C24] text-[#18191F] dark:text-white uppercase placeholder:normal-case focus:outline-none focus:border-[#DC012B]"
+                    className="w-full text-xs h-9 pl-9 pr-3 rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] text-[var(--text-primary)] uppercase placeholder:normal-case focus:outline-none focus:border-[var(--primary)]"
                   />
                 </div>
                 <Button type="submit" variant="secondary" size="sm" className="rounded-xl h-9">
@@ -241,21 +319,22 @@ export function MiniCartDrawer() {
               </form>
 
               {couponMessage && (
-                <p className={`text-xs ${couponMessage.isError ? "text-[#FF6B6B]" : "text-[#2EC4B6]"} font-medium`}>
+                <p className={`text-xs ${couponMessage.isError ? "text-[var(--danger)]" : "text-[var(--success)]"} font-medium`}>
                   {couponMessage.text}
                 </p>
               )}
 
               {coupon && (
-                <div className="flex items-center justify-between text-xs bg-[#E6FAF8] dark:bg-[#0E3834] text-[#229D92] dark:text-[#4DD9CB] p-2 rounded-lg">
+                <div className="flex items-center justify-between text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 p-2 rounded-lg border border-emerald-500/20">
                   <span className="font-semibold flex items-center gap-1">
                     <Sparkles className="w-3.5 h-3.5" /> Coupon ({coupon.code}) Applied
                   </span>
                   <div className="flex items-center gap-2">
                     <span>-{formatPrice(coupon.discountAmount)}</span>
                     <button
+                      type="button"
                       onClick={removeCoupon}
-                      className="text-slate-400 hover:text-[#FF6B6B]"
+                      className="text-[var(--text-muted)] hover:text-[var(--danger)] cursor-pointer"
                       title="Remove coupon"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -265,13 +344,13 @@ export function MiniCartDrawer() {
               )}
 
               {/* Price Breakdown */}
-              <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+              <div className="space-y-1.5 text-xs text-[var(--text-muted)]">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span className="font-semibold text-[#18191F] dark:text-white">{formatPrice(subtotal)}</span>
+                  <span>{t("subtotal")}</span>
+                  <span className="font-semibold text-[var(--text-primary)]">{formatPrice(subtotal)}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-[#2EC4B6]">
+                  <div className="flex justify-between text-[var(--success)]">
                     <span>Coupon Savings</span>
                     <span className="font-semibold">-{formatPrice(discount)}</span>
                   </div>
@@ -284,25 +363,25 @@ export function MiniCartDrawer() {
                 )}
                 <div className="flex justify-between">
                   <span>Cash on Delivery (Estimated)</span>
-                  <span>{shippingFee === 0 ? <strong className="text-[#2EC4B6]">FREE</strong> : formatPrice(shippingFee)}</span>
+                  <span>{shippingFee === 0 ? <strong className="text-[var(--success)]">FREE</strong> : formatPrice(shippingFee)}</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-[#18191F] dark:text-white pt-2 border-t border-[#E8E2DE] dark:border-[#2E303E]">
-                  <span>Total Amount</span>
-                  <span className="text-base text-[#DC012B] font-black">{formatPrice(total)}</span>
+                <div className="flex justify-between text-sm font-bold text-[var(--text-primary)] pt-2 border-t border-[var(--border)]">
+                  <span>{t("total")}</span>
+                  <span className="text-base text-[var(--primary)] font-black">{formatPrice(total)}</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="pt-2 space-y-2">
                 <Link href="/checkout" onClick={closeCart} className="block w-full">
-                  <Button variant="primary" size="lg" className="w-full text-sm font-bold shadow-md bg-[#DC012B] hover:bg-[#B80023]">
-                    <span>Proceed to Cash on Delivery</span>
+                  <Button variant="pill-primary" size="lg" className="w-full text-sm font-bold shadow-[0_4px_0_#93000E]">
+                    <span>{locale === "bn" ? "অর্ডার সম্পন্ন করতে এগিয়ে যান" : "Proceed to Cash on Delivery"}</span>
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
                 <Link href="/cart" onClick={closeCart} className="block w-full text-center">
-                  <Button variant="ghost" size="sm" className="w-full text-xs text-slate-500">
-                    View & Edit Full Cart
+                  <Button variant="ghost" size="sm" className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+                    View &amp; Edit Full Cart
                   </Button>
                 </Link>
               </div>
