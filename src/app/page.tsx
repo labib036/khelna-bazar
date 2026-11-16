@@ -1,145 +1,105 @@
 import Link from "next/link";
-import Image from "next/image";
-import { getProducts, getCategories } from "@/server/services/product-service";
-import { ProductCard } from "@/components/store/product-card";
-import { MarketingDashboard } from "@/components/store/marketing-dashboard";
-import { formatPrice } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { getProducts } from "@/server/services/product-service";
+import { StitchHero } from "@/components/store/stitch-hero";
+import { StitchGiftWizard } from "@/components/store/stitch-gift-wizard";
+import { HomeProductsSection } from "@/components/store/home-products-section";
+import { Countdown } from "@/components/ui/countdown";
 import {
-  Sparkles,
   Flame,
   ArrowRight,
-  Gift,
-  Clock,
+  ChevronRight,
   ShieldCheck,
   Truck,
   RotateCcw,
+  Sparkles,
   Star,
-  ChevronRight,
+  CheckCircle2,
 } from "lucide-react";
 
 export const revalidate = 300; // ISR cache 5 minutes
 
 export default async function HomePage() {
-  const [featuredData, dealsData, categories] = await Promise.all([
+  const [featuredData, dealsData] = await Promise.all([
     getProducts({ limit: 8, sort: "bestselling" }),
     getProducts({ isDeal: true, limit: 4 }),
-    getCategories(),
   ]);
 
   const featuredProducts = featuredData.products;
   const dealProducts = dealsData.products;
 
   const ageCategories = [
-    { label: "0 – 12 Months", sub: "Sensory & Teething", query: "0-12m", color: "from-blue-500 to-indigo-600", emoji: "🍼" },
-    { label: "1 – 2 Years", sub: "Montessori & Walkers", query: "1-2y", color: "from-amber-400 to-orange-500", emoji: "🧸" },
-    { label: "3 – 4 Years", sub: "Pretend Play & Blocks", query: "3-4y", color: "from-emerald-400 to-teal-600", emoji: "🎨" },
-    { label: "5 – 7 Years", sub: "STEM & Early Robotics", query: "5-7y", color: "from-purple-500 to-pink-600", emoji: "🚀" },
-    { label: "8 – 11 Years", sub: "RC Vehicles & Puzzles", query: "8-11y", color: "from-cyan-500 to-blue-600", emoji: "🧩" },
-    { label: "12+ Years", sub: "Complex Engineering", query: "12+", color: "from-rose-500 to-red-600", emoji: "🔬" },
+    { label: "0 – 12 Months", sub: "Sensory & Soft", query: "0-12m", emoji: "🍼" },
+    { label: "1 – 2 Years", sub: "Toddler Active", query: "1-2y", emoji: "🧸" },
+    { label: "3 – 5 Years", sub: "Creative & Play", query: "3-4y", emoji: "🎨" },
+    { label: "6 – 8 Years", sub: "STEM & Discovery", query: "5-7y", emoji: "🚀" },
+    { label: "9 – 11 Years", sub: "Brain & Puzzles", query: "8-11y", emoji: "🧩" },
+    { label: "12+ Years", sub: "Robotics & Tech", query: "12+", emoji: "🔬" },
+  ];
+
+  const curatedCategoryBento = [
+    { name: "STEM & Robotics", slug: "stem-robotics", icon: "🔬", desc: "Build & Code", bg: "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20" },
+    { name: "Montessori & Wooden", slug: "baby-toddler", icon: "🪵", desc: "Eco Non-Toxic", bg: "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20" },
+    { name: "Dolls & Plushies", slug: "baby-toddler", icon: "🧸", desc: "Snuggly Wonders", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
+    { name: "RC & Diecast Vehicles", slug: "rc-vehicles", icon: "🏎️", desc: "High Speed Stunts", bg: "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20" },
+    { name: "Creative Arts & Crafts", slug: "creative-arts-crafts", icon: "🎨", desc: "Paints & Slime", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
+    { name: "Board Games & Puzzles", slug: "educational-board-games", icon: "🧩", desc: "Family Brain Play", bg: "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20" },
+    { name: "Building Blocks & Lego", slug: "building-blocks", icon: "🧱", desc: "Architectural Sets", bg: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20" },
+    { name: "Sensory & Calm", slug: "baby-toddler", icon: "✨", desc: "Quiet Focus Toys", bg: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20" },
+  ];
+
+  const parentReviews = [
+    {
+      author: "Sarah M.",
+      child: "Leo (4 Yrs)",
+      district: "Dhanmondi, Dhaka",
+      verified: true,
+      rating: 5,
+      date: "2 days ago",
+      text: "The Cosmic Bot arrived in 24 hours via Steadfast Courier! Beautiful packaging and Leo hasn't put down the sensory gears since morning. 100% child safe.",
+    },
+    {
+      author: "Tanvir Ahmed",
+      child: "Aayan (6 Yrs)",
+      district: "Agrabad, Chittagong",
+      verified: true,
+      rating: 5,
+      date: "1 week ago",
+      text: "Paid via Cash on Delivery after opening the parcel right in front of the rider. Exactly as shown on the website, no fake stock or broken pieces.",
+    },
+    {
+      author: "Nadia Rahman",
+      child: "Zara (2 Yrs)",
+      district: "Zindabazar, Sylhet",
+      verified: true,
+      rating: 5,
+      date: "2 weeks ago",
+      text: "The Montessori rainbow wooden stacker is completely smooth with no splinters. Natural pigments and food-safe smell. Will definitely shop again!",
+    },
   ];
 
   return (
-    <div className="space-y-12 sm:space-y-16 pb-16">
-      {/* 1. HERO SECTION WITH PROMO TILES */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-          {/* Main Hero Banner (Col 1-2) */}
-          <div className="lg:col-span-2 relative min-h-[380px] sm:min-h-[460px] rounded-3xl overflow-hidden bg-gradient-to-br from-[#DC012B] via-[#E63946] to-[#F59E0B] text-white p-6 sm:p-12 flex flex-col justify-between shadow-lg">
-            <div className="relative z-10 max-w-xl space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold tracking-wide uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
-                Bangladesh's Trusted Online Toy Store
-              </span>
-              <h1 className="font-heading text-3xl sm:text-5xl font-black leading-tight tracking-tight">
-                Where Pure Joy &amp; Curiosity Begin!
-              </h1>
-              <p className="text-sm sm:text-base text-rose-50 max-w-md">
-                Certified safe toys, building blocks, STEM robotics kits, and snuggly plushies. Pay easily with{" "}
-                <strong className="text-[#FBBF24]">Cash on Delivery</strong> nationwide.
-              </p>
-              <div className="pt-2 flex flex-wrap gap-3">
-                <Link href="/c/building-blocks">
-                  <Button variant="sun" size="lg" className="shadow-md bg-[#F59E0B] hover:bg-[#D97706] text-slate-900 font-extrabold">
-                    <span>Shop Building Sets</span>
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
-                <Link href="/gift-finder">
-                  <Button variant="secondary" size="lg" className="bg-white/95 text-[#18191F] hover:bg-white font-bold">
-                    <span>Gift Finder Quiz</span>
-                  </Button>
-                </Link>
-              </div>
-            </div>
+    <div className="space-y-12 sm:space-y-16 pb-16 bg-[var(--bg-primary)]">
+      {/* 1. STITCH SENSORY HERO SHOWCASE */}
+      <StitchHero />
 
-            {/* Subtle Delivery Badge in Hero */}
-            <div className="relative z-10 flex items-center gap-2 pt-6 text-xs text-rose-100">
-              <Truck className="w-4 h-4 text-[#10B981]" />
-              <span>Fast 24–48 hour delivery inside Dhaka &bull; Nationwide Cash on Delivery</span>
-            </div>
-
-            {/* Background Decorative Graphic */}
-            <div className="absolute right-0 bottom-0 top-0 w-2/5 opacity-15 pointer-events-none flex items-center justify-center">
-              <Sparkles className="w-96 h-96 text-white" />
-            </div>
-          </div>
-
-          {/* Right Stacked Promotional Tiles (Col 3) */}
-          <div className="flex flex-col gap-4 sm:gap-6">
-            {/* Promo 1: RC & Speed */}
-            <div className="relative flex-1 min-h-[180px] rounded-3xl overflow-hidden bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6 flex flex-col justify-between shadow-md">
-              <div className="relative z-10">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-200">
-                  Speed &amp; Stunts
-                </span>
-                <h3 className="font-heading font-black text-xl mt-1">4WD Monster RC Buggies</h3>
-                <p className="text-xs text-amber-100 mt-1">Up to 25 km/h all-terrain action.</p>
-              </div>
-              <div className="relative z-10 pt-2">
-                <Link href="/c/rc-vehicles">
-                  <span className="inline-flex items-center gap-1 text-xs font-bold bg-white text-orange-600 px-3 py-1.5 rounded-full hover:bg-amber-100 transition-colors">
-                    Explore RC Cars <ChevronRight className="w-3 h-3" />
-                  </span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Promo 2: STEM Robotics */}
-            <div className="relative flex-1 min-h-[180px] rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 flex flex-col justify-between shadow-md">
-              <div className="relative z-10">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-200">
-                  Young Scientists
-                </span>
-                <h3 className="font-heading font-black text-xl mt-1">Solar &amp; Coding Kits</h3>
-                <p className="text-xs text-teal-100 mt-1">Zero batteries. 100% engineering.</p>
-              </div>
-              <div className="relative z-10 pt-2">
-                <Link href="/c/stem-science">
-                  <span className="inline-flex items-center gap-1 text-xs font-bold bg-white text-emerald-700 px-3 py-1.5 rounded-full hover:bg-teal-100 transition-colors">
-                    Discover STEM <ChevronRight className="w-3 h-3" />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 1.5. NEW VISITOR MARKETING DASHBOARD & REWARDS GATEWAY */}
-      <MarketingDashboard />
-
-      {/* 2. SHOP BY AGE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 2. SHOP BY AGE GROUP */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
-              Shop by Child's Age
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
+              <span>🧸 Child Milestone Matching</span>
+            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
+              Shop by Child&apos;s Age Group
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Find developmentally appropriate, safety-certified toys tailored to each stage.
-            </p>
           </div>
+          <Link
+            href="/c/all"
+            className="text-xs sm:text-sm font-bold text-[var(--primary)] hover:underline flex items-center gap-1"
+          >
+            <span>All Brackets</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
@@ -147,103 +107,93 @@ export default async function HomePage() {
             <Link
               key={item.query}
               href={`/c/all?age=${item.query}`}
-              className="group p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col items-center text-center cursor-pointer"
+              className="group p-4 sm:p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] transition-all duration-200 card-sensory-lift flex flex-col items-center text-center cursor-pointer hover:border-[var(--primary)]/40 shadow-xs"
             >
-              <div className="w-14 h-14 rounded-2xl bg-[#FAF8F6] dark:bg-[#242531] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300 shadow-2xs">
                 {item.emoji}
               </div>
-              <h3 className="font-heading font-bold text-xs sm:text-sm text-[#18191F] dark:text-white mt-3">
+              <h3 className="font-heading font-black text-xs sm:text-sm text-[var(--text-primary)] mt-3">
                 {item.label}
               </h3>
-              <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">{item.sub}</p>
+              <p className="text-[11px] text-[var(--text-muted)] mt-0.5 line-clamp-1 font-medium">{item.sub}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* 3. FLASH DEALS WITH COUNTDOWN URGENCY */}
-      {dealProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#FFF0F0] to-[#FFF8E6] dark:from-[#2B1010] dark:to-[#2B230B] border border-[#FF6B6B]/30 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-[#FF6B6B] text-white animate-bounce">
-                  <Flame className="w-6 h-6 fill-current" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-heading text-xl sm:text-2xl font-black text-[#18191F] dark:text-white">
-                      Today's Flash Deals
-                    </h2>
-                    <span className="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#FF6B6B] text-white">
-                      Limited Stock
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                    Save up to 35% on top rated toys. Pay via Cash on Delivery when courier arrives.
-                  </p>
-                </div>
+      {/* 3. FLASH DEALS WITH LIVE FLIP COUNTDOWN */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="p-6 sm:p-8 rounded-4xl bg-gradient-to-r from-rose-500/10 via-[var(--surface-container-low)] to-[var(--surface-sun)] border border-[var(--primary)]/20 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-[var(--primary)] text-[var(--on-primary)] shadow-xs">
+                <Flame className="w-6 h-6 fill-current animate-pulse" />
               </div>
-
-              {/* Urgency Badge */}
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#1B1C24] border border-[#FF6B6B]/20 text-xs font-bold text-[#FF6B6B] shadow-xs shrink-0">
-                <Clock className="w-4 h-4 animate-spin text-[#FF6B6B]" />
-                <span>Ends in 14h 22m</span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="font-heading text-xl sm:text-2xl font-black text-[var(--text-primary)]">
+                    Today&apos;s Flash Deals
+                  </h2>
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[var(--primary)] text-[var(--on-primary)] shadow-xs">
+                    Limited Stock
+                  </span>
+                </div>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                  Save up to 35% on top rated toys. Pay via Cash on Delivery when courier arrives.
+                </p>
               </div>
             </div>
 
-            {/* Deal Products Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {dealProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
+            {/* Live Flip Countdown */}
+            <div className="flex items-center gap-2 p-2 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs">
+              <Countdown label="Deals Expire in:" size="md" initialHours={8} initialMinutes={14} initialSeconds={30} />
             </div>
           </div>
-        </section>
-      )}
 
-      {/* 4. SHOP BY CATEGORY */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Deal Products Grid */}
+          <HomeProductsSection initialProducts={dealProducts} filterType="deals" limit={4} />
+        </div>
+      </section>
+
+      {/* 4. CURATED CATEGORY GRID (8 BENTO TILES) */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
-              Explore Popular Categories
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
+              <span>Explore Wonder Collections</span>
+            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
+              Curated Toy Categories
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Browse our diverse collection of imaginative and learning play categories.
-            </p>
           </div>
           <Link
             href="/c/all"
-            className="text-xs sm:text-sm font-bold text-[#DC012B] hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-bold text-[var(--primary)] hover:underline flex items-center gap-1"
           >
-            <span>View All</span>
+            <span>View All Categories</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {categories.slice(0, 10).map((cat) => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {curatedCategoryBento.map((item) => (
             <Link
-              key={cat.slug}
-              href={`/c/${cat.slug}`}
-              className="group relative rounded-2xl overflow-hidden bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all hover:shadow-md flex flex-col"
+              key={item.slug + item.name}
+              href={`/c/${item.slug}`}
+              className={`p-4 sm:p-5 rounded-3xl border transition-all duration-200 card-sensory-lift flex flex-col justify-between cursor-pointer ${item.bg}`}
             >
-              <div className="relative aspect-4/3 w-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="240px"
-                />
+              <div className="flex items-center justify-between">
+                <span className="text-3xl">{item.icon}</span>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/60 dark:bg-black/30">
+                  {item.desc}
+                </span>
               </div>
-              <div className="p-3 text-center">
-                <h3 className="font-heading font-bold text-xs sm:text-sm text-[#18191F] dark:text-white line-clamp-1 group-hover:text-[#DC012B] transition-colors">
-                  {cat.name}
+              <div className="mt-4">
+                <h3 className="font-heading font-black text-sm sm:text-base tracking-tight leading-snug">
+                  {item.name}
                 </h3>
-                <span className="text-[11px] text-slate-400 font-medium">
-                  {cat.itemCount || 10}+ Toys
+                <span className="text-[11px] font-bold opacity-80 inline-flex items-center gap-1 mt-1">
+                  Explore <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
             </Link>
@@ -251,173 +201,151 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. GIFT FINDER QUIZ CTA BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#7B5CFA] via-[#6343E0] to-[#DC012B] text-white p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-3 max-w-xl text-center sm:text-left">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold">
-              <Gift className="w-3.5 h-3.5 text-[#FFC93C]" /> Interactive Gift Assistant
-            </span>
-            <h2 className="font-heading text-2xl sm:text-4xl font-black">
-              Not Sure What to Buy? Answer 3 Simple Questions!
-            </h2>
-            <p className="text-xs sm:text-sm text-purple-100">
-              Our smart Gift Finder algorithm matches age, developmental milestones, and budget in under 30 seconds.
-            </p>
-          </div>
-          <Link href="/gift-finder" className="shrink-0">
-            <Button variant="sun" size="lg" className="text-sm font-extrabold shadow-lg px-8">
-              <span>Start Gift Finder</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
-          </Link>
-        </div>
-      </section>
+      {/* 5. INTERACTIVE GIFT FINDER BANNER (30-SECOND WIZARD) */}
+      <StitchGiftWizard />
 
-      {/* 6. FEATURED BEST SELLERS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 6. TABBED HOT LISTS (BEST SELLERS & NEW ARRIVALS) */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
+              <span>⭐ Parent Verified Favorites</span>
+            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
               Trending Best Sellers
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Loved by thousands of happy kids and trusted by parents across Bangladesh.
-            </p>
           </div>
           <Link
             href="/c/all?sort=bestselling"
-            className="text-xs sm:text-sm font-bold text-[#DC012B] hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-bold text-[var(--primary)] hover:underline flex items-center gap-1"
           >
-            <span>See All</span>
+            <span>Browse Full Catalog</span>
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {featuredProducts.map((p) => (
-            <ProductCard key={p.id} product={p} />
+        <HomeProductsSection initialProducts={featuredProducts} filterType="featured" limit={8} />
+      </section>
+
+      {/* 7. TRUST & SAFETY PROMISE */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="p-6 sm:p-10 rounded-4xl bg-[var(--surface)] border border-[var(--border)] shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border)]">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[var(--primary)] uppercase tracking-wider mb-1">
+                <ShieldCheck className="w-4 h-4" /> The Khelna Bazar Promise
+              </div>
+              <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
+                Play With Complete Peace of Mind
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-md">
+              Every toy in our inventory meets rigorous child-safety standards and comes backed by our doorstep verification guarantee.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
+                100% Non-Toxic &amp; Safe
+              </h4>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                ASTM F963 &amp; CE tested. BPA-free, lead-free food-safe pigments for curious little hands.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[var(--primary)]/15 text-[var(--primary)] flex items-center justify-center">
+                <Truck className="w-5 h-5" />
+              </div>
+              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
+                Nationwide Cash on Delivery
+              </h4>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Pay in cash only after receiving and checking your parcel across all 64 districts.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[var(--secondary-container)]/30 text-[var(--secondary)] flex items-center justify-center">
+                <RotateCcw className="w-5 h-5" />
+              </div>
+              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
+                7-Day Easy Replacement
+              </h4>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Damaged or missing pieces? We send an express replacement with zero hassle.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
+                Same-Day Dhaka Dispatch
+              </h4>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Orders placed before 2:00 PM are dispatched same day from our local fulfillment center.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. CUSTOMER REVIEWS & COMMUNITY LOVE */}
+      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
+              <span>Real Parent Stories</span>
+            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
+              Loved by Families Across Bangladesh
+            </h2>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {parentReviews.map((rev) => (
+            <div
+              key={rev.author}
+              className="p-5 sm:p-6 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs card-sensory-lift flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-[var(--secondary-container)]">
+                    {Array.from({ length: rev.rating }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current text-[var(--secondary-container)]" />
+                    ))}
+                  </div>
+                  <span className="text-[11px] text-[var(--text-muted)]">{rev.date}</span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed italic">
+                  &ldquo;{rev.text}&rdquo;
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between text-xs">
+                <div>
+                  <h4 className="font-bold text-[var(--text-primary)]">{rev.author}</h4>
+                  <span className="text-[11px] text-[var(--text-muted)]">
+                    {rev.child} • {rev.district}
+                  </span>
+                </div>
+
+                {rev.verified && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="w-3 h-3" /> Verified Buyer
+                  </span>
+                )}
+              </div>
+            </div>
           ))}
-        </div>
-      </section>
-
-      {/* 7. BUDGET PICKS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
-          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
-            Shop by Budget
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Joyful surprises for every pocket, backed by our Cash on Delivery guarantee.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Link
-            href="/c/all?maxPrice=1000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
-          >
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pocket Friendly</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
-              Under ৳1,000
-            </h3>
-            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
-          </Link>
-
-          <Link
-            href="/c/all?minPrice=1000&maxPrice=2000"
-            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
-          >
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Popular Range</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
-              ৳1,000 – ৳2,000
-            </h3>
-            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
-          </Link>
-
-          <Link
-            href="/c/all?minPrice=2000&maxPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
-          >
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Free Delivery Tier</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
-              ৳2,000 – ৳3,500
-            </h3>
-            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
-          </Link>
-
-          <Link
-            href="/c/all?minPrice=3500"
-            className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] hover:border-[#DC012B] transition-all text-center hover:shadow-md group"
-          >
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Collector &amp; Deluxe</span>
-            <h3 className="font-heading font-black text-xl sm:text-2xl text-[#18191F] dark:text-white mt-1 group-hover:text-[#DC012B]">
-              Above ৳3,500
-            </h3>
-            <span className="text-xs text-[#DC012B] font-semibold mt-2 inline-block">Browse Toys &rarr;</span>
-          </Link>
-        </div>
-      </section>
-
-      {/* 8. CUSTOMER LOVE / VERIFIED REVIEWS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-8">
-          <h2 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
-            Loved by Parents, Adored by Kids
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Real feedback from verified Cash on Delivery buyers across Dhaka, Chittagong, Sylhet and nationwide.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
-            <div className="flex items-center text-[#FFC93C]">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-current" />
-              ))}
-            </div>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 italic">
-              "Ordered the Space Explorer rocket set for my 7-year-old. The courier arrived in Banani the very next day.
-              The blocks click firmly together just like authentic Lego. Very safe, no sharp edges!"
-            </p>
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Dr. Farhana Islam</span>
-              <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Dhaka</span>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
-            <div className="flex items-center text-[#FFC93C]">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-current" />
-              ))}
-            </div>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 italic">
-              "Being able to inspect the package before giving cash to the courier gives complete peace of mind.
-              The 4WD RC Buggy is lightning fast! Best online toy shop experience in BD."
-            </p>
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Rashidul Karim</span>
-              <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Chittagong</span>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-3">
-            <div className="flex items-center text-[#FFC93C]">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-current" />
-              ))}
-            </div>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 italic">
-              "The Montessori sensory wooden cube is top notch beechwood. Smooth, zero chemical smell, and our 14-month-old
-              plays with it for hours. Highly recommended for toddler parents!"
-            </p>
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="font-bold text-xs text-[#18191F] dark:text-white block">Nusrat Jahan</span>
-              <span className="text-[11px] text-emerald-600 font-medium">Verified Purchase &bull; Uttara</span>
-            </div>
-          </div>
         </div>
       </section>
     </div>
