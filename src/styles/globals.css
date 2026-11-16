@@ -1,87 +1,526 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
+
+/* --------------------------------------------------------------------------
+   KHELNA BAZAR - STITCH SENSORY UI DESIGN SYSTEM TOKENS
+   Specification: Joyful Toy Bazaar (DESIGN.md)
+   - Brand Red: #D71921 / #AE0012
+   - Secondary Amber Gold: #FCB812 / #B45309 (Spinning top / Latim equity)
+   - Joy Accent Royal Blue: #1E5BFF / #0044D5 (Safety seals & specifications)
+   - Warm Canvas: #FFF8F6 (Sun-warmed organic cloud surface)
+   - Warm Charcoal Text: #221A18 (WCAG 2.2 AA compliant >= 5.1:1 contrast)
+   - Fluid typography (Plus Jakarta Sans, Fredoka, Hind Siliguri)
+   - Pill contour geometry (Roundedness: 3 / full pills / 24-32px containers)
+   - Tactile 3D push buttons & buoyant golden-amber shadows
+-------------------------------------------------------------------------- */
 
 :root {
-  /* Khelna Bazar Red Brand Palette & Joyful Warm Accents */
-  --brand: #DC012B;
-  --brand-hover: #B80023;
-  --brand-ink: #8A0018;
-  --brand-light: #FFF0F2;
-  --sun: #F59E0B;
-  --sun-hover: #D97706;
-  --coral: #FF4757;
-  --coral-hover: #E03646;
-  --mint: #10B981;
-  --mint-hover: #059669;
-  --grape: #8B5CF6;
-  --grape-hover: #7C3AED;
-  
-  --ink: #18191F;
-  --muted: #64748B;
-  --bg: #FAF8F6;
+  /* ------------------------------------------------------------------------
+     1. COLOR SYSTEM - LIGHT THEME (Warm Tactile Charm)
+  ------------------------------------------------------------------------ */
+  --bg-primary: #FFF8F6;
   --surface: #FFFFFF;
-  --surface-alt: #F4EFEB;
-  --line: #E8E2DE;
+  --surface-dim: #E7D6D3;
+  --surface-bright: #FFF8F6;
+  --surface-elevated: #FFF0ED;
+  
+  /* Stitch Surface Containers */
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #FFF0ED;
+  --surface-container: #FCEAE6;
+  --surface-container-high: #F6E4E1;
+  --surface-container-highest: #F0DFDB;
+  
+  /* Tinted section surfaces */
+  --surface-peach: #FFF0ED;
+  --surface-sun: #FFFBEB;
+  --surface-mint: #ECFDF5;
+  --surface-sky: #EFF6FF;
+  --surface-lilac: #F5F3FF;
 
-  --radius-sm: 8px;
+  --text-primary: #221A18;
+  --text-muted: #5D3F3C;
+  --border: #F0DFDB;
+  --border-subtle: #FCEAE6;
+  --outline: #916F6B;
+  --outline-variant: #E6BDB8;
+
+  /* Primary Brand Red Ramp (Stitch Heritage Latim Red) */
+  --primary: #D71921;             /* Contrast >= 5.2:1 against white */
+  --primary-hover: #AE0012;       /* Primary Container */
+  --primary-container: #AE0012;
+  --primary-subtle: #FFF0ED;
+  --primary-fixed: #FFDAD6;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #FFECEA;
+
+  /* Secondary Amber Gold Ramp (Spinning Top Accent) */
+  --secondary: #B45309;           /* Accessible Amber Text/Icons */
+  --secondary-container: #FCB812; /* Joyful Gold Surface */
+  --secondary-hover: #9A3412;
+  --secondary-subtle: #FFFBEB;
+  --secondary-fixed: #FFDEA7;
+  --on-secondary: #FFFFFF;
+  --on-secondary-container: #553800;
+  --on-secondary-fixed: #271900;
+
+  /* Tertiary / Joy Accent Royal Blue (Safety & Tech Spec) */
+  --accent: #1E5BFF;              /* Joy Royal Blue */
+  --accent-hover: #0044D5;
+  --accent-container: #0044D5;
+  --accent-subtle: #EFF6FF;
+  --on-accent: #FFFFFF;
+
+  /* Semantic Palettes */
+  --success: #059669;             /* Emerald Safety */
+  --success-subtle: #ECFDF5;
+  --warning: #D97706;             /* Warm Sun Alert */
+  --warning-subtle: #FFFBEB;
+  --danger: #BA1A1A;              /* Choking Hazard / Error */
+  --danger-subtle: #FFDAD6;
+
+  /* Elevation Shadows (Buoyant terracotta & amber diffusions) */
+  --shadow-xs: 0 1px 2px 0 rgba(34, 26, 24, 0.04);
+  --shadow-sm: 0 2px 6px -1px rgba(34, 26, 24, 0.06), 0 1px 3px 0 rgba(215, 25, 33, 0.04);
+  --shadow-md: 0 4px 14px -2px rgba(215, 25, 33, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(215, 25, 33, 0.12), 0 4px 8px -2px rgba(253, 184, 19, 0.16);
+  --shadow-xl: 0 20px 32px -8px rgba(34, 26, 24, 0.14);
+  --shadow-glow: 0 0 24px -2px rgba(215, 25, 33, 0.2);
+  --shadow-amber-glow: 0 0 24px -2px rgba(252, 184, 18, 0.25);
+  --overlay: rgba(34, 26, 24, 0.6);
+
+  /* Tactile 3D Push Button Shadows */
+  --shadow-btn-red: 0 4px 0 #93000E;
+  --shadow-btn-red-active: 0 2px 0 #93000E;
+  --shadow-btn-amber: 0 4px 0 #B45309;
+  --shadow-btn-amber-active: 0 2px 0 #B45309;
+
+  /* Stitch Radii scale (Roundedness: 3) */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 24px;
-  --radius-full: 9999px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
 
-  --shadow-sm: 0 2px 6px -1px rgba(220, 1, 43, 0.05);
-  --shadow-md: 0 8px 24px -4px rgba(220, 1, 43, 0.08);
-  --shadow-lg: 0 16px 36px -6px rgba(220, 1, 43, 0.12);
+  /* Motion tokens */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-slow: 320ms;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Backward Compatibility Aliases */
+  --brand: var(--primary);
+  --brand-hover: var(--primary-hover);
+  --brand-light: var(--primary-subtle);
+  --ink: var(--text-primary);
+  --muted: var(--text-muted);
+  --bg: var(--bg-primary);
+  --line: var(--border);
+  --sun: var(--secondary-container);
+  --coral: var(--primary);
+  --mint: var(--success);
+  --foreground: var(--text-primary);
+  --muted-foreground: var(--text-muted);
+  --primary-foreground: var(--on-primary);
+  --secondary-foreground: var(--on-secondary-fixed);
+  --accent-foreground: var(--on-accent);
+
+  color-scheme: light dark;
 }
 
-.dark {
-  /* Design Tokens - Dark Theme */
-  --brand: #FF3B56;
-  --brand-hover: #FF6B81;
-  --brand-ink: #FFE5E9;
-  --brand-light: #3D000B;
-  --sun: #FBBF24;
-  --sun-hover: #FCD34D;
-  --coral: #FF6B81;
-  --coral-hover: #FFA4B1;
-  --mint: #34D399;
-  --mint-hover: #6EE7B7;
-  --grape: #A78BFA;
-  --grape-hover: #C4B5FD;
-  
-  --ink: #F9FAFB;
-  --muted: #94A3B8;
-  --bg: #121318;
-  --surface: #1B1C24;
-  --surface-alt: #242531;
-  --line: #2E303E;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    /* ----------------------------------------------------------------------
+       2. COLOR SYSTEM - SYSTEM DARK THEME (Luminous Warm Glow)
+    ---------------------------------------------------------------------- */
+    --bg-primary: #1A1110;
+    --surface: #241A18;
+    --surface-dim: #18100F;
+    --surface-bright: #2C201E;
+    --surface-elevated: #322523;
 
-  --shadow-sm: 0 2px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 16px 36px -6px rgba(0, 0, 0, 0.7);
+    --surface-container-lowest: #1F1514;
+    --surface-container-low: #291D1B;
+    --surface-container: #332422;
+    --surface-container-high: #3D2D2A;
+    --surface-container-highest: #4A3532;
+
+    --surface-peach: #3D1A14;
+    --surface-sun: #452405;
+    --surface-mint: #064E3B;
+    --surface-sky: #0C325E;
+    --surface-lilac: #2E1065;
+
+    --text-primary: #FFF0ED;
+    --text-muted: #E6BDB8;
+    --border: #4A3532;
+    --border-subtle: #3A2825;
+    --outline: #A88681;
+    --outline-variant: #5D3F3C;
+
+    /* High-contrast luminous primary */
+    --primary: #FF6A6E;
+    --primary-hover: #FF8588;
+    --primary-container: #D71921;
+    --primary-subtle: #3A1214;
+    --primary-fixed: #FFDAD6;
+    --on-primary: #1A1110;
+    --on-primary-container: #FFECEA;
+
+    --secondary: #FFD56B;
+    --secondary-container: #FCB812;
+    --secondary-hover: #FFE28F;
+    --secondary-subtle: #3D2900;
+    --secondary-fixed: #FFDEA7;
+    --on-secondary: #1A1110;
+    --on-secondary-container: #553800;
+    --on-secondary-fixed: #271900;
+
+    --accent: #6C9AFF;
+    --accent-hover: #8EB2FF;
+    --accent-container: #1E5BFF;
+    --accent-subtle: #0C325E;
+    --on-accent: #1A1110;
+
+    --success: #34D399;
+    --success-subtle: #064E3B;
+    --warning: #FBBF24;
+    --warning-subtle: #451A03;
+    --danger: #F87171;
+    --danger-subtle: #450A0A;
+
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 6px 18px -2px rgba(0, 0, 0, 0.65);
+    --shadow-lg: 0 16px 32px -4px rgba(0, 0, 0, 0.8);
+    --shadow-xl: 0 24px 40px -8px rgba(0, 0, 0, 0.9);
+    --shadow-glow: 0 0 24px -2px rgba(255, 106, 110, 0.35);
+    --shadow-amber-glow: 0 0 24px -2px rgba(255, 213, 107, 0.35);
+    --overlay: rgba(0, 0, 0, 0.85);
+
+    --shadow-btn-red: 0 4px 0 #85000C;
+    --shadow-btn-red-active: 0 2px 0 #85000C;
+    --shadow-btn-amber: 0 4px 0 #8A3E00;
+    --shadow-btn-amber-active: 0 2px 0 #8A3E00;
+
+    --brand: var(--primary);
+    --brand-hover: var(--primary-hover);
+    --brand-light: var(--primary-subtle);
+    --ink: var(--text-primary);
+    --muted: var(--text-muted);
+    --bg: var(--bg-primary);
+    --line: var(--border);
+    --sun: var(--secondary-container);
+    --coral: var(--primary);
+    --mint: var(--success);
+    --foreground: var(--text-primary);
+    --muted-foreground: var(--text-muted);
+    --primary-foreground: var(--on-primary);
+    --secondary-foreground: var(--on-secondary-fixed);
+    --accent-foreground: var(--on-accent);
+
+    color-scheme: dark;
+  }
 }
 
+:root[data-theme='dark'] {
+  --bg-primary: #1A1110;
+  --surface: #241A18;
+  --surface-dim: #18100F;
+  --surface-bright: #2C201E;
+  --surface-elevated: #322523;
+
+  --surface-container-lowest: #1F1514;
+  --surface-container-low: #291D1B;
+  --surface-container: #332422;
+  --surface-container-high: #3D2D2A;
+  --surface-container-highest: #4A3532;
+
+  --surface-peach: #3D1A14;
+  --surface-sun: #452405;
+  --surface-mint: #064E3B;
+  --surface-sky: #0C325E;
+  --surface-lilac: #2E1065;
+
+  --text-primary: #FFF0ED;
+  --text-muted: #E6BDB8;
+  --border: #4A3532;
+  --border-subtle: #3A2825;
+  --outline: #A88681;
+  --outline-variant: #5D3F3C;
+
+  --primary: #FF6A6E;
+  --primary-hover: #FF8588;
+  --primary-container: #D71921;
+  --primary-subtle: #3A1214;
+  --primary-fixed: #FFDAD6;
+  --on-primary: #1A1110;
+  --on-primary-container: #FFECEA;
+
+  --secondary: #FFD56B;
+  --secondary-container: #FCB812;
+  --secondary-hover: #FFE28F;
+  --secondary-subtle: #3D2900;
+  --secondary-fixed: #FFDEA7;
+  --on-secondary: #1A1110;
+  --on-secondary-container: #553800;
+  --on-secondary-fixed: #271900;
+
+  --accent: #6C9AFF;
+  --accent-hover: #8EB2FF;
+  --accent-container: #1E5BFF;
+  --accent-subtle: #0C325E;
+  --on-accent: #1A1110;
+
+  --success: #34D399;
+  --success-subtle: #064E3B;
+  --warning: #FBBF24;
+  --warning-subtle: #451A03;
+  --danger: #F87171;
+  --danger-subtle: #450A0A;
+
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 18px -2px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 16px 32px -4px rgba(0, 0, 0, 0.8);
+  --shadow-xl: 0 24px 40px -8px rgba(0, 0, 0, 0.9);
+  --shadow-glow: 0 0 24px -2px rgba(255, 106, 110, 0.35);
+  --shadow-amber-glow: 0 0 24px -2px rgba(255, 213, 107, 0.35);
+  --overlay: rgba(0, 0, 0, 0.85);
+
+  --shadow-btn-red: 0 4px 0 #85000C;
+  --shadow-btn-red-active: 0 2px 0 #85000C;
+  --shadow-btn-amber: 0 4px 0 #8A3E00;
+  --shadow-btn-amber-active: 0 2px 0 #8A3E00;
+
+  --brand: var(--primary);
+  --brand-hover: var(--primary-hover);
+  --brand-light: var(--primary-subtle);
+  --ink: var(--text-primary);
+  --muted: var(--text-muted);
+  --bg: var(--bg-primary);
+  --line: var(--border);
+  --sun: var(--secondary-container);
+  --coral: var(--primary);
+  --mint: var(--success);
+  --foreground: var(--text-primary);
+  --muted-foreground: var(--text-muted);
+  --primary-foreground: var(--on-primary);
+  --secondary-foreground: var(--on-secondary-fixed);
+  --accent-foreground: var(--on-accent);
+
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg-primary: #FFF8F6;
+  --surface: #FFFFFF;
+  --surface-dim: #E7D6D3;
+  --surface-bright: #FFF8F6;
+  --surface-elevated: #FFF0ED;
+
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #FFF0ED;
+  --surface-container: #FCEAE6;
+  --surface-container-high: #F6E4E1;
+  --surface-container-highest: #F0DFDB;
+
+  --surface-peach: #FFF0ED;
+  --surface-sun: #FFFBEB;
+  --surface-mint: #ECFDF5;
+  --surface-sky: #EFF6FF;
+  --surface-lilac: #F5F3FF;
+
+  --text-primary: #221A18;
+  --text-muted: #5D3F3C;
+  --border: #F0DFDB;
+  --border-subtle: #FCEAE6;
+  --outline: #916F6B;
+  --outline-variant: #E6BDB8;
+
+  --primary: #D71921;
+  --primary-hover: #AE0012;
+  --primary-container: #AE0012;
+  --primary-subtle: #FFF0ED;
+  --primary-fixed: #FFDAD6;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #FFECEA;
+
+  --secondary: #B45309;
+  --secondary-container: #FCB812;
+  --secondary-hover: #9A3412;
+  --secondary-subtle: #FFFBEB;
+  --secondary-fixed: #FFDEA7;
+  --on-secondary: #FFFFFF;
+  --on-secondary-container: #553800;
+  --on-secondary-fixed: #271900;
+
+  --accent: #1E5BFF;
+  --accent-hover: #0044D5;
+  --accent-container: #0044D5;
+  --accent-subtle: #EFF6FF;
+  --on-accent: #FFFFFF;
+
+  --success: #059669;
+  --success-subtle: #ECFDF5;
+  --warning: #D97706;
+  --warning-subtle: #FFFBEB;
+  --danger: #BA1A1A;
+  --danger-subtle: #FFDAD6;
+
+  --shadow-xs: 0 1px 2px 0 rgba(34, 26, 24, 0.04);
+  --shadow-sm: 0 2px 6px -1px rgba(34, 26, 24, 0.06), 0 1px 3px 0 rgba(215, 25, 33, 0.04);
+  --shadow-md: 0 4px 14px -2px rgba(215, 25, 33, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(215, 25, 33, 0.12), 0 4px 8px -2px rgba(253, 184, 19, 0.16);
+  --shadow-xl: 0 20px 32px -8px rgba(34, 26, 24, 0.14);
+  --shadow-glow: 0 0 24px -2px rgba(215, 25, 33, 0.2);
+  --shadow-amber-glow: 0 0 24px -2px rgba(252, 184, 18, 0.25);
+  --overlay: rgba(34, 26, 24, 0.6);
+
+  --shadow-btn-red: 0 4px 0 #93000E;
+  --shadow-btn-red-active: 0 2px 0 #93000E;
+  --shadow-btn-amber: 0 4px 0 #B45309;
+  --shadow-btn-amber-active: 0 2px 0 #B45309;
+
+  --brand: var(--primary);
+  --brand-hover: var(--primary-hover);
+  --brand-light: var(--primary-subtle);
+  --ink: var(--text-primary);
+  --muted: var(--text-muted);
+  --bg: var(--bg-primary);
+  --line: var(--border);
+  --sun: var(--secondary-container);
+  --coral: var(--primary);
+  --mint: var(--success);
+  --foreground: var(--text-primary);
+  --muted-foreground: var(--text-muted);
+  --primary-foreground: var(--on-primary);
+  --secondary-foreground: var(--on-secondary-fixed);
+  --accent-foreground: var(--on-accent);
+
+  color-scheme: light;
+}
+
+/* --------------------------------------------------------------------------
+   3. TAILWIND CSS V4 THEME BINDINGS
+-------------------------------------------------------------------------- */
+@theme {
+  --color-foreground: var(--text-primary);
+  --color-muted-foreground: var(--text-muted);
+  --color-primary-foreground: var(--on-primary);
+  --color-secondary-foreground: var(--on-secondary-fixed);
+  --color-accent-foreground: var(--on-accent);
+
+  --color-bg-primary: var(--bg-primary);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-surface-peach: var(--surface-peach);
+  --color-surface-sun: var(--surface-sun);
+  --color-surface-mint: var(--surface-mint);
+  --color-surface-sky: var(--surface-sky);
+  --color-surface-lilac: var(--surface-lilac);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-container: var(--primary-container);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-on-primary: var(--on-primary);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-subtle: var(--secondary-subtle);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-on-secondary: var(--on-secondary);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-container: var(--accent-container);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-on-accent: var(--on-accent);
+
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-overlay: var(--overlay);
+
+  /* Font Families */
+  --font-sans: var(--font-sans), 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-heading), 'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-bengali: var(--font-bengali), 'Hind Siliguri', -apple-system, sans-serif;
+
+  /* Elevation Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-glow: var(--shadow-glow);
+  --shadow-amber-glow: var(--shadow-amber-glow);
+}
+
+/* --------------------------------------------------------------------------
+   4. BASE & TYPOGRAPHY RESETS
+-------------------------------------------------------------------------- */
 * {
   box-sizing: border-box;
 }
 
 body {
-  color: var(--ink);
-  background-color: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings font */
-h1, h2, h3, h4, .font-heading {
-  font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading), 'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.015em;
 }
 
-/* Shimmer Skeleton Animation */
+/* Bengali Typography - tuned line height to prevent matra clipping */
+.font-bengali, [lang="bn"], [lang="bn"] * {
+  font-family: var(--font-bengali), 'Hind Siliguri', sans-serif;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+
+/* Tabular Numbers for Prices & Tables */
+.tabular-nums, .price-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   5. SENSORY KEYFRAME ANIMATIONS & STITCH UTILITIES
+-------------------------------------------------------------------------- */
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -92,66 +531,152 @@ h1, h2, h3, h4, .font-heading {
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(90deg, var(--line) 25%, var(--surface-alt) 50%, var(--line) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    var(--surface-container-high) 50%,
+    var(--border) 100%
+  );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.6s infinite linear;
 }
 
-/* Hover Lift Effect */
-.card-hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Wiggle animation */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-3deg); }
-  75% { transform: rotate(3deg); }
-}
-
-.hover-wiggle:hover {
-  animation: wiggle 0.3s ease-in-out;
-}
-
-/* Movable floating logo animation */
-@keyframes floatLogo {
+@keyframes pulse-subtle {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    opacity: 1;
+    transform: scale(1);
   }
-  25% {
-    transform: translateY(-3px) rotate(-1.5deg);
-  }
-  75% {
-    transform: translateY(-5px) rotate(1.5deg);
+  50% {
+    opacity: 0.88;
+    transform: scale(1.02);
   }
 }
 
-.movable-logo {
-  animation: floatLogo 3.5s ease-in-out infinite;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+.animate-pulse-subtle {
+  animation: pulse-subtle 2.5s infinite ease-in-out;
+}
+
+@keyframes heart-burst {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-heart-burst {
+  animation: heart-burst 0.35s var(--ease-spring);
+}
+
+/* Stitch 3D Tactile Push Buttons */
+.btn-pill-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: var(--shadow-btn-red);
+  transition: transform var(--duration-fast) var(--ease-spring),
+              background-color var(--duration-fast) ease-out,
+              box-shadow var(--duration-fast) ease-out;
+  cursor: pointer;
+}
+.btn-pill-primary:hover {
+  background-color: var(--primary-hover);
+}
+.btn-pill-primary:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-btn-red-active);
+}
+
+.btn-pill-amber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-fixed);
+  border-radius: 9999px;
+  font-weight: 700;
+  box-shadow: var(--shadow-btn-amber);
+  transition: transform var(--duration-fast) var(--ease-spring),
+              background-color var(--duration-fast) ease-out,
+              box-shadow var(--duration-fast) ease-out;
+  cursor: pointer;
+}
+.btn-pill-amber:hover {
+  filter: brightness(1.03);
+}
+.btn-pill-amber:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-btn-amber-active);
+}
+
+/* Sensory Card Hover Lift */
+.card-hover-lift, .card-sensory-lift {
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-spring),
+              border-color var(--duration-normal) var(--ease-spring);
   will-change: transform;
 }
 
-.movable-logo:hover {
-  transform: translateY(-6px) scale(1.1) rotate(6deg);
+.card-hover-lift:hover, .card-sensory-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
-.movable-logo:active {
-  transform: scale(0.92) rotate(-6deg);
+/* Photo Micro-Zoom (Within masked container) */
+.photo-micro-zoom {
+  transition: transform var(--duration-slow) var(--ease-spring);
+  will-change: transform;
+}
+.group:hover .photo-micro-zoom,
+.photo-micro-zoom:hover {
+  transform: scale(1.025);
 }
 
-/* Accessible focus ring */
+/* Interactive Button Stepper */
+.btn-micro-press {
+  transition: transform var(--duration-fast) var(--ease-spring),
+              background-color var(--duration-fast) ease-out,
+              box-shadow var(--duration-fast) ease-out;
+}
+.btn-micro-press:active {
+  transform: scale(0.98);
+}
+
+/* Accessible focus ring (WCAG 2.2 AA) */
 *:focus-visible {
-  outline: 3px solid var(--brand);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Respect reduced motion */
+/* Hide scrollbar while preserving scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Sticky Header Backdrop */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Respect Reduced Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -159,7 +684,15 @@ h1, h2, h3, h4, .font-heading {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .card-hover-lift:hover {
+  .card-hover-lift:hover,
+  .card-sensory-lift:hover {
     transform: none !important;
+  }
+  .btn-pill-primary:active,
+  .btn-pill-amber:active {
+    transform: none !important;
+  }
+  .skeleton-shimmer {
+    animation: none !important;
   }
 }
