@@ -153,14 +153,14 @@ function LoginForm() {
           <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
-              onClick={() => fillDemoCredentials("admin@khelnabazar.com.bd", "Password123!")}
+              onClick={() => fillDemoCredentials("admin@khelnabazar.com", "Admin@Khelna123")}
               className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--primary)] hover:border-[var(--primary)] transition-colors cursor-pointer"
             >
               Demo Admin
             </button>
             <button
               type="button"
-              onClick={() => fillDemoCredentials("customer@khelnabazar.com.bd", "Password123!")}
+              onClick={() => fillDemoCredentials("customer@khelnabazar.com", "Customer@Khelna123")}
               className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--secondary)] hover:border-[var(--secondary)] transition-colors cursor-pointer"
             >
               Demo Customer
