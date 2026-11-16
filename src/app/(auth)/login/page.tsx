@@ -4,139 +4,262 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuthStore } from "@/lib/auth-store";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Lock, User, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Sparkles, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/account";
+  const rawRedirect = searchParams.get("next") || searchParams.get("redirect") || "";
 
-  const { login } = useAuthStore();
+  // Validate next redirect to prevent open redirect vulnerabilities
+  const safeRedirect =
+    rawRedirect && rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
+      ? rawRedirect
+      : "";
+
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!identifier.trim() || !password.trim()) {
-      toast.error("Please enter your username/email and password.");
+    setErrorMessage(null);
+
+    const cleanId = identifier.trim();
+    if (!cleanId || !password) {
+      const msg = "Please enter your mobile number or email, and your password.";
+      setErrorMessage(msg);
+      toast.error(msg);
       return;
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      login(identifier.trim());
-      toast.success("Welcome to Khelna Bazar!");
-      setIsLoading(false);
+    try {
+      const res = await signIn("credentials", {
+        identifier: cleanId,
+        password,
+        redirect: false,
+      });
 
-      if (identifier.toLowerCase().includes("admin") || identifier.toLowerCase() === "owner") {
-        router.push("/admin");
-      } else {
-        router.push(redirectUrl);
+      if (!res || res.error) {
+        const errorMsg = "Invalid credentials. Please verify your phone/email and password.";
+        setErrorMessage(errorMsg);
+        toast.error(errorMsg);
+        setIsLoading(false);
+        return;
       }
-    }, 450);
+
+      toast.success("Welcome back to Khelna Bazar!");
+
+      if (safeRedirect) {
+        router.push(safeRedirect);
+        router.refresh();
+      } else {
+        router.push("/account");
+        router.refresh();
+      }
+    } catch {
+      const errTxt = "An unexpected connection error occurred during sign in.";
+      setErrorMessage(errTxt);
+      toast.error(errTxt);
+      setIsLoading(false);
+    }
+  };
+
+  const fillDemoCredentials = (id: string, pass: string) => {
+    setIdentifier(id);
+    setPassword(pass);
+    toast.info(`Filled credentials for ${id}`);
   };
 
   return (
-    <div className="max-w-md w-full space-y-6 bg-white dark:bg-[#1B1C24] p-8 sm:p-10 rounded-3xl border border-[#E8E2DE] dark:border-[#2E303E] shadow-sm">
-      {/* Brand Header */}
-      <div className="text-center space-y-2.5">
-        <Link href="/" className="inline-flex items-center gap-3 group">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden bg-white p-0.5 shadow-sm movable-logo shrink-0">
-            <Image
-              src="/images/khelna-bazar-logo.gif"
-              alt="Khelna Bazar Logo"
-              fill
-              unoptimized
-              className="object-contain"
-            />
-          </div>
-          <div className="text-left flex flex-col">
-            <span className="font-heading font-black text-2xl text-[#18191F] dark:text-white leading-none">
-              KHELNA <span className="text-[#DC012B]">BAZAR</span>
-            </span>
-            <span className="text-[9px] font-bold tracking-widest text-[#DC012B] uppercase mt-0.5">
-              khelnabazar.com.bd
-            </span>
-          </div>
-        </Link>
+    <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-4xl overflow-hidden border border-[var(--border)] shadow-2xl bg-[var(--surface-container-low)]">
+      {/* Left Brand Illustration & Benefit Panel (Desktop only) */}
+      <div
+        className="hidden md:flex flex-col justify-between p-10 text-white relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #AE0012 0%, #D71921 55%, #FCB812 100%)",
+          backgroundColor: "#D71921",
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.2),transparent_70%)] pointer-events-none" />
 
-        <h1 className="font-heading text-xl font-bold text-[#18191F] dark:text-white pt-2">
-          Sign In to Your Account
-        </h1>
-        <p className="text-xs text-slate-500">
-          Enter your username or email and password to continue.
-        </p>
-      </div>
+        <div className="relative z-10 space-y-4">
+          <Link href="/" className="inline-flex items-center gap-2.5">
+            <div className="relative w-12 h-12 rounded-2xl bg-white p-1 overflow-hidden shadow-md">
+              <Image src="/images/logo-placeholder.svg" alt="Logo" fill className="object-contain p-1" sizes="48px" />
+            </div>
+            <div>
+              <span className="font-heading font-black text-xl tracking-tight block">Khelna Bazar</span>
+              <span className="text-[10px] font-bold text-amber-200 uppercase tracking-widest">Joy Toy Boutique</span>
+            </div>
+          </Link>
 
-      {/* Universal Sign In Form */}
-      <form onSubmit={handleLogin} className="space-y-4 pt-1">
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <User className="w-3.5 h-3.5 text-[#DC012B]" />
-            <span>Username or Email</span>
-          </label>
-          <Input
-            type="text"
-            placeholder="Username or your@email.com"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            required
-            autoComplete="username"
-            className="h-11"
-          />
+          <h2 className="font-heading text-3xl font-black leading-tight pt-4">
+            Joyful, Safe &amp; Tested Toys for Every Stage
+          </h2>
+          <p className="text-sm text-white/90 leading-relaxed">
+            Sign in to manage your Cash on Delivery orders, track delivery milestones, and redeem PlayPoints rewards.
+          </p>
         </div>
 
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-slate-400" />
-              <span>Password</span>
+        <div className="relative z-10 space-y-3 pt-8 border-t border-white/20 text-xs">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-300 shrink-0" />
+            <span>ASTM F963 &amp; CE Certified Safe Toys</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <Truck className="w-4 h-4 text-amber-200 shrink-0" />
+            <span>Doorstep Cash on Delivery Nationwide</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+            <span>100 PlayPoints on Account Creation</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Sign-in Form */}
+      <div className="p-8 sm:p-10 flex flex-col justify-between space-y-6 bg-[var(--surface)]">
+        <div className="space-y-2">
+          {/* Mobile brand mark */}
+          <div className="md:hidden flex items-center gap-2 mb-2">
+            <div className="relative w-9 h-9 rounded-full bg-white p-0.5 overflow-hidden border border-[var(--border)] shadow-xs">
+              <Image src="/images/logo-placeholder.svg" alt="Logo" fill className="object-contain" sizes="36px" />
+            </div>
+            <span className="font-heading font-black text-lg text-[var(--text-primary)]">Khelna Bazar</span>
+          </div>
+
+          <h1 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
+            Welcome Back!
+          </h1>
+          <p className="text-xs text-[var(--text-muted)]">
+            Sign in with your mobile phone or registered email
+          </p>
+        </div>
+
+        {/* Demo Fast-Fill Chips for Instant Testability */}
+        <div className="p-3 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-1.5">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)]">
+            <KeyRound className="w-3.5 h-3.5 text-[var(--primary)]" />
+            <span>Quick Demo Sign-in:</span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              onClick={() => fillDemoCredentials("admin@khelnabazar.com.bd", "Password123!")}
+              className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--primary)] hover:border-[var(--primary)] transition-colors cursor-pointer"
+            >
+              Demo Admin
+            </button>
+            <button
+              type="button"
+              onClick={() => fillDemoCredentials("customer@khelnabazar.com.bd", "Password123!")}
+              className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--secondary)] hover:border-[var(--secondary)] transition-colors cursor-pointer"
+            >
+              Demo Customer
+            </button>
+          </div>
+        </div>
+
+        {/* Error Alert */}
+        {errorMessage && (
+          <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-[var(--danger)] text-xs flex items-center gap-2.5 animate-shake">
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--danger)] shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-1">
+            <label className="block text-xs font-bold text-[var(--text-primary)]">
+              Phone Number or Email
             </label>
-            <span className="text-[11px] text-[#DC012B] hover:underline cursor-pointer">
-              Forgot password?
-            </span>
+            <div className="relative">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+              <input
+                type="text"
+                autoComplete="username"
+                placeholder="017XXXXXXXX or user@email.com"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                className="w-full h-11 pl-11 pr-4 rounded-full bg-[var(--surface-container-low)] text-xs font-medium text-[var(--text-primary)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                required
+              />
+            </div>
           </div>
-          <Input
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-            className="h-11"
-          />
+
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold text-[var(--text-primary)]">
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-xs text-[var(--primary)] hover:underline font-bold"
+              >
+                Forgot?
+              </Link>
+            </div>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-11 pl-11 pr-11 rounded-full bg-[var(--surface-container-low)] text-xs font-medium text-[var(--text-primary)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-xs pt-1">
+            <label className="flex items-center gap-2 cursor-pointer select-none text-[var(--text-muted)]">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
+              />
+              <span>Remember me</span>
+            </label>
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="pill-primary"
+            size="lg"
+            isLoading={isLoading}
+            className="w-full text-xs font-black shadow-[0_4px_0_#93000E] active:translate-y-[2px] active:shadow-[0_2px_0_#93000E] h-11 mt-2"
+          >
+            <span>Sign In</span>
+            <ArrowRight className="w-4 h-4 ml-1" />
+          </Button>
+        </form>
+
+        <div className="pt-4 text-center text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="font-bold text-[var(--primary)] hover:underline">
+            Create Free Account
+          </Link>
         </div>
-
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          isLoading={isLoading}
-          className="w-full text-sm font-bold shadow-md bg-[#DC012B] hover:bg-[#B80023]"
-        >
-          <span>Sign In</span>
-          <ArrowRight className="w-4 h-4 ml-1.5" />
-        </Button>
-      </form>
-
-      {/* Registration Callout */}
-      <div className="pt-2 text-center text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800">
-        New to Khelna Bazar?{" "}
-        <Link href="/register" className="font-bold text-[#DC012B] hover:underline">
-          Create a free account
-        </Link>
-      </div>
-
-      {/* Subtle Admin Tip */}
-      <div className="pt-1 text-center">
-        <p className="text-[11px] text-slate-400">
-          Store managers & admins: sign in with your staff or admin email.
-        </p>
       </div>
     </div>
   );
@@ -145,7 +268,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <Suspense fallback={<div className="text-center p-8 text-xs text-slate-400">Loading sign in...</div>}>
+      <Suspense fallback={<div className="text-center p-8 text-xs text-[var(--text-muted)]">Loading sign in...</div>}>
         <LoginForm />
       </Suspense>
     </div>
