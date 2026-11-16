@@ -45,7 +45,7 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <ul>
         <li><strong>Inside Dhaka City:</strong> ৳60 flat fee. Delivered within 24 to 48 hours.</li>
         <li><strong>Outside Dhaka (Nationwide):</strong> ৳120 flat fee. Delivered within 2 to 4 business days.</li>
-        <li><strong>FREE DELIVERY:</strong> All orders totaling ৳2,000 or more receive 100% free home delivery!</li>
+        <li><strong>FREE DELIVERY:</strong> All orders totaling ৳1,500 or more receive 100% free home delivery!</li>
       </ul>
       <h3>How Doorstep Cash on Delivery Works</h3>
       <p>When the courier reaches your address, they will call your mobile number. You can verify the parcel's condition and hand the exact cash amount to the delivery agent.</p>
@@ -58,8 +58,8 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <p>If an item arrives damaged, defective, or missing components, we provide a 100% free replacement or full refund within 7 days of delivery.</p>
       <h3>How to Initiate a Return</h3>
       <ol>
-        <li>Contact our customer care hotline at +880 1700-000000 or email support@khelnabazar.com.</li>
-        <li>Provide your Order Number (e.g. KB-100245) and a quick photo/video of the issue.</li>
+        <li>Contact our customer care team via our hotline or official email address.</li>
+        <li>Provide your Order Number (e.g. KB-2611-XXXXXX) and a quick photo/video of the issue.</li>
         <li>Our courier partner will pick up the parcel from your address at zero extra cost to you.</li>
       </ol>
     `,
@@ -68,8 +68,8 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
     title: "Privacy Policy",
     html: `
       <h2>Your Privacy is Respected</h2>
-      <p>Khelna Bazar values your privacy. We collect only necessary delivery information (Name, Contact Number, and Shipping Address) solely to fulfill your Cash on Delivery orders.</p>
-      <p>We do not store credit card numbers (as we are strictly Cash on Delivery) and will never sell or share your phone number with marketing brokers.</p>
+      <p>Khelna Bazar values your privacy. We collect only necessary delivery information (Name, Contact Number, and Shipping Address) solely to fulfill your orders.</p>
+      <p>We do not share your information with third-party marketing brokers. All customer data is encrypted and securely maintained.</p>
     `,
   },
   "terms": {
@@ -79,7 +79,25 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <p>By placing an order on Khelna Bazar, you agree to inspect the delivery package and provide cash payment upon arrival. All prices are listed in Bangladeshi Taka (BDT) including applicable taxes.</p>
     `,
   },
+  "contact": {
+    title: "Contact Customer Care",
+    html: `
+      <h2>We are Here to Help</h2>
+      <p>Have questions about toy safety, delivery timeline, or placing a bulk order? Reach out to our dedicated support team in Dhaka.</p>
+      <ul>
+        <li><strong>Operating Hours:</strong> Saturday – Thursday: 9:00 AM – 10:00 PM BST</li>
+        <li><strong>Coverage:</strong> All 64 Districts of Bangladesh</li>
+      </ul>
+    `,
+  },
 };
+
+// Aliases for common routing variations
+STATIC_FALLBACK_PAGES["shipping"] = STATIC_FALLBACK_PAGES["shipping-policy"];
+STATIC_FALLBACK_PAGES["returns"] = STATIC_FALLBACK_PAGES["returns-policy"];
+STATIC_FALLBACK_PAGES["return-refund-policy"] = STATIC_FALLBACK_PAGES["returns-policy"];
+STATIC_FALLBACK_PAGES["privacy"] = STATIC_FALLBACK_PAGES["privacy-policy"];
+STATIC_FALLBACK_PAGES["terms-and-conditions"] = STATIC_FALLBACK_PAGES["terms"];
 
 export async function generateMetadata({ params }: CmsPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -104,7 +122,7 @@ export default async function CmsPage({ params }: CmsPageProps) {
         html: dbPage.contentHtml,
       };
     }
-  } catch (e) {
+  } catch {
     // DB offline fallback
   }
 
@@ -118,13 +136,15 @@ export default async function CmsPage({ params }: CmsPageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-6">
-      <h1 className="font-heading text-3xl sm:text-4xl font-black text-[#18191F] dark:text-white pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E]">
-        {pageData.title}
-      </h1>
-      <div
-        className="prose dark:prose-invert max-w-none text-sm text-slate-700 dark:text-slate-300 leading-relaxed space-y-4"
-        dangerouslySetInnerHTML={{ __html: pageData.html }}
-      />
+      <div className="p-8 sm:p-12 rounded-4xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs space-y-6">
+        <h1 className="font-heading text-3xl sm:text-4xl font-black text-[var(--text-primary)] pb-4 border-b border-[var(--border)]">
+          {pageData.title}
+        </h1>
+        <div
+          className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed space-y-4"
+          dangerouslySetInnerHTML={{ __html: pageData.html }}
+        />
+      </div>
     </div>
   );
 }
