@@ -27,22 +27,25 @@ export function calculateDiscountPercentage(basePrice: number, comparePrice?: nu
 }
 
 /**
- * Calculate delivery fee based on zone and subtotal (Free over threshold)
+ * Calculate delivery fee based on zone and subtotal (if owner configured threshold)
  */
 export function calculateDeliveryFee(zone: string, subtotal: number): number {
-  if (subtotal >= siteConfig.shippingDefaults.freeShippingThreshold) {
-    return 0; // Free delivery
+  if (
+    siteConfig.shippingDefaults.freeShippingThreshold > 0 &&
+    subtotal >= siteConfig.shippingDefaults.freeShippingThreshold
+  ) {
+    return 0; // Free delivery threshold met
   }
 
   if (zone.toLowerCase().includes("outside") || zone.toLowerCase().includes("nationwide")) {
-    return siteConfig.shippingDefaults.outsideDhakaRate; // ৳120
+    return siteConfig.shippingDefaults.outsideDhakaRate;
   }
 
   if (zone.toLowerCase().includes("express")) {
-    return siteConfig.shippingDefaults.expressDhakaRate; // ৳150
+    return siteConfig.shippingDefaults.expressDhakaRate;
   }
 
-  return siteConfig.shippingDefaults.insideDhakaRate; // ৳60 (Standard Inside Dhaka)
+  return siteConfig.shippingDefaults.insideDhakaRate;
 }
 
 /**

@@ -1,6 +1,7 @@
 export const siteConfig = {
-  name: "KHELNA BAZAR",
-  description: "The most joyful, safe, and premium online toy store in Bangladesh. Fast Cash on Delivery nationwide.",
+  name: "Khelna Bazar",
+  nameBn: "খেলনা বাজার",
+  description: "Explore toys for play, learning and thoughtful gifting in Bangladesh. Cash on Delivery and verified mobile payments.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ogImage: "/images/khelna-bazar-logo.png",
   
@@ -17,11 +18,11 @@ export const siteConfig = {
 
   contact: {
     phone: "01712-039707",
-    hotline: process.env.NEXT_PUBLIC_STORE_HOTLINE || "01712-039707",
+    hotline: "01712-039707",
     whatsapp: "01712039707",
     whatsappDisplay: "01712-039707",
-    email: process.env.NEXT_PUBLIC_STORE_EMAIL || "",
-    address: process.env.NEXT_PUBLIC_STORE_ADDRESS || "",
+    email: "",
+    address: "",
     hours: "",
   },
 
@@ -43,44 +44,43 @@ export const siteConfig = {
 
   // Default Shipping / Delivery Settings (Cash On Delivery)
   shippingDefaults: {
-    insideDhakaRate: 60,       // ৳60 inside Dhaka
-    outsideDhakaRate: 120,     // ৳120 outside Dhaka
-    expressDhakaRate: 150,     // ৳150 same/next day express Dhaka
-    freeShippingThreshold: 2000, // Free delivery on orders over ৳2000
-    giftWrapFee: 50,           // ৳50 optional gift wrapping per item
-    estimatedDeliveryDhaka: "24-48 Hours",
-    estimatedDeliveryNationwide: "2-4 Business Days",
+    insideDhakaRate: 0,
+    outsideDhakaRate: 0,
+    expressDhakaRate: 0,
+    freeShippingThreshold: 0,
+    giftWrapFee: 0,
+    estimatedDeliveryDhaka: "",
+    estimatedDeliveryNationwide: "",
   },
 
-  // Loyalty Program (PlayPoints)
-  loyalty: {
-    pointsPerTakaSpent: 1,
-    takaPerHundredPoints: 10,
-    reviewPoints: 50,
-    signupPoints: 100,
-    birthdayPoints: 200,
-  },
-
-  // Trust Badges (Owner Confirmed)
+  // Trust Badges (Owner Confirmed Facts)
   trustBadges: [
     {
       title: "Inspect Before You Accept",
-      description: "Check your toy in front of the delivery person",
+      titleBn: "গ্রহণের আগে পণ্য পরীক্ষা করুন",
+      description: "Check the product in front of the delivery person before accepting it",
+      descriptionBn: "পণ্য গ্রহণের আগে ডেলিভারি প্রতিনিধির সামনে পরীক্ষা করুন",
       icon: "ShieldCheck",
     },
     {
-      title: "Defective? We Refund",
-      description: "Full refund for defective products reported at delivery",
+      title: "Defective Products",
+      titleBn: "ত্রুটিপূর্ণ পণ্য",
+      description: "Defective products can be returned or refunded when reported at delivery",
+      descriptionBn: "ডেলিভারির সময় ত্রুটি জানালে ত্রুটিপূর্ণ পণ্য ফেরত বা রিফান্ডের আওতায় আসতে পারে",
       icon: "RotateCcw",
     },
     {
-      title: "Cash on Delivery",
-      description: "Pay when you receive your order",
+      title: "Cash on Delivery Available",
+      titleBn: "ক্যাশ অন ডেলিভারি সুবিধা রয়েছে",
+      description: "Pay the delivery person when your order arrives",
+      descriptionBn: "অর্ডার পৌঁছালে ডেলিভারি প্রতিনিধিকে পেমেন্ট করুন",
       icon: "Truck",
     },
     {
-      title: "Order Support",
-      description: "Call or WhatsApp 01712-039707",
+      title: "Call or WhatsApp",
+      titleBn: "কল বা WhatsApp করুন",
+      description: "Support available at 01712-039707",
+      descriptionBn: "সহায়তার জন্য 01712-039707 নম্বরে যোগাযোগ করুন",
       icon: "Phone",
     },
   ],

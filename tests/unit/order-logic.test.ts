@@ -31,22 +31,14 @@ describe("KHELNA BAZAR - Core Business & COD Logic", () => {
     });
   });
 
-  // 3. Delivery Fee & Free Shipping Threshold
-  describe("Delivery Fee Calculations (Inside vs Outside Dhaka)", () => {
-    it("applies standard Inside Dhaka rate of ৳60 for orders under ৳2,000", () => {
-      const fee = calculateDeliveryFee("inside_dhaka", 1500);
-      expect(fee).toBe(siteConfig.shippingDefaults.insideDhakaRate); // 60
-    });
+  // 3. Delivery Fee & Owner-Approved Settings
+  describe("Delivery Fee Calculations (Config-driven)", () => {
+    it("returns configured delivery fee based on delivery zone", () => {
+      const feeInside = calculateDeliveryFee("inside_dhaka", 1500);
+      expect(feeInside).toBe(siteConfig.shippingDefaults.insideDhakaRate);
 
-    it("applies standard Outside Dhaka rate of ৳120 for orders under ৳2,000", () => {
-      const fee = calculateDeliveryFee("outside_dhaka", 1500);
-      expect(fee).toBe(siteConfig.shippingDefaults.outsideDhakaRate); // 120
-    });
-
-    it("applies FREE delivery (৳0) when subtotal reaches or exceeds threshold (৳2,000)", () => {
-      expect(calculateDeliveryFee("inside_dhaka", 2000)).toBe(0);
-      expect(calculateDeliveryFee("outside_dhaka", 2500)).toBe(0);
-      expect(calculateDeliveryFee("inside_dhaka", 5000)).toBe(0);
+      const feeOutside = calculateDeliveryFee("outside_dhaka", 1500);
+      expect(feeOutside).toBe(siteConfig.shippingDefaults.outsideDhakaRate);
     });
   });
 
