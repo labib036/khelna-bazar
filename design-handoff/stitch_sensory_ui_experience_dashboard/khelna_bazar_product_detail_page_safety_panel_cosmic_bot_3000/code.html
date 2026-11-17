@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary-fixed": "#ffdad6",
+          "secondary-container": "#fcb812",
+          "on-surface": "#221a18",
+          "background": "#fff8f6",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed-variant": "#0039b5",
+          "outline": "#916f6b",
+          "on-error": "#ffffff",
+          "surface-container-low": "#fff0ed",
+          "surface-container-lowest": "#ffffff",
+          "surface-container": "#fceae6",
+          "primary": "#d71921",
+          "primary-fixed-dim": "#ffb4ac",
+          "surface-variant": "#f0dfdb",
+          "surface-dim": "#e7d6d3",
+          "primary-container": "#ae0012",
+          "tertiary-container": "#e05300",
+          "inverse-primary": "#ffb4ac",
+          "surface-tint": "#d71921",
+          "on-secondary-fixed-variant": "#5e4200",
+          "on-tertiary-fixed": "#001551",
+          "on-error-container": "#93000a",
+          "surface-container-high": "#f6e4e1",
+          "on-primary-fixed": "#410002",
+          "tertiary": "#c00015",
+          "on-primary-container": "#ffecea",
+          "tertiary-fixed": "#ffdad6",
+          "on-primary-fixed-variant": "#93000e",
+          "on-tertiary-container": "#ffffff",
+          "surface": "#fff8f6",
+          "secondary-fixed": "#ffdea7",
+          "inverse-surface": "#382e2c",
+          "on-primary": "#ffffff",
+          "secondary-fixed-dim": "#ffbb1e",
+          "on-background": "#221a18",
+          "surface-bright": "#fff8f6",
+          "on-tertiary": "#ffffff",
+          "on-secondary-container": "#553800",
+          "error-container": "#ffdad6",
+          "tertiary-fixed-dim": "#ffb4ac",
+          "secondary": "#b45309",
+          "outline-variant": "#e6bdb8",
+          "inverse-on-surface": "#ffede9",
+          "on-surface-variant": "#5d3f3c",
+          "on-secondary-fixed": "#271900",
+          "surface-container-highest": "#f0dfdb",
+          "error": "#ba1a1a"
+        },
+        "borderRadius": {
+          "DEFAULT": "1rem",
+          "lg": "2rem",
+          "xl": "3rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "gutter": "1.25rem",
+          "margin-mobile": "1rem",
+          "space-sm": "0.5rem",
+          "space-lg": "1.5rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem",
+          "gutter-mobile": "0.75rem",
+          "space-xl": "2.5rem"
+        },
+        "fontFamily": {
+          "body-sm": ["Inter", "sans-serif"],
+          "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+          "display": ["Plus Jakarta Sans", "sans-serif"],
+          "title-md": ["Plus Jakarta Sans", "sans-serif"],
+          "display-mobile": ["Plus Jakarta Sans", "sans-serif"],
+          "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "body-lg": ["Inter", "sans-serif"],
+          "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "body-md": ["Inter", "sans-serif"],
+          "label-md": ["Plus Jakarta Sans", "sans-serif"]
+        },
+        "fontSize": {
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "800"}],
+          "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+          "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+          "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+          "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+          "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+          "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+          "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+          "display": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+          "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+          "headline-xl-mobile": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "800"}],
+          "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}]
+        }
+      },
+    },
+  }
+</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-secondary-container selection:text-on-secondary-fixed"><div class="fixed top-0 left-0 right-0 z-50 flex flex-col bg-surface/95 backdrop-blur-xl shadow-[0_10px_30px_-4px_rgba(215,25,33,0.08)]"><div class="w-full bg-primary text-on-primary py-space-xs px-gutter-mobile md:px-margin text-center font-label-md text-label-md flex items-center justify-center gap-space-sm shadow-[inset_0_-1px_0_rgba(255,255,255,0.2)]"><span class="material-symbols-outlined text-[16px] text-secondary-container">celebration</span><span>🎉 Free Magic Express Delivery on orders over ৳1500 • 🧸 100% Non-Toxic &amp; Safety Certified • Use code <span class="font-label-lg text-on-secondary-container tracking-wide uppercase px-space-xs py-0.5 rounded-full bg-secondary-container font-extrabold">JOY10</span> for 10% OFF!</span></div><header class="w-full"><div class="h-20 max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-sm group" data-path="home" href="#"><img alt="Khelna Bazar Logo" class="h-14 w-auto object-contain rounded-full shadow-sm transition-transform group-hover:scale-105 ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjwaA3J7xPOBw2Eq9entQcbLEljq2uBpKa5PNFDMVaIm1l_GLKQ0_cT0PrnEb6-1q9AaSI_2XXhfAy5AgbdtAZkNl0RC0oXbOvEYZjZHKVPDZXAvcRnGrNVMQx-wbUazo1U6KsNuULicGTJkr4l4Jh6bCpmCeNUwwetj2sChUScWu5GGbKx599qTT6yPhSDNpRdobpEskIJKcCBHIDMiiXSGOM9KwO6iixmcugq3b1VdQ0tjvA4vj"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight leading-none font-extrabold">Khelna Bazar</span><span class="font-label-sm text-[10px] text-secondary font-bold tracking-tight mt-0.5">khelnabazar.com.bd • Joy Toy Boutique</span></div></a><button class="hidden xl:flex items-center gap-space-xs bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md px-space-md py-space-sm rounded-full transition-all border border-outline-variant/30" type="button"><span class="material-symbols-outlined text-[18px] text-primary">category</span><span>All Categories</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span></button></div><div class="flex-1 max-w-xl hidden lg:flex flex-col gap-1"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-space-md text-primary text-[20px]">search</span><input class="w-full h-11 pl-11 pr-24 bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all shadow-[0_4px_12px_-2px_rgba(215,25,33,0.04)]" placeholder="Search magical toys, LEGO, plushies, Montessori..." type="text"/><button class="absolute right-space-sm h-8 px-space-sm rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-primary transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[18px]">mic</span></button></div><div class="flex items-center gap-space-xs px-space-sm"><span class="font-label-sm text-label-sm text-outline uppercase font-bold">Trending:</span><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Lego Technic,</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Montessori Wooden,</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Latim &amp; Spinning Tops</a></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="relative p-space-sm rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface transition-transform hover:scale-105 flex items-center justify-center" data-path="wishlist" href="#"><span class="material-symbols-outlined text-[22px] text-primary">favorite</span><span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">4</span></a><button class="flex items-center gap-space-xs bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed font-label-md text-label-md px-space-md py-2.5 rounded-full shadow-[0_4px_0_#b45309] active:translate-y-[2px] active:shadow-[0_2px_0_#b45309] transition-all" type="button"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="hidden sm:inline font-bold">৳ 2,450</span><span class="hidden sm:inline opacity-50">•</span><span class="px-space-xs py-0.5 rounded-full bg-on-secondary-fixed/10 font-bold">3 items</span></button><a class="flex items-center gap-space-xs p-1 rounded-full hover:bg-surface-container transition-colors pl-space-xs" data-path="customer-account" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWnBnUPzaVo-pqd0Ey6U9XdGGTFHSsHj6M2_YtW6y70StBPBGQKfuQNlAdouWMRha7bO8joPRmTjLCwIGPMgLqLlKgfAxE9_fGgai32egMJ3jHxBcG_tUxH6yY7IglwYV4Ba8iA7YtVSi5z4OpGd3h9bWNHYBc4UrEo0yzAUgEnx8Et7ypwYSoMvxSGn3g6TI1EnaOj0AOG4JW_q9yHl1RPrh9V0RvBWfEHNGqYc8"/><span class="material-symbols-outlined text-[18px] text-on-surface-variant hidden md:inline">expand_more</span></a></div></div><div class="w-full bg-surface-container-low/80 overflow-x-auto border-t border-outline-variant/20"><div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter py-2 flex items-center justify-between gap-space-md"><nav class="flex items-center gap-space-sm shrink-0" data-active-classes="bg-primary text-on-primary font-bold"><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="home" href="#">Home</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">All Toys</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">New Arrivals</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">Montessori &amp; Learning</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">Outdoor &amp; Active</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="wonder-club" href="#">Wonder Club</a></nav><div class="flex items-center gap-space-xs shrink-0 pl-space-md"><span class="material-symbols-outlined text-[18px] text-primary">child_care</span><span class="font-label-sm text-label-sm text-secondary font-extrabold uppercase mr-1">Age:</span><div class="flex items-center gap-1.5"><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">0-12m</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-primary text-on-primary font-bold transition-all shadow-sm" data-path="shop-catalog" href="#">1-2y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">3-5y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">6-8y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">9+</a></div></div></div></div></header></div><main class="w-full pt-36 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Breadcrumb & Micro Status Nav -->
+<section class="w-full bg-surface-container-low/60 py-space-sm">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter flex flex-wrap items-center justify-between gap-space-sm">
+<nav class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1" data-path="home" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">cottage</span> Home
+        </a>
+<span class="text-outline/40">/</span>
+<a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">STEM &amp; Robotics</a>
+<span class="text-outline/40">/</span>
+<a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Interactive Coding</a>
+<span class="text-outline/40">/</span>
+<span class="text-on-surface font-semibold truncate max-w-[200px] md:max-w-xs">Cosmic Bot 3000 STEM Companion</span>
+</nav>
+<div class="flex items-center gap-space-sm font-label-sm text-label-sm">
+<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-bold shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary-container">verified</span> Khelna Originals Verified
+        </span>
+<span class="hidden sm:inline-block text-outline/50">•</span>
+<span class="text-on-surface-variant font-medium">SKU: <span class="font-bold text-on-surface font-mono">TOY-BOT-3000</span></span>
+</div>
+</div>
+</section>
+<!-- Main Product Showcase Grid (Desktop ~55% / 45%) -->
+<section class="w-full py-space-lg">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- Left Column: Interactive Media Gallery (~55%) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<!-- Main Hero Image Frame -->
+<div class="relative w-full aspect-[4/3] rounded-lg bg-surface-container-lowest overflow-hidden shadow-md group">
+<img class="w-full h-full object-contain p-space-lg transition-transform duration-500 ease-out group-hover:scale-105" data-alt="Studio hero photograph of Cosmic Bot 3000, an adorable tactile child-friendly white and solar red educational robot toy with vibrant friendly blue digital LED eyes, smooth curved rounded child-safe edges, glowing tactile physical coding buttons on top, resting on a clean wooden play desk with colorful puzzle path cards, soft warm lighting, macro toy photography, playful modern aesthetic." id="mainProductPreview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKCsWPMBrCag5xNnnAZgsKt3ZZT77Q54OiTbol5TjfP3rtlNUcJQF8AfWyf3c5E-kF6quXuZ6NpgKSeOd93Irnc5n-Etqxy36ikGkJ9zyayw-1ZwVTejcoQp-xK-QzmWSkUWtuVljMqYCG99wtKEky1AsUbQUXd0mzXmFH5pmkRbvwl5ex3ExySYAtX0tWs3Ow2j80hQOnpqWIOBSLNyXkQG2RLJoJSDjhhoaIB9w"/>
+<!-- Overlaid Floater Badges -->
+<div class="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-sm font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[15px] text-secondary-container">local_fire_department</span> Trending #1 Pick
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm shadow-sm font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[15px] text-primary">format_image_left</span> ASTM &amp; CE Certified Safe
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 px-2.5 rounded-full bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm shadow-sm font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">psychology</span> Age 5-9y
+              </span>
+</div>
+<!-- Floating Quick Interactions -->
+<div class="absolute bottom-4 right-4 flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface hover:bg-primary hover:text-on-primary font-label-md text-label-md transition-all shadow-md active:scale-95" onclick="trigger360Demo()" title="Interactive 360 Spin View" type="button">
+<span class="material-symbols-outlined text-[18px]">360</span>
+<span class="font-bold">360° View</span>
+</button>
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface hover:bg-primary hover:text-on-primary font-label-md text-label-md transition-all shadow-md active:scale-95" title="Watch Parent Unboxing" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">play_circle</span>
+<span class="font-bold">Watch Unboxing (1:45m)</span>
+</button>
+</div>
+<!-- Zoom Hint Pill -->
+<div class="absolute bottom-4 left-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-highest/80 backdrop-blur-sm text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">zoom_in</span> Hover or pinch to inspect safe seams
+              </span>
+</div>
+</div>
+<!-- Thumbnail Strip (5 interactive views) -->
+<div class="grid grid-cols-5 gap-space-sm">
+<button class="gallery-thumb active-thumb relative aspect-square rounded-DEFAULT bg-surface-container-lowest p-2 shadow-sm overflow-hidden transition-all bg-surface-container-high" onclick="selectGalleryThumb(0, this)" type="button">
+<img class="w-full h-full object-contain" data-alt="Cosmic Bot 3000 toy front hero perspective with glowing blue friendly LED eyes and white body on clean background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz3u10msfTnPhbMXXXSZslahPTuRkHCut8sgVd7tErwWfcTuukvOfquBh-zC6vttzl4cqVQ5Fn9pHZKGX88qYTmMavFg1ufMEeOYs6VnkKmt-E9sr2r31nSFa4JLN4g_Uz4dmV3-igaXBjtmw3cjO-h8q4i6u9-qwKBbpSi1122edVlDl9PKwi0k5b4r1AnY8cA3OdiNXk_KV-FTeLNFbmQsCv9dsCaeEaX2syjUM"/>
+<span class="absolute bottom-1 right-1 font-label-sm text-[9px] bg-surface/90 text-on-surface px-1 rounded font-bold">Front</span>
+</button>
+<button class="gallery-thumb relative aspect-square rounded-DEFAULT bg-surface-container-lowest p-2 shadow-sm overflow-hidden transition-all hover:bg-surface-container-high" onclick="selectGalleryThumb(1, this)" type="button">
+<img class="w-full h-full object-contain" data-alt="Flat lay photograph of Cosmic Bot 3000 on its giant colorful printed coding grid floor mat with colorful magnetic direction tiles arranged in a sequence path." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuKU6d_RHCXMtCPx8vEHSKKIG4AmDrl670FXNuQw03rGwwLcj1T9csKApqz0d6hfPG3lqpw7VrTnLNrmSkCq7xBCYFOF3YE2UxbME8F_3nQHXNi0IVEJorvyrWTPbOnolFoHs_jAv_6EJgDU77ViBMcJr6lWobhq-jvxzY7o_dUDnORjLkw-ec1jBU8TbdpAdkUJ5xzbdbkPXod3BTTG3q89i765ZWG-GhsRZisTg"/>
+<span class="absolute bottom-1 right-1 font-label-sm text-[9px] bg-surface/90 text-on-surface px-1 rounded font-bold">Grid Mat</span>
+</button>
+<button class="gallery-thumb relative aspect-square rounded-DEFAULT bg-surface-container-lowest p-2 shadow-sm overflow-hidden transition-all hover:bg-surface-container-high" onclick="selectGalleryThumb(2, this)" type="button">
+<img class="w-full h-full object-contain" data-alt="Warm lifestyle photo of a joyful 6-year-old child smiling while pressing the silicone arrow keys on Cosmic Bot 3000 on a living room rug, natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBASZMoX9vuYyBfuNN7cV7KsWVGx99708ggBwDX-XBj8rw5uoR10HVC3IjjrGsY5YTMFBpVTcTlRiRUUHXYeug4fwJ3SNQ1yoj-jrHPISn5jCNevKNb_tI_VLDgBsGmbPA3tQPB4P0DkkWtQ-n11yLbxAkYhpnmGO22L20Kx21JV-hU1eCTd4YbGSkdRmDBNJ8b4f7z2uvU0xUjOR-IW_Qjwu9Fi_3N10pPF5RSZVY"/>
+<span class="absolute bottom-1 right-1 font-label-sm text-[9px] bg-surface/90 text-on-surface px-1 rounded font-bold">In Play</span>
+</button>
+<button class="gallery-thumb relative aspect-square rounded-DEFAULT bg-surface-container-lowest p-2 shadow-sm overflow-hidden transition-all hover:bg-surface-container-high" onclick="selectGalleryThumb(3, this)" type="button">
+<img class="w-full h-full object-contain" data-alt="Close up shot in dim cozy room lighting showing the glowing infrared obstacle sensors and ambient belly light ring of the robot toy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdGZ6YANFFb8lt__4J40qL8IizikU5gFOl1hut-xFxJDKMeF6SXp5THPvaJCDMadSYW4SQ5zyk6nfZy1HW0riWHggLnrdn12cxIXHOPzfyIXh3tmcqbxflCcv-lO_eeqigRFgLhOuMNtEeisanF9IQbW73Q24lUAFCfxFN81pCF1xNdYPtmcYCz7iacrNj_A88sPYIquiR45d2C7lMzX3c051_Umvdn020Cnq5g0o"/>
+<span class="absolute bottom-1 right-1 font-label-sm text-[9px] bg-surface/90 text-on-surface px-1 rounded font-bold">Sensors</span>
+</button>
+<button class="gallery-thumb relative aspect-square rounded-DEFAULT bg-surface-container-lowest p-2 shadow-sm overflow-hidden transition-all hover:bg-surface-container-high" onclick="selectGalleryThumb(4, this)" type="button">
+<img class="w-full h-full object-contain" data-alt="Eco-friendly kraft unboxing gift packaging with Khelna Bazar red ribbon and colorful bilingual educational guide book laid out neatly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlTewtD7UTZS_RNnzoj0WKsC4HzKv8YQDKY8uv1CBcIzlgK6mEPevLt4fCV-UaLPUa-u8FJBCZrpRmNWmGgcAue29jXVlSVpyhKq7NP2iGMFTtkZ3JgygH47BPU8XzuwZgF4NaEtJmbe2JNgua16lI6gZFlLQv8dbqmse3az6HOJb9JUuJ85dXk4tWHvdygp7Ck3m0kR4PGfPziIkzF5pnuyi8SxAIMdF5p2kEKzE"/>
+<span class="absolute bottom-1 right-1 font-label-sm text-[9px] bg-surface/90 text-on-surface px-1 rounded font-bold">Gift Box</span>
+</button>
+</div>
+<!-- Quick Parent Trust Guarantee Snippets below media -->
+<div class="grid grid-cols-3 gap-space-sm p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm mt-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[26px] text-primary">eco</span>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">100% Recyclable Shell</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Food-grade ABS resin</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[26px] text-secondary">battery_charging_full</span>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">USB-C Fast Charging</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">10 hrs unhurried play</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[26px] text-tertiary">wifi_off</span>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">100% Screen-Free Mode</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Works zero-wifi ready</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Buy Box & Product Options (~45%) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md bg-surface-container-lowest p-space-lg rounded-lg shadow-sm">
+<!-- Maker & Status Lockup -->
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-extrabold uppercase tracking-wide">
+                Wonder Robotics Lab
+              </span>
+<span class="text-outline/40 text-xs">•</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Khelna Originals</span>
+</div>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-green-700 bg-green-50 px-2.5 py-0.5 rounded-full font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-ping"></span> Dispatch in 24h
+            </span>
+</div>
+<!-- Product Title -->
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-extrabold tracking-tight">
+            Cosmic Bot 3000 STEM Companion
+            <span class="block font-headline-sm text-headline-sm text-on-surface-variant font-semibold mt-1">Interactive Coding, Sensory Audio &amp; Maze Explorer Robot</span>
+</h1>
+<!-- Rating & Community Reviews Strip -->
+<div class="flex flex-wrap items-center gap-space-sm pb-space-sm">
+<div class="flex items-center gap-1 bg-secondary-container/20 px-2.5 py-1 rounded-full">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-lg text-label-lg font-extrabold text-on-secondary-container ml-1">4.9</span>
+</div>
+<a class="font-label-md text-label-md text-primary font-bold hover:underline" href="#reviewsSection">
+              (342 verified parent reviews)
+            </a>
+<span class="text-outline/40">•</span>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface" href="#qaSection">
+              28 answered questions
+            </a>
+<span class="text-outline/40">•</span>
+<span class="font-label-sm text-label-sm text-green-700 font-bold bg-green-50 px-2 py-0.5 rounded-full">
+              98% Recommend
+            </span>
+</div>
+<!-- Price Block with Savings & PlayPoints -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-baseline gap-space-sm">
+<span class="font-headline-xl text-headline-xl font-extrabold text-primary tracking-tight">৳ 3,450</span>
+<span class="font-headline-sm text-headline-sm text-outline line-through">৳ 4,200</span>
+<span class="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-fixed font-label-md text-label-md font-extrabold">
+                -18% OFF
+              </span>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="text-primary font-bold">You save ৳ 750 directly!</span>
+<span class="flex items-center gap-1 font-bold text-secondary bg-surface-container-lowest px-2 py-0.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary-container">stars</span>
+                Earn 172 PlayPoints on this purchase 🌟
+              </span>
+</div>
+</div>
+<!-- Developmental Suitability Milestone Badge -->
+<div class="p-space-sm px-space-md rounded-DEFAULT bg-surface-container flex items-center gap-3">
+<span class="material-symbols-outlined text-[28px] text-tertiary">extension</span>
+<div>
+<p class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Milestone Alignment</p>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Recommended for Ages 5 - 9 Years</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Early STEM sequences, algorithmic problem solving &amp; motor dexterity</p>
+</div>
+</div>
+<!-- Color / Edition Selector -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md font-bold text-on-surface">
+                Edition / Theme: <span class="text-primary font-bold" id="activeEditionLabel">Starlight White &amp; Solar Red</span>
+</label>
+<span class="font-label-sm text-label-sm text-outline">Certified Non-Toxic Dye</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="edition-btn p-2 rounded-DEFAULT bg-surface-container-low text-left shadow-sm transition-all" onclick="selectColorEdition('Starlight White &amp; Solar Red', this)" type="button">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-4 h-4 rounded-full bg-white ring-2 ring-primary"></div>
+<div class="w-4 h-4 rounded-full bg-primary -ml-2"></div>
+</div>
+<div class="font-label-sm text-label-sm font-bold truncate">Starlight Red</div>
+<div class="text-[10px] text-on-surface-variant">In Stock</div>
+</button>
+<button class="edition-btn p-2 rounded-DEFAULT bg-surface-container text-left shadow-sm transition-all hover:bg-surface-container-high" onclick="selectColorEdition('Galactic Teal &amp; Cyber Amber', this)" type="button">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-4 h-4 rounded-full bg-teal-500"></div>
+<div class="w-4 h-4 rounded-full bg-secondary-container -ml-2"></div>
+</div>
+<div class="font-label-sm text-label-sm font-bold truncate">Cyber Teal</div>
+<div class="text-[10px] text-on-surface-variant">4 Units left</div>
+</button>
+<button class="edition-btn p-2 rounded-DEFAULT bg-surface-container text-left shadow-sm transition-all hover:bg-surface-container-high" onclick="selectColorEdition('Nebula Purple &amp; Starlight Gold', this)" type="button">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-4 h-4 rounded-full bg-purple-600"></div>
+<div class="w-4 h-4 rounded-full bg-yellow-400 -ml-2"></div>
+</div>
+<div class="font-label-sm text-label-sm font-bold truncate">Nebula Purple</div>
+<div class="text-[10px] text-on-surface-variant">Pre-order batch</div>
+</button>
+</div>
+</div>
+<!-- Scarcity & Countdown Alert -->
+<div class="p-space-sm rounded-DEFAULT bg-surface-container-high/60 flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-primary font-extrabold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">alarm</span>
+                Only 7 units left in Dhaka Central Hub!
+              </span>
+<span class="text-on-surface-variant font-mono">1h 42m for today's dispatch</span>
+</div>
+<!-- Scarcity Progress Bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-700" style="width: 28%;"></div>
+</div>
+</div>
+<!-- Quantity Stepper & Add to Bag CTAs -->
+<div class="flex flex-col gap-space-sm pt-2">
+<div class="flex items-center gap-space-sm">
+<!-- Stepper -->
+<div class="flex items-center rounded-full bg-surface-container p-1 shadow-inner shrink-0">
+<button aria-label="Decrease quantity" class="w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center font-extrabold shadow-sm active:scale-90" onclick="changeQty(-1)" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-12 text-center font-headline-sm text-headline-sm font-bold text-on-surface" id="qtyDisplay">1</span>
+<button aria-label="Increase quantity" class="w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary transition-all flex items-center justify-center font-extrabold shadow-sm active:scale-90" onclick="changeQty(1)" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<!-- Primary Red Action Button -->
+<button class="flex-1 h-12 px-space-md rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg font-extrabold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.98]" id="addToCartBtn" onclick="handleAddToCart()" type="button">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+<span>Add to Bag 🛍️</span>
+</button>
+<!-- Wishlist Heart Button -->
+<button class="w-12 h-12 rounded-full bg-surface-container-low hover:bg-surface-container text-primary transition-transform hover:scale-105 active:scale-90 flex items-center justify-center shadow-sm shrink-0" onclick="toggleWishlist(this)" title="Add to Leo's Wishlist" type="button">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</button>
+</div>
+<!-- Instant bKash / Card One-Click Secondary CTA -->
+<button class="w-full h-12 rounded-full bg-secondary-container hover:bg-secondary-fixed text-on-secondary-fixed font-label-lg text-label-lg font-extrabold flex items-center justify-center gap-2 shadow-md transition-all active:translate-y-0.5" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary">bolt</span>
+<span>Buy Now (Instant 1-Click bKash / Card / COD)</span>
+</button>
+</div>
+<!-- Complimentary Gift Wrap Checkbox Option -->
+<div class="p-space-sm rounded-DEFAULT bg-surface-container-low flex items-center gap-3">
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary cursor-pointer" id="giftWrapToggle" type="checkbox"/>
+<label class="cursor-pointer text-left" for="giftWrapToggle">
+<span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">redeem</span>
+                Add Artisan Eco-Gift Wrap &amp; Custom Joy Note
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block">Free during Ramadan &amp; Children's Month with code <b class="text-primary font-bold">WONDER10</b></span>
+</label>
+</div>
+<!-- Dhaka & 64 Districts Delivery Postal Calculator -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">local_shipping</span>
+                Bangladesh Delivery Time &amp; Rates
+              </span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Doorstep COD Available</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">location_on</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary" id="deliveryDistrict" placeholder="Enter district or thana..." type="text" value="Dhaka (Dhanmondi, Gulshan, Uttara)"/>
+</div>
+<button class="h-10 px-4 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-sm text-label-sm font-bold transition-all shrink-0" onclick="checkDeliverySpeed()" type="button">
+                Check
+              </button>
+</div>
+<div class="space-y-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-green-600"></span> Magic Express (Dhaka Metro):
+                </span>
+<span class="font-bold text-green-700">Today by 6:30 PM (Free over ৳1,500)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5 text-on-surface font-medium">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span> Nationwide 64 Districts:
+                </span>
+<span class="font-semibold text-on-surface">2-3 Business Days (৳ 90 via RedX/Paperfly)</span>
+</div>
+<div class="flex items-center justify-between text-[11px] text-outline pt-1">
+<span>Doorstep unboxing verification allowed before payment</span>
+<span class="text-primary font-bold">100% Zero-Tears Promise</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- DEDICATED SAFETY & CHOKING HAZARD PANEL (Crucial Requirement) -->
+<section class="w-full py-space-lg">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="relative overflow-hidden rounded-lg bg-surface-container-low p-space-lg md:p-space-xl shadow-sm">
+<!-- Subtle Background Motif -->
+<div class="absolute -right-12 -bottom-12 w-64 h-64 bg-secondary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-space-lg">
+<!-- Header with Shield Lockup -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-md shrink-0">
+<span class="material-symbols-outlined text-[32px]">shield_with_heart</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-extrabold tracking-widest">Khelna Certified Lab Assurance</span>
+<h2 class="font-headline-lg text-headline-lg font-extrabold text-on-surface">
+                  Toy Safety, Choking Hazard &amp; Lab Audit
+                </h2>
+</div>
+</div>
+<!-- Certified Lab Seal Badges -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-3 py-1.5 rounded-full bg-surface-container-lowest font-label-md text-label-md font-bold text-on-surface shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified_user</span> ASTM F963 (US)
+              </span>
+<span class="px-3 py-1.5 rounded-full bg-surface-container-lowest font-label-md text-label-md font-bold text-on-surface shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">euro_symbol</span> EN71 / CE (EU)
+              </span>
+<span class="px-3 py-1.5 rounded-full bg-surface-container-lowest font-label-md text-label-md font-bold text-on-surface shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-tertiary">check_circle</span> BSTI Standard
+              </span>
+</div>
+</div>
+<!-- Mandatory Hazard Warning Alert Box -->
+<div class="p-space-md rounded-DEFAULT bg-secondary-container/15 flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-sm text-headline-sm font-extrabold text-on-surface">
+                WARNING: CHOKING HAZARD — Small Parts (Coding Sequence Tiles)
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                This educational STEM set includes 36 miniature tactile command tiles. <b>Not intended for children under 3 years old.</b> Recommended for kids aged 5 to 9 under attentive guardian encouragement.
+              </p>
+</div>
+</div>
+<!-- Deep Trust Grid (4 Pillar Safety Pillars) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Pillar 1 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary font-bold font-title-md text-title-md">
+<span class="material-symbols-outlined text-[22px]">sanitizer</span>
+<span>Zero-Toxin Resin</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                100% BPA-Free, Lead-Free &amp; Phthalate-Free food-grade ABS resin. Finished with odorless, non-leaching soy-based organic color pigments.
+              </p>
+</div>
+<!-- Pillar 2 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary font-bold font-title-md text-title-md">
+<span class="material-symbols-outlined text-[22px]">hardware</span>
+<span>Child-Proof Battery Seam</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Internal rechargeable Lithium cell encased in dual flame-retardant casing with recessed screw-lock and automatic overheat safety cutoff.
+              </p>
+</div>
+<!-- Pillar 3 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary font-bold font-title-md text-title-md">
+<span class="material-symbols-outlined text-[22px]">health_and_safety</span>
+<span>1.8m Drop Resistance</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Drop-tested 200+ times against hard tiled nursery floors. Engineered with internal shock-absorbing silicone bumpers and zero sharp pinch points.
+              </p>
+</div>
+<!-- Pillar 4 -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<div class="flex items-center gap-2 text-primary font-bold font-title-md text-title-md">
+<span class="material-symbols-outlined text-[22px]">hearing</span>
+<span>Acoustic Decibel Cap</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Sound output strictly capped at 78 dB (well below WHO pediatric acoustic thresholds) to protect tender auditory nerve development.
+              </p>
+</div>
+</div>
+<!-- Age Developmental Alignment Rationale Box -->
+<div class="p-space-md rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<span class="material-symbols-outlined text-[36px] text-tertiary">school</span>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Why is 5–9 Years the "Wonder Sweet Spot"?</h4>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+                  Between ages 5 and 9, neuroplastic pathways for algorithmic thinking, spatial mapping, and symbolic reasoning bloom rapidly. Cosmic Bot turns abstract computer science loops into physical floor play without passive screen fatigue.
+                </p>
+</div>
+</div>
+<a class="shrink-0 px-space-md py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-bold transition-all flex items-center gap-1.5" data-path="safety-standards" href="#">
+<span>View Lab Test PDF</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Rich Modular Content Tabs / Accordions Section -->
+<section class="w-full py-space-lg">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<!-- Interactive Tab Controls -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2" role="tablist">
+<button class="tab-btn active-tab px-space-lg py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-bold shadow-sm transition-all whitespace-nowrap" onclick="switchProductTab('features', this)" type="button">
+          Toy Wonders &amp; 6 Features
+        </button>
+<button class="tab-btn px-space-lg py-2.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg font-bold shadow-sm transition-all whitespace-nowrap" onclick="switchProductTab('boxContents', this)" type="button">
+          What's in the Wonder Box
+        </button>
+<button class="tab-btn px-space-lg py-2.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg font-bold shadow-sm transition-all whitespace-nowrap" onclick="switchProductTab('developmental', this)" type="button">
+          Developmental Radar &amp; Skills
+        </button>
+<button class="tab-btn px-space-lg py-2.5 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high font-label-lg text-label-lg font-bold shadow-sm transition-all whitespace-nowrap" onclick="switchProductTab('techSpecs', this)" type="button">
+          Tech Specifications
+        </button>
+</div>
+<!-- Tab 1: Toy Wonders & Features (Default Active) -->
+<div class="tab-pane mt-space-md" id="tabFeatures">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md">
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">record_voice_over</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Bilingual Voice Guidance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Cosmic Bot greets and coaches little coders with warm encouraging phrases in both standard Bangla and clear English phonetics.
+            </p>
+</div>
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 text-secondary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">sensors</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Infrared Obstacle Avoidance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Dual front-facing optical sonars detect furniture, wall corners, and family pets up to 15cm away, naturally recalculating escape paths!
+            </p>
+</div>
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-container/10 text-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">mood</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">40+ Animated LED Emotions</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              The high-contrast dot matrix eye panel displays joy, curiosity, winks, sleepy yawns, and celebratory victory spirals upon maze completion.
+            </p>
+</div>
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high text-on-surface flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">code_blocks</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Scratch &amp; Block Compatible</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Starts 100% unplugged with tactile tiles, and smoothly upgrades to visual drag-and-drop Scratch coding via our free Khelna Play iOS/Android companion app.
+            </p>
+</div>
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">music_note</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Music, Rhythm &amp; Dance Mode</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Includes 8 upbeat acoustic folk &amp; cosmic synth songs. Children can compose custom beats by sequencing movement steps on the mat!
+            </p>
+</div>
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col gap-space-sm group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[28px]">battery_saver</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">10-Hour Endurance Battery</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              USB-C modern rapid top-up delivers a complete weekend of uninterrupted tinkering with intelligent 10-minute standby sleep.
+            </p>
+</div>
+</div>
+</div>
+<!-- Tab 2: What's in the Wonder Box -->
+<div class="tab-pane hidden mt-space-md" id="tabBoxContents">
+<div class="p-space-xl rounded-DEFAULT bg-surface-container-lowest shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center shrink-0">1x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Cosmic Bot 3000 Robot</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Precision tuned motor wheels, dual infrared eye sensors &amp; silicone keypad.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-fixed font-bold flex items-center justify-center shrink-0">36x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Magnetic Coding Sequence Tiles</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Forward, Reverse, Left 90°, Right 90°, Pause, Loop, and Star Challenge triggers.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container font-bold flex items-center justify-center shrink-0">1x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Double-Sided Giant Activity Map</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Durable spill-resistant vinyl (85cm x 85cm) featuring Space Station &amp; Bengal Jungle Maze.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface font-bold flex items-center justify-center shrink-0">1x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">1.2m Braided USB-C Cable</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tangle-resistant reinforced woven fabric cord safe for curious small fingers.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center shrink-0">24x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Holographic Mission Stickers</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cosmic astronaut badges, playful robot faces, and award badges for completed tasks.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-space-md rounded-DEFAULT bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-fixed font-bold flex items-center justify-center shrink-0">1x</div>
+<div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Bilingual Parent Quick-Start Guide</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full color 28-page playful curriculum designed by early childhood educators.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab 3: Developmental Radar & Skills -->
+<div class="tab-pane hidden mt-space-md" id="tabDevelopmental">
+<div class="p-space-xl rounded-DEFAULT bg-surface-container-lowest shadow-sm">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+<!-- Radar Visualization Graphic (Inline SVG under 2KB) -->
+<div class="lg:col-span-5 flex flex-col items-center justify-center p-space-md bg-surface-container-low rounded-DEFAULT">
+<div class="font-title-md text-title-md font-bold text-on-surface mb-2">Cognitive Development Radar</div>
+<svg aria-label="Developmental skill radar chart" class="w-64 h-64 overflow-visible" role="img" viewbox="0 0 300 300">
+<!-- Concentric Guide Polygons -->
+<polygon fill="none" opacity="0.6" points="150,30 264,113 220,248 80,248 36,113" stroke="#e6bdb8" stroke-dasharray="3,3" stroke-width="1"></polygon>
+<polygon fill="none" opacity="0.4" points="150,70 226,125 197,215 103,215 74,125" stroke="#e6bdb8" stroke-width="1"></polygon>
+<polygon fill="none" opacity="0.3" points="150,110 188,138 173,183 127,183 112,138" stroke="#e6bdb8" stroke-width="1"></polygon>
+<!-- Axis lines -->
+<line opacity="0.3" stroke="#916f6b" stroke-width="1" x1="150" x2="150" y1="150" y2="30"></line>
+<line opacity="0.3" stroke="#916f6b" stroke-width="1" x1="150" x2="264" y1="150" y2="113"></line>
+<line opacity="0.3" stroke="#916f6b" stroke-width="1" x1="150" x2="220" y1="150" y2="248"></line>
+<line opacity="0.3" stroke="#916f6b" stroke-width="1" x1="150" x2="80" y1="150" y2="248"></line>
+<line opacity="0.3" stroke="#916f6b" stroke-width="1" x1="150" x2="36" y1="150" y2="113"></line>
+<!-- Filled Data Shape -->
+<polygon fill="#d71921" fill-opacity="0.25" points="150,42 250,120 210,235 90,230 48,122" stroke="#ae0012" stroke-width="2.5"></polygon>
+<!-- Points -->
+<circle cx="150" cy="42" fill="#ae0012" r="4"></circle>
+<circle cx="250" cy="120" fill="#fcb812" r="4"></circle>
+<circle cx="210" cy="235" fill="#ae0012" r="4"></circle>
+<circle cx="90" cy="230" fill="#215cff" r="4"></circle>
+<circle cx="48" cy="122" fill="#ae0012" r="4"></circle>
+<!-- Axis Text Labels -->
+<text fill="#ae0012" font-size="11" font-weight="bold" text-anchor="middle" x="150" y="20">Logic (95%)</text>
+<text fill="#7c5800" font-size="10" font-weight="bold" text-anchor="start" x="270" y="115">Spatial (88%)</text>
+<text fill="#ae0012" font-size="10" font-weight="bold" text-anchor="middle" x="225" y="265">Motor Skills (92%)</text>
+<text fill="#215cff" font-size="10" font-weight="bold" text-anchor="middle" x="75" y="265">Storytelling (85%)</text>
+<text fill="#ae0012" font-size="10" font-weight="bold" text-anchor="end" x="25" y="115">Focus (90%)</text>
+</svg>
+</div>
+<!-- Detailed Breakdowns -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="space-y-1">
+<div class="flex justify-between font-label-md text-label-md font-bold">
+<span class="text-on-surface">Logical Sequences &amp; Cause-and-Effect</span>
+<span class="text-primary font-bold">95% Mastery Rating</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 95%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Children learn that order dictates result (e.g. forward 2x before turn).</p>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-md text-label-md font-bold">
+<span class="text-on-surface">Fine Motor Tactile Dexterity</span>
+<span class="text-secondary font-bold">92% Engagement</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-secondary-container rounded-full" style="width: 92%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Snapping magnetic tiles and pressing soft convex buttons develops pincer grasp control.</p>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-md text-label-md font-bold">
+<span class="text-on-surface">Spatial Coordinate Awareness</span>
+<span class="text-tertiary font-bold">88% Milestone Alignment</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 88%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Translating physical orientation into 90-degree left/right navigation decisions.</p>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-md text-label-md font-bold">
+<span class="text-on-surface">Creative Narrative &amp; Storytelling</span>
+<span class="text-primary font-bold">85% Spark Index</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 85%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Inventing rescue stories, space expeditions, and zoo animal escapes on the floor mat.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab 4: Tech Specifications -->
+<div class="tab-pane hidden mt-space-md" id="tabTechSpecs">
+<div class="p-space-xl rounded-DEFAULT bg-surface-container-lowest shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-md">
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Robot Dimensions</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">14.2cm x 12.8cm x 11.5cm</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Weight</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">420 grams (Tumble safe)</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Chassis Shell</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Impact-Resistant Recycled ABS</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Battery Specifications</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">2200mAh Li-ion (USB-C Rechargeable)</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Sensors</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">2x Infrared Proximity + 1x Underbody Color Reader</span>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Connectivity</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Bluetooth Low Energy (BLE 5.2) + Offline Direct Mode</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Frequently Bought Together (Bundle Upsell) -->
+<section class="w-full py-space-lg">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[24px] text-secondary">auto_fix_high</span>
+<h2 class="font-headline-sm text-headline-sm font-extrabold text-on-surface">Frequently Bought Together (Curated Play Pack)</h2>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+            Extra Bundle Savings ৳300
+          </span>
+</div>
+<div class="flex flex-col lg:flex-row items-center justify-between gap-space-lg">
+<!-- 3 Item Cards Flow -->
+<div class="flex flex-wrap md:flex-nowrap items-center gap-space-sm w-full lg:w-auto">
+<!-- Item 1: Main Product -->
+<div class="flex items-center gap-3 p-space-sm rounded-DEFAULT bg-surface-container-lowest shadow-sm flex-1 md:flex-initial">
+<input checked="" class="w-5 h-5 rounded text-primary accent-primary cursor-not-allowed" disabled="" type="checkbox"/>
+<div class="w-14 h-14 rounded-DEFAULT bg-surface-container p-1 shrink-0">
+<img class="w-full h-full object-contain" data-alt="Cosmic Bot 3000 main toy preview thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOrE7IMJJ2qAVj7toEaAs9Zs8FR4_gYL3WFdDqVOJwubxZjE9joc4lE5ksbaKtgsUT0VYx608xEseRjsgqbGs4Me2mpb7A3shscL8v8KcfBRYBvZx87mvvgtRa2vyaeAXHw4hp7oO6gz7SM8sMYtEFuryiWXoF7dFO0S-FCPjJ7lpnjVsqfb5ezZHY7En4eBktDPF80R68Zwdu2mfEWFFR1HNHARSPBriqsfOYU0A"/>
+</div>
+<div class="pr-2">
+<p class="font-label-sm text-label-sm text-outline">This Item</p>
+<p class="font-label-md text-label-md font-bold text-on-surface">Cosmic Bot 3000</p>
+<p class="font-label-sm text-label-sm font-bold text-primary">৳ 3,450</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-outline font-bold">tv_displays</span>
+<!-- Item 2: Magnetic Extension Map -->
+<div class="flex items-center gap-3 p-space-sm rounded-DEFAULT bg-surface-container-lowest shadow-sm flex-1 md:flex-initial">
+<input checked="" class="w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="bundleItem2" onchange="recalculateBundle()" type="checkbox"/>
+<div class="w-14 h-14 rounded-DEFAULT bg-surface-container p-1 shrink-0">
+<img class="w-full h-full object-contain" data-alt="Magnetic Extension Map adventure mat showing roads, rivers, and space stations for toy robots" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ-yRbYQnxMqqOuUla1CoD6LKhi-QPfH7fhvbQEeFTAvK_ivbjT3_fgAdrlCEBSac7oYoY_48R-V1OBB_qwOsN9CfbO6Sk8ICTg2XTQMPAWKp4ClMAmQNMutAppBwu1EQnmydx-dUSUIzkB0ePuBRW_qbMeC3IIN-KosfTkvCMo17OPyio2X6_cPUe-1NRsybJjpPy3ee-JObbkPkgQMvrFPRcl1chOmjd3SA1vKM"/>
+</div>
+<div class="pr-2">
+<label class="cursor-pointer" for="bundleItem2">
+<p class="font-label-sm text-label-sm text-secondary font-bold">Add-On Mat</p>
+<p class="font-label-md text-label-md font-bold text-on-surface">Magnetic Extension Map</p>
+<p class="font-label-sm text-label-sm font-bold text-primary">৳ 650</p>
+</label>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-outline font-bold">tv_displays</span>
+<!-- Item 3: Child Safety Screwdriver & Tote -->
+<div class="flex items-center gap-3 p-space-sm rounded-DEFAULT bg-surface-container-lowest shadow-sm flex-1 md:flex-initial">
+<input checked="" class="w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="bundleItem3" onchange="recalculateBundle()" type="checkbox"/>
+<div class="w-14 h-14 rounded-DEFAULT bg-surface-container p-1 shrink-0">
+<img class="w-full h-full object-contain" data-alt="Organic cotton canvas child play storage tote bag with ergonomic rounded yellow plastic child screwdriver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB37p4agzxopgbkpOYtnYfWoA4oUkVEYv9re_B74X-AhiEw5Mbi_Hv9eE1AalM4Z9B2XRN1c09xkTEYdkUuyMgUPif1D49w6oT7PaJoPpkOGI-gQCu6-pAF1JNOTQh4mxk0X0euD2ubp1Ei4xF3XuchCUUEpLLTqa2P4RgP39-MfeKJ8Kb2jEB5Zlqyb1Kt-85yYvPFz-xHKHlqWPUHiqiu5UnXJ0fI-djGyHak0G8"/>
+</div>
+<div class="pr-2">
+<label class="cursor-pointer" for="bundleItem3">
+<p class="font-label-sm text-label-sm text-tertiary font-bold">Accessory Kit</p>
+<p class="font-label-md text-label-md font-bold text-on-surface">Kids Safety Tool &amp; Canvas Bag</p>
+<p class="font-label-sm text-label-sm font-bold text-primary">৳ 350</p>
+</label>
+</div>
+</div>
+</div>
+<!-- Total Calculation & CTA -->
+<div class="flex flex-col sm:flex-row lg:flex-col items-end gap-3 w-full lg:w-auto shrink-0 border-t lg:border-t-0 pt-3 lg:pt-0">
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Combined 3 Items Price:</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary" id="bundleTotalPrice">৳ 4,150</span>
+<span class="font-body-md text-body-md text-outline line-through">৳ 4,450</span>
+</div>
+</div>
+<button class="h-11 px-space-lg rounded-full bg-secondary-container hover:bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-extrabold shadow-md transition-all active:translate-y-0.5 flex items-center gap-2" onclick="addEntireBundle()" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span>Add All 3 to Cart (Save ৳300)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Parent Reviews & Real Experiences Showcase -->
+<section class="w-full py-space-lg" id="reviewsSection">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm mb-space-lg">
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">True Stories from Happy Living Rooms</span>
+<h2 class="font-headline-lg text-headline-lg font-extrabold text-on-surface">Parent Reviews &amp; Playroom Joy</h2>
+</div>
+<button class="h-10 px-space-md rounded-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md font-bold transition-all flex items-center gap-1.5 self-start md:self-auto" onclick="openWriteReviewModal()" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">rate_review</span>
+<span>Write a Parent Review</span>
+</button>
+</div>
+<!-- Rating Breakdown Header Strip -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm items-center mb-space-md">
+<!-- Score Column -->
+<div class="lg:col-span-3 flex flex-col items-center justify-center p-space-sm border-r-0 lg:border-r border-outline-variant/30">
+<span class="font-display text-display font-extrabold text-primary leading-none">4.9</span>
+<div class="flex text-secondary-container mt-1">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Based on 342 verified purchases</p>
+</div>
+<!-- Rating Distribution Bars -->
+<div class="lg:col-span-6 flex flex-col gap-1.5 px-space-md">
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="w-12 text-on-surface">5 stars</span>
+<div class="flex-1 h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92%;"></div>
+</div>
+<span class="w-10 text-right text-outline">314</span>
+</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="w-12 text-on-surface">4 stars</span>
+<div class="flex-1 h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 6%;"></div>
+</div>
+<span class="w-10 text-right text-outline">22</span>
+</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="w-12 text-on-surface">3 stars</span>
+<div class="flex-1 h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 1.5%;"></div>
+</div>
+<span class="w-10 text-right text-outline">4</span>
+</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="w-12 text-on-surface">2 stars</span>
+<div class="flex-1 h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 0.5%;"></div>
+</div>
+<span class="w-10 text-right text-outline">2</span>
+</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="w-12 text-on-surface">1 star</span>
+<div class="flex-1 h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 0%;"></div>
+</div>
+<span class="w-10 text-right text-outline">0</span>
+</div>
+</div>
+<!-- Parent Quick Highlights -->
+<div class="lg:col-span-3 flex flex-col gap-2 p-space-sm bg-surface-container-low rounded-DEFAULT">
+<div class="flex items-center gap-2 text-on-surface font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px] text-green-700">task_alt</span>
+<span>Zero Plastic Smells Out-of-Box</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px] text-green-700">task_alt</span>
+<span>Immediate Offline Fun</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px] text-green-700">task_alt</span>
+<span>Survives Toddler Siblings</span>
+</div>
+</div>
+</div>
+<!-- Real Parent Review Cards (3 Rich Feedback Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Review 1 -->
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">3 days ago</span>
+</div>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">"Saved our weekends from tablet zombies!"</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              My 6-year-old son Ayaan was glued to YouTube shorts. Cosmic Bot arrived in Gulshan within 5 hours! He spent 3 continuous hours plotting mazes with the magnetic tiles. The Bangla audio prompts are so heartwarming.
+            </p>
+<!-- Verified Image Attachment -->
+<div class="w-20 h-20 rounded-DEFAULT overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Customer photo review showing 6yo Bangladeshi boy laughing on rug as small white toy robot navigates tiles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpmcFbQ2HI2DXIkPbiKIcv_5uAJipSzW-2lKNjtTo7PyPrncPxjqVepbLqiaZA-18r2gFtO0uWhtoR-pN6DgBg19zStJV632YpitNGxWkHjimIQ88bKMTwLhptANDmOdHpDD48Volhw7IkjRYDKZOmIWCoJXQuIM6Lc8FoWH2x2KfGBSpqMAr6ug-HPiYz8ks46TWixkzfM22A8gUKp6qMHhB1UMIgyqElr799C5Y"/>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-sm border-t border-outline-variant/20 font-label-sm text-label-sm">
+<div>
+<p class="font-bold text-on-surface">Farhana Rahman</p>
+<p class="text-outline">Mother of Ayaan (Age 6y) • Gulshan-2, Dhaka</p>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-bold">Verified Buyer</span>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">1 week ago</span>
+</div>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">"Indestructible and genuinely educational."</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              As a software engineer, I am extremely skeptical of 'coding toys'. Cosmic Bot actually teaches real sequential logic and loops without any screens required. It was dropped down 4 stairs by his younger sister without a single crack.
+            </p>
+<div class="w-20 h-20 rounded-DEFAULT overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Customer photo review of Cosmic Bot navigating between wooden building blocks in a modern living room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRgofsdwpedUST5nXx64iGe1-fsqA20audc8LdeXChJsIuLfH3Utl3bTyUhkjV_NSZqQ8GVpWWBqHCiGtv-PDuNNelIp8nM416Zu1FdKUKRpCUGD02EvMgkGG3ymnhaYhKTAlFWOAjosU6-FZ6T62W0OEWd7ajPZjk924Bl-uGWvMep2JXc_rs-cr2EeA5d0Whe_ul2KlG7UdrwKJVu6HhHNRHrk2xW6IV6lp0KF8"/>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-sm border-t border-outline-variant/20 font-label-sm text-label-sm">
+<div>
+<p class="font-bold text-on-surface">Tanvir Chowdhury</p>
+<p class="text-outline">Father of Zaara (Age 7y) • Chittagong</p>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-bold">Verified Buyer</span>
+</div>
+</div>
+<!-- Review 3 -->
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-space-md">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex text-secondary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">2 weeks ago</span>
+</div>
+<h3 class="font-title-md text-title-md font-bold text-on-surface">"Best birthday gift for curious minds!"</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              The free gift wrapping with handwritten card was exquisite. Ordered from Sylhet, arrived in 2 days safely in eco-friendly bubble wrapping. The battery lasts for days of casual tinkering. Highly recommend Khelna Bazar!
+            </p>
+<div class="w-20 h-20 rounded-DEFAULT overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Customer photo review of Khelna Bazar red gift wrap box with personalized golden calligraphy name card." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVducUjYeu8uhfZIHAPEFhxc1v05wYTlzIV6v2BBIHiWqiMtLv4lEUg1ehyeRWjvoZz-yLn09pRixJM-C3oypC4CN2EedCrT-wTZuO9auOgEGgrD09RGnSIcj81Bclf4_BgY9h6khYh3GRma2XgSF90W0y9Ze4V_JomWMlTdmcbppODagl2L-BLmudVTtMwtVdVGOZ0tgboRq24IvyOdOmq4MOH4p1XpsUipDfmVU"/>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-sm border-t border-outline-variant/20 font-label-sm text-label-sm">
+<div>
+<p class="font-bold text-on-surface">Nusrat Jahan</p>
+<p class="text-outline">Aunt of Zidan (Age 5y) • Sylhet Sadar</p>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-bold">Verified Buyer</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Questions & Answers Accordion Search Section -->
+<section class="w-full py-space-lg" id="qaSection">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="p-space-lg rounded-DEFAULT bg-surface-container-lowest shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm font-extrabold text-on-surface">Parent Questions &amp; Answers (28)</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Instant answers from our Child Development Toymakers</p>
+</div>
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Search robot questions (Wi-Fi, apps, warranty)..." type="text"/>
+</div>
+</div>
+<div class="space-y-space-sm">
+<div class="p-space-md rounded-DEFAULT bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center justify-between cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+<h3 class="font-title-md text-title-md font-bold text-on-surface flex items-center gap-2">
+<span class="text-primary font-mono font-bold">Q:</span> Does it require Wi-Fi or home internet connection to play?
+              </h3>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">expand_more</span>
+</div>
+<div class="pt-1 font-body-md text-body-md text-on-surface-variant">
+<b class="text-secondary font-bold">Answer:</b> No! Cosmic Bot is designed to operate <b>100% offline out-of-the-box</b>. All 40 voice commands, sensor loops, and mat challenges run on the internal chip without internet or account sign-ups. The Bluetooth phone app is an optional free creative upgrade for older kids (ages 7+).
+            </div>
+</div>
+<div class="p-space-md rounded-DEFAULT bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center justify-between cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+<h3 class="font-title-md text-title-md font-bold text-on-surface flex items-center gap-2">
+<span class="text-primary font-mono font-bold">Q:</span> Can I return it if my child does not enjoy it?
+              </h3>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">expand_more</span>
+</div>
+<div class="pt-1 font-body-md text-body-md text-on-surface-variant hidden">
+<b class="text-secondary font-bold">Answer:</b> Yes! Khelna Bazar offers a <b>30-Day Zero-Tears Guarantee</b>. If your child doesn't fall in love with Cosmic Bot within 30 days, simply contact our Dhaka parent concierge for a doorstep courier pickup and complete refund.
+            </div>
+</div>
+<div class="p-space-md rounded-DEFAULT bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-center justify-between cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+<h3 class="font-title-md text-title-md font-bold text-on-surface flex items-center gap-2">
+<span class="text-primary font-mono font-bold">Q:</span> How safe is it if accidentally put in mouth or chewed?
+              </h3>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">expand_more</span>
+</div>
+<div class="pt-1 font-body-md text-body-md text-on-surface-variant hidden">
+<b class="text-secondary font-bold">Answer:</b> The main robot chassis is molded with certified food-grade non-toxic ABS and colored with organic dye. While the robot itself has zero detachable small bits, the 36 magnetic coding tiles are small parts intended for children 3y+ to prevent choking hazards.
+            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sticky Bottom Quick Cart Bar on Scroll (Mobile / Tablet / Compact Desktop) -->
+<aside class="fixed bottom-0 left-0 right-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md p-space-sm shadow-[0_-10px_25px_-5px_rgba(39,30,28,0.1)] transition-transform duration-300 translate-y-full" id="stickyFloatingCart">
+<div class="max-w-[1360px] mx-auto px-gutter flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-surface-container p-1 hidden sm:block">
+<img class="w-full h-full object-contain" data-alt="Cosmic Bot 3000 quick miniature thumbnail preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV05cf4Wqr2Fj0w3qO4VDHiQpPUrcuKcgnj58rDbwdDdjPiBF57rVuFTQtkmW4fE9nLJwRrMAq4hbeif1d7CtWviyhOlpED37l6HRBiaoW7Dtfx5D85_4no82O5PBSoeLTiDhdiehXi-QRE1TN9V3GBBBleVOnmArTNuBMy0s4X2VRAjllGglGkUvGNipOdpduVrhGNzRJC5ykdJOGgTXydDDTZhcghzWJN_8hmUU"/>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface truncate max-w-xs">Cosmic Bot 3000 STEM Companion</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm font-extrabold text-primary">৳ 3,450</span>
+<span class="font-label-sm text-label-sm text-outline line-through">৳ 4,200</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-11 px-6 rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg font-bold shadow-md transition-all active:scale-95" onclick="handleAddToCart()" type="button">
+          Add to Bag 🛍️
+        </button>
+</div>
+</div>
+</aside>
+</div>
+<!-- Inline Micro-Interactions Script -->
+<script>
+  let currentQty = 1;
+
+  function changeQty(delta) {
+    currentQty = Math.max(1, Math.min(10, currentQty + delta));
+    const qtyDisplay = document.getElementById('qtyDisplay');
+    if (qtyDisplay) qtyDisplay.innerText = currentQty;
+  }
+
+  function selectGalleryThumb(index, btnElement) {
+    document.querySelectorAll('.gallery-thumb').forEach(el => {
+      el.classList.remove('active-thumb', 'ring-2', 'ring-primary');
+      el.classList.add('bg-surface-container-lowest');
+    });
+    btnElement.classList.add('active-thumb', 'ring-2', 'ring-primary');
+    
+    // Quick visual flash on main product image
+    const mainImg = document.getElementById('mainProductPreview');
+    if (mainImg) {
+      mainImg.style.opacity = '0.7';
+      setTimeout(() => {
+        mainImg.style.opacity = '1';
+      }, 150);
+    }
+  }
+
+  function selectColorEdition(editionName, btnElement) {
+    document.querySelectorAll('.edition-btn').forEach(el => {
+      el.classList.remove('ring-2', 'ring-primary', 'bg-surface-container-low');
+      el.classList.add('bg-surface-container');
+    });
+    btnElement.classList.add('ring-2', 'ring-primary', 'bg-surface-container-low');
+    btnElement.classList.remove('bg-surface-container');
+    
+    const label = document.getElementById('activeEditionLabel');
+    if (label) label.innerText = editionName;
+  }
+
+  function switchProductTab(tabId, btnElement) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('bg-primary', 'text-on-primary');
+      b.classList.add('bg-surface-container', 'text-on-surface');
+    });
+
+    btnElement.classList.remove('bg-surface-container', 'text-on-surface');
+    btnElement.classList.add('bg-primary', 'text-on-primary');
+
+    if (tabId === 'features') document.getElementById('tabFeatures')?.classList.remove('hidden');
+    if (tabId === 'boxContents') document.getElementById('tabBoxContents')?.classList.remove('hidden');
+    if (tabId === 'developmental') document.getElementById('tabDevelopmental')?.classList.remove('hidden');
+    if (tabId === 'techSpecs') document.getElementById('tabTechSpecs')?.classList.remove('hidden');
+  }
+
+  function recalculateBundle() {
+    let total = 3450;
+    const b2 = document.getElementById('bundleItem2');
+    const b3 = document.getElementById('bundleItem3');
+    if (b2 && b2.checked) total += 650;
+    if (b3 && b3.checked) total += 350;
+    
+    // extra discount if both checked
+    if (b2?.checked && b3?.checked) total -= 300;
+
+    const totalEl = document.getElementById('bundleTotalPrice');
+    if (totalEl) totalEl.innerText = '৳ ' + total.toLocaleString();
+  }
+
+  function handleAddToCart() {
+    const btn = document.getElementById('addToCartBtn');
+    if (!btn) return;
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Added to Bag! 🎉</span>';
+    btn.classList.remove('bg-primary');
+    btn.classList.add('bg-green-600');
+
+    setTimeout(() => {
+      btn.innerHTML = origHTML;
+      btn.classList.remove('bg-green-600');
+      btn.classList.add('bg-primary');
+    }, 2000);
+  }
+
+  function toggleWishlist(btn) {
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (icon) {
+      if (icon.style.fontVariationSettings && icon.style.fontVariationSettings.includes("'FILL' 1")) {
+        icon.style.fontVariationSettings = "'FILL' 0";
+      } else {
+        icon.style.fontVariationSettings = "'FILL' 1";
+      }
+    }
+  }
+
+  function addEntireBundle() {
+    alert("🌟 Joy Pack Activated! Cosmic Bot 3000 + Extension Map + Kids Tool Kit added to your Wonder Bag!");
+  }
+
+  function trigger360Demo() {
+    const mainImg = document.getElementById('mainProductPreview');
+    if (mainImg) {
+      mainImg.style.transition = 'transform 0.4s ease';
+      mainImg.style.transform = 'scale(1.08) rotate(6deg)';
+      setTimeout(() => {
+        mainImg.style.transform = 'scale(1.08) rotate(-6deg)';
+        setTimeout(() => {
+          mainImg.style.transform = 'scale(1) rotate(0deg)';
+        }, 300);
+      }, 300);
+    }
+  }
+
+  function checkDeliverySpeed() {
+    const input = document.getElementById('deliveryDistrict');
+    if (input) {
+      alert("✨ Magic Express Verified for: " + (input.value || "Dhaka Metro") + "\nSame-day delivery available if ordered within the next 1h 42m!");
+    }
+  }
+
+  function openWriteReviewModal() {
+    alert("📝 Khelna Parent Care: Verified buyer review form opened! Share your child's milestone experience.");
+  }
+
+  // Floating sticky cart bar logic on scroll
+  window.addEventListener('scroll', () => {
+    const stickyCart = document.getElementById('stickyFloatingCart');
+    if (!stickyCart) return;
+    if (window.scrollY > 500) {
+      stickyCart.classList.remove('translate-y-full');
+    } else {
+      stickyCart.classList.add('translate-y-full');
+    }
+  });
+</script></main><footer class="w-full bg-surface-container-low text-on-surface mt-space-xl border-t border-outline-variant/30"><div class="bg-primary text-on-primary py-space-lg px-gutter-mobile md:px-margin"><div class="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[44px] text-secondary-container p-space-sm bg-white/10 rounded-full">auto_awesome</span><div><h4 class="font-headline-sm text-headline-sm text-on-primary font-bold">Join the Wonder Club</h4><p class="font-body-md text-body-md text-on-primary-container">Get 15% off your first magical order + a birthday surprise for your little one!</p></div></div><div class="flex w-full md:w-auto max-w-md items-center gap-space-xs"><input class="w-full h-12 px-space-md bg-surface-container-lowest text-on-surface rounded-full font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary-container" placeholder="Enter your parent email..." type="email"/><button class="shrink-0 h-12 px-space-lg rounded-full bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed font-label-lg text-label-lg font-bold transition-all shadow-[0_4px_0_#b45309] active:translate-y-[2px]" type="button">Unlock 15%</button></div></div></div><div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg pb-space-lg border-b border-outline-variant/20"><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">verified_user</span><div><div class="font-title-md text-title-md">ASTM &amp; CE Certified</div><div class="font-body-sm text-body-sm text-on-surface-variant">100% lab tested non-toxic</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-secondary">rocket_launch</span><div><div class="font-title-md text-title-md">Magic Express Post</div><div class="font-body-sm text-body-sm text-on-surface-variant">Free delivery over ৳1500</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">change_circle</span><div><div class="font-title-md text-title-md">30-Day Easy Returns</div><div class="font-body-sm text-body-sm text-on-surface-variant">Zero tears refund policy</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">support_agent</span><div><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div><div class="font-title-md text-title-md">Support: Online</div></div><div class="font-body-sm text-body-sm text-on-surface-variant">Live Parent Care Elf</div></div></div></div><div class="grid grid-cols-2 md:grid-cols-5 gap-space-lg pt-space-xl"><div class="col-span-2"><div class="flex items-center gap-space-sm mb-space-sm"><img alt="Khelna Bazar Logo" class="h-12 w-auto object-contain rounded-full shadow-sm ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjwaA3J7xPOBw2Eq9entQcbLEljq2uBpKa5PNFDMVaIm1l_GLKQ0_cT0PrnEb6-1q9AaSI_2XXhfAy5AgbdtAZkNl0RC0oXbOvEYZjZHKVPDZXAvcRnGrNVMQx-wbUazo1U6KsNuULicGTJkr4l4Jh6bCpmCeNUwwetj2sChUScWu5GGbKx599qTT6yPhSDNpRdobpEskIJKcCBHIDMiiXSGOM9KwO6iixmcugq3b1VdQ0tjvA4vj"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-tight font-extrabold">Khelna Bazar</span><span class="font-label-sm text-[11px] text-secondary font-bold tracking-tight">khelnabazar.com.bd</span></div></div><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md max-w-sm">Crafting unforgettable childhood memories through joyful, safe, and thoughtfully curated sensory toys from around the globe.</p><div class="flex items-center gap-space-xs"><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">star</span><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">favorite</span><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">share</span></div></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">Explore Boutique</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Sensory &amp; Soft Toys</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Montessori Woodcraft</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">STEM &amp; Science Kits</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Eco-Friendly Picks</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Gift Sets by Age</a></li></ul></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">Parent Support</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="order-tracking" href="#">Track Magic Box</a></li><li><a class="hover:text-primary transition-colors" data-path="customer-account" href="#">Returns &amp; Exchanges</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Toy Safety Labs</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Parent Care Concierge</a></li><li><a class="hover:text-primary transition-colors" data-path="wonder-club" href="#">Gift Registry</a></li></ul></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">The Wonder Store</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="our-story" href="#">Our Joyful Story</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Artisan Toymakers</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Boutique Locations</a></li><li><a class="hover:text-primary transition-colors" data-path="wonder-club" href="#">Wonder Club Rewards</a></li><li><a class="hover:text-primary transition-colors" data-path="our-story" href="#">Impact &amp; Donations</a></li></ul></div></div><div class="mt-space-xl pt-space-md border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-label-sm text-label-sm gap-space-sm"><div>© 2025 Khelna Bazar (khelnabazar.com.bd) Joy Toy Boutique. All rights reserved. Sparking childhood wonder daily across Bangladesh.</div><div class="flex items-center gap-space-md"><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Privacy Policy</a><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Terms of Delight</a><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Safety Certifications</a></div></div></div></footer>
+</body></html>

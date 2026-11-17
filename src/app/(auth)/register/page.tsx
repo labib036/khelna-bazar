@@ -131,7 +131,7 @@ export default function RegisterPage() {
           <div className="relative z-10 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5">
               <div className="relative w-12 h-12 rounded-2xl bg-white p-1 overflow-hidden shadow-md">
-                <Image src="/images/logo-placeholder.svg" alt="Logo" fill className="object-contain p-1" sizes="48px" />
+                <Image src="/images/khelna-bazar-logo.png" alt="Logo" fill className="object-contain p-1" sizes="48px" />
               </div>
               <div>
                 <span className="font-heading font-black text-xl tracking-tight block">Khelna Bazar</span>

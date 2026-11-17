@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export type Theme = "system" | "light" | "dark";
+export type ThemeMode = Theme;
 
 interface ThemeContextType {
   theme: Theme;

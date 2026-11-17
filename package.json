@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "tsc --noEmit",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts",
+    "db:seed": "tsx prisma/seed-essential.ts",
+    "db:seed:essential": "tsx prisma/seed-essential.ts",
+    "db:seed:sample": "tsx prisma/seed-sample.ts",
+    "admin:create": "tsx scripts/create-admin.ts",
     "test": "vitest run"
   },
   "dependencies": {

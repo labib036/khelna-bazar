@@ -13,6 +13,7 @@ import {
   Check,
   ShieldCheck,
   Zap,
+  Truck,
 } from "lucide-react";
 
 const HERO_FEATURED_TOYS = [
@@ -83,8 +84,8 @@ export function StitchHero() {
           {/* Floating Pill Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-fixed)] shadow-sm font-extrabold text-xs">
-              <Star className="w-3.5 h-3.5 fill-current text-[var(--on-secondary-fixed)]" />
-              <span className="uppercase tracking-wider">4.9/5 Parent Trust Rating</span>
+              <Truck className="w-3.5 h-3.5 text-[var(--on-secondary-fixed)]" />
+              <span className="uppercase tracking-wider">Cash on Delivery Across 64 Districts</span>
             </div>
 
             <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--surface-container-high)] text-[var(--primary)] font-bold text-xs border border-[var(--primary)]/15 shadow-2xs">
@@ -129,28 +130,15 @@ export function StitchHero() {
             </button>
           </div>
 
-          {/* Micro Social Proof Snippet */}
-          <div className="flex items-center gap-3.5 p-2.5 sm:p-3 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs">
-            <div className="flex -space-x-2.5 shrink-0">
-              <div className="w-9 h-9 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center ring-2 ring-white">
-                S
-              </div>
-              <div className="w-9 h-9 rounded-full bg-purple-500 text-white font-black text-xs flex items-center justify-center ring-2 ring-white">
-                T
-              </div>
-              <div className="w-9 h-9 rounded-full bg-amber-500 text-white font-black text-xs flex items-center justify-center ring-2 ring-white">
-                L
-              </div>
+          {/* Authentic Store Trust Snippet */}
+          <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
+              <ShieldCheck className="w-4 h-4" />
             </div>
             <div className="flex flex-col text-xs">
-              <div className="flex items-center gap-1 text-[var(--secondary)]">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-3 h-3 fill-current" />
-                ))}
-                <span className="font-black text-[var(--text-primary)] ml-1">4.9 / 5.0</span>
-              </div>
+              <span className="font-extrabold text-[var(--text-primary)]">Inspect Before You Accept</span>
               <span className="text-[11px] text-[var(--text-muted)] font-medium">
-                Loved by 12,000+ Happy Families across Bangladesh
+                ডেলিভারির সময় দেখে নিন &bull; Defective? Full refund reported at delivery
               </span>
             </div>
           </div>
@@ -169,8 +157,8 @@ export function StitchHero() {
               <span className="px-3 py-1 rounded-full bg-[var(--primary)] text-[var(--on-primary)] text-[10px] font-extrabold uppercase tracking-wider shadow-xs">
                 {currentToy.badge}
               </span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck className="w-3.5 h-3.5" /> Certified Non-Toxic
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--primary)]">
+                <ShieldCheck className="w-3.5 h-3.5" /> Inspect At Delivery
               </span>
             </div>
 
@@ -181,6 +169,7 @@ export function StitchHero() {
                 alt={currentToy.name}
                 fill
                 priority
+                loading="eager"
                 className="object-cover photo-micro-zoom duration-500"
                 sizes="(max-width: 1024px) 100vw, 400px"
               />

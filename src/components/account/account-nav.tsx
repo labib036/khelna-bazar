@@ -19,7 +19,8 @@ import { useWishlistStore } from "@/lib/wishlist-store";
 
 export function AccountNav() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const user = session?.user;
   const wishlistCount = useWishlistStore((state) => state.getCount());
 
@@ -51,7 +52,7 @@ export function AccountNav() {
       label: "PlayPoints Rewards",
       href: "/account/rewards",
       icon: Sparkles,
-      badge: "1,450 pts",
+      badge: (user as any)?.loyaltyPoints ? `${(user as any).loyaltyPoints} pts` : null,
       badgeColor: "bg-[var(--secondary-container)] text-[var(--on-secondary-container)]",
     },
     {
@@ -128,25 +129,25 @@ export function AccountNav() {
         )}
       </nav>
 
-      {/* Parent Elf Help Card */}
+      {/* Customer Support Card */}
       <div className="bg-[var(--surface)] p-4 rounded-2xl border border-[var(--border)] text-center space-y-2">
         <div className="w-8 h-8 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center mx-auto">
           <Headphones className="w-4 h-4" />
         </div>
         <div className="font-heading font-black text-xs text-[var(--text-primary)]">
-          Parent Elf Hotline
+          Customer Support
         </div>
         <p className="text-[11px] text-[var(--text-muted)] leading-tight">
-          Toy safety questions or urgent delivery requests?
+          Questions or delivery updates? Call or WhatsApp
         </p>
         <a
-          href="https://wa.me/8801700000000"
+          href="https://wa.me/8801712039707"
           target="_blank"
           rel="noreferrer"
           className="inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-3 rounded-full bg-[var(--surface-container-high)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-[var(--on-primary)] text-xs font-bold transition-colors"
         >
           <MessageCircle className="w-3.5 h-3.5" />
-          <span>WhatsApp Elf Chat</span>
+          <span>WhatsApp 01712-039707</span>
         </a>
       </div>
 

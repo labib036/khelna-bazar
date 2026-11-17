@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/auth-store";
+import { useSession, signOut } from "next-auth/react";
 import {
   LayoutDashboard,
   Package,
@@ -32,13 +32,13 @@ interface AdminLayoutProps {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const sessionResult = useSession();
+  const user = sessionResult?.data?.user;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/login" });
     toast.success("Signed out successfully.");
-    router.push("/login");
   };
 
   const navItems = [
@@ -127,14 +127,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           {/* User Profile Card */}
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#DC012B] flex items-center justify-center font-black text-sm text-white shadow-xs shrink-0">
-              {user?.name?.[0] || "A"}
+              {user?.name?.[0] || user?.email?.[0] || "A"}
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-xs font-bold text-white block truncate">
-                {user?.name || "Khelna Bazar Owner"}
+                {user?.name || "Administrator"}
               </span>
               <span className="text-[11px] font-semibold text-slate-400 block truncate">
-                {user?.email || "admin@khelnabazar.com"}
+                {user?.email || "Admin Console"}
               </span>
               <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 {user?.role || "ADMIN"} ACCESS

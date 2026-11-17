@@ -31,7 +31,9 @@ import {
 import { toast } from "sonner";
 
 export default function AccountOverviewPage() {
-  const { data: session, status } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
+  const status = sessionResult?.status ?? "unauthenticated";
   const user = session?.user;
   const [orders, setOrders] = useState<StoreOrder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +43,7 @@ export default function AccountOverviewPage() {
   useEffect(() => {
     if (status === "authenticated") {
       getCustomerOrders()
-        .then((data) => setOrders(data))
+        .then((data: StoreOrder[]) => setOrders(data))
         .catch(() => {})
         .finally(() => setLoading(false));
     } else if (status === "unauthenticated") {
@@ -123,9 +125,13 @@ export default function AccountOverviewPage() {
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 bg-[var(--surface)]/90 backdrop-blur-md px-3.5 py-1 rounded-full shadow-xs border border-[var(--border)]">
                   <Sparkles className="w-4 h-4 text-[var(--secondary-container)] fill-current" />
-                  <span className="text-xs font-bold text-[var(--text-primary)]">Wonder Explorer Tier</span>
+                  <span className="text-xs font-bold text-[var(--text-primary)]">
+                    {(user as any)?.tier || "Bronze"} Member
+                  </span>
                   <span className="text-[var(--text-muted)]">•</span>
-                  <span className="text-xs font-extrabold text-[var(--primary)]">1,450 PlayPoints 🌟</span>
+                  <span className="text-xs font-extrabold text-[var(--primary)]">
+                    {(user as any)?.loyaltyPoints ?? 0} PlayPoints
+                  </span>
                 </div>
                 <h1 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-black text-[var(--text-primary)] tracking-tight">
                   Welcome back, {user?.name?.split(" ")[0] || "Friend"}! 👋
@@ -191,7 +197,7 @@ export default function AccountOverviewPage() {
               </div>
               <span className="text-xs text-[var(--text-muted)] font-bold block">PlayPoints Balance</span>
               <span className="font-heading font-black text-xl text-[var(--text-primary)] mt-0.5 block group-hover:text-amber-600">
-                1,450 pts
+                {(user as any)?.loyaltyPoints ?? 0} pts
               </span>
             </Link>
 
@@ -214,125 +220,70 @@ export default function AccountOverviewPage() {
             id="active-tracker"
             className="p-6 sm:p-7 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs space-y-6"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-3 py-0.5 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-extrabold text-[10px] uppercase tracking-wider shadow-xs">
-                    Live Dispatch Status
-                  </span>
-                  <span className="text-xs font-bold text-[var(--text-muted)]">
-                    Order #{activeOrder ? activeOrder.orderNumber : "KB-84920"}
-                  </span>
-                </div>
-                <h2 className="font-heading font-black text-lg sm:text-xl text-[var(--text-primary)]">
-                  {activeOrder?.items?.[0]?.name || "Montessori STEM Sensory Puzzle Set + Toy Cars"}
-                </h2>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="text-right sm:block">
-                  <div className="font-heading font-bold text-xs text-[var(--text-primary)]">
-                    Est. Delivery: Tomorrow by 5:00 PM
+            {activeOrder ? (
+              <>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border)]">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-3 py-0.5 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-extrabold text-[10px] uppercase tracking-wider shadow-xs">
+                        Live Dispatch Status
+                      </span>
+                      <span className="text-xs font-bold text-[var(--text-muted)]">
+                        Order #{activeOrder.orderNumber}
+                      </span>
+                    </div>
+                    <h2 className="font-heading font-black text-lg sm:text-xl text-[var(--text-primary)]">
+                      {activeOrder.items?.[0]?.name || "Toy Delivery"}
+                      {activeOrder.items?.length > 1 ? ` (+${activeOrder.items.length - 1} more items)` : ""}
+                    </h2>
                   </div>
-                  <div className="text-[11px] text-[var(--text-muted)]">
-                    Courier: Steadfast Express • Dhaka Metro
+                  <div className="text-right sm:block">
+                    <div className="font-heading font-bold text-xs text-[var(--text-primary)]">
+                      Status: {activeOrder.status.replace(/_/g, " ")}
+                    </div>
+                    <div className="text-[11px] text-[var(--text-muted)]">
+                      Zone: {activeOrder.deliveryZone || "Bangladesh"}
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stepper Timeline */}
-            <div className="relative py-4">
-              <div className="relative flex items-center justify-between w-full">
-                {/* Background Line */}
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-[var(--surface-container-high)] w-full rounded-full z-0" />
-                {/* Active Progress Fill */}
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[var(--primary)] via-[var(--primary)] to-[var(--secondary-container)] w-3/4 rounded-full z-0 transition-all duration-700" />
-
-                {/* Step 1: Confirmed */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[var(--primary)] text-[var(--on-primary)] flex items-center justify-center shadow-md">
-                    <Check className="w-5 h-5" />
-                  </div>
-                  <span className="font-heading font-bold text-xs text-[var(--text-primary)] mt-2">Confirmed</span>
-                  <span className="text-[10px] text-[var(--text-muted)]">9:15 AM</span>
                 </div>
 
-                {/* Step 2: Magic Packed */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[var(--primary)] text-[var(--on-primary)] flex items-center justify-center shadow-md">
-                    <Box className="w-5 h-5" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--surface)] rounded-2xl p-4 border border-[var(--border)]">
+                  <div>
+                    <div className="font-heading font-black text-sm text-[var(--text-primary)]">
+                      Total: {formatPrice(activeOrder.total)} • Cash on Delivery
+                    </div>
+                    <p className="text-xs text-[var(--text-muted)]">
+                      Recipient: {activeOrder.customerName} ({activeOrder.customerPhone})
+                    </p>
                   </div>
-                  <span className="font-heading font-bold text-xs text-[var(--text-primary)] mt-2">Magic Packed</span>
-                  <span className="text-[10px] text-[var(--text-muted)]">11:30 AM</span>
-                </div>
-
-                {/* Step 3: On Van (Active Pulse) */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] flex items-center justify-center shadow-md ring-4 ring-amber-400/40 animate-pulse">
-                    <Truck className="w-6 h-6" />
-                  </div>
-                  <span className="font-heading font-extrabold text-xs text-amber-700 dark:text-amber-400 mt-1">On Van 🚚</span>
-                  <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400">1:45 PM</span>
-                </div>
-
-                {/* Step 4: Delivered */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[var(--surface-container-high)] text-[var(--text-muted)] flex items-center justify-center">
-                    <Home className="w-5 h-5" />
-                  </div>
-                  <span className="font-heading font-bold text-xs text-[var(--text-muted)] mt-2">Delivered</span>
-                  <span className="text-[10px] text-[var(--text-muted)]">Est. 5:00 PM</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Courier & Note Banner */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-[var(--surface)] rounded-2xl p-4 border border-[var(--border)]">
-              <div className="md:col-span-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <div className="w-full sm:w-36 h-20 rounded-xl bg-[var(--primary)]/10 relative overflow-hidden flex items-center justify-center shrink-0">
-                  <div className="flex flex-col items-center gap-1 text-[var(--primary)]">
-                    <Navigation className="w-5 h-5 animate-pulse" />
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider">Live GPS</span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="font-heading font-black text-sm text-[var(--text-primary)]">
-                    Courier Rider: Kabir • +880 1712-345678
-                  </div>
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Destination: {activeOrder?.shippingAddress?.line1 || "Dhanmondi 27, Dhaka"}. Cash on Delivery:{" "}
-                    <strong className="text-[var(--text-primary)]">{formatPrice(activeOrder?.total || 2450)}</strong>
-                  </p>
-                  <div className="flex items-center gap-3 pt-1 text-xs">
-                    <a
-                      href="tel:+8801712345678"
-                      className="inline-flex items-center gap-1 font-bold text-[var(--primary)] hover:underline"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      <span>Call Courier</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="md:col-span-4 flex items-center justify-end gap-2">
-                {activeOrder ? (
                   <Link href={`/order/${activeOrder.id}`}>
                     <Button variant="outline" size="sm" className="font-bold text-xs gap-1">
                       <span>Full Timeline</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
                   </Link>
-                ) : (
-                  <Link href="/account/orders">
-                    <Button variant="outline" size="sm" className="font-bold text-xs gap-1">
-                      <span>View Orders</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </>
+            ) : (
+              <div className="py-8 text-center space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-[var(--surface-container-high)] text-[var(--text-muted)] flex items-center justify-center mx-auto">
+                  <Package className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading font-bold text-base text-[var(--text-primary)]">
+                  No Active Orders
+                </h3>
+                <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
+                  You don&apos;t have any orders in transit. Ready to discover certified safe toys with doorstep Cash on Delivery?
+                </p>
+                <div className="pt-2">
+                  <Link href="/c/all">
+                    <Button variant="pill-primary" size="sm">
+                      Browse Toy Collection
                     </Button>
                   </Link>
-                )}
+                </div>
               </div>
-            </div>
+            )}
           </section>
 
           {/* Rewards Wallet & Referral Grid */}
@@ -350,7 +301,7 @@ export default function AccountOverviewPage() {
                     </h3>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-extrabold text-xs">
-                    ৳145 Toy Credit
+                    ৳{Math.floor(((user as any)?.loyaltyPoints ?? 0) / 10)} Toy Credit
                   </span>
                 </div>
 
@@ -360,7 +311,7 @@ export default function AccountOverviewPage() {
                       Current Points Balance
                     </span>
                     <div className="font-heading font-black text-3xl sm:text-4xl text-[var(--primary)] leading-none mt-1">
-                      1,450
+                      {(user as any)?.loyaltyPoints ?? 0}
                     </div>
                     <p className="text-xs text-[var(--text-muted)] mt-1">
                       Earn 1 pt for every ৳10 spent. Redeem anytime at checkout!
@@ -379,13 +330,17 @@ export default function AccountOverviewPage() {
                 {/* Tier Progress */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs font-bold">
-                    <span className="text-[var(--text-muted)]">Tier Progress: Silver (850 pts to Gold)</span>
-                    <span className="text-[var(--primary)]">63%</span>
+                    <span className="text-[var(--text-muted)]">
+                      Tier: {(user as any)?.tier || "Bronze"}
+                    </span>
+                    <span className="text-[var(--primary)]">
+                      {Math.min(100, Math.round((((user as any)?.loyaltyPoints ?? 0) / 1000) * 100))}%
+                    </span>
                   </div>
                   <div className="w-full h-2.5 bg-[var(--surface-container-high)] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-[var(--secondary-container)] to-amber-600 rounded-full"
-                      style={{ width: "63%" }}
+                      style={{ width: `${Math.min(100, Math.round((((user as any)?.loyaltyPoints ?? 0) / 1000) * 100))}%` }}
                     />
                   </div>
                 </div>
@@ -443,8 +398,8 @@ export default function AccountOverviewPage() {
                   </button>
                 </div>
                 <div className="flex items-center justify-between text-white/80 text-[11px] px-2 font-bold">
-                  <span>3 friends joined this month</span>
-                  <span className="text-amber-300 font-extrabold">+৳300 earned</span>
+                  <span>Refer a parent</span>
+                  <span className="text-amber-300 font-extrabold">+৳100 per friend</span>
                 </div>
               </div>
             </div>

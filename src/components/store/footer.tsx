@@ -37,45 +37,45 @@ export function Footer() {
   return (
     <footer className="bg-[#18191F] text-slate-300 pt-16 pb-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Value Props & Trust Badges Strip */}
+        {/* Value Props & Trust Badges Strip (Confirmed by Owner) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-12 border-b border-slate-800">
           <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
-            <div className="p-3 rounded-xl bg-[#FFF0F2] text-[#DC012B] shrink-0">
+            <div className="p-3 rounded-xl bg-[var(--primary-fixed)] text-[var(--primary)] shrink-0">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-white text-sm">Inspect Before You Accept</h4>
+              <p className="text-xs text-slate-400 mt-0.5">Check your toy in front of the delivery person before accepting.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
+            <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 shrink-0">
+              <RotateCcw className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-white text-sm">Defective? We Refund</h4>
+              <p className="text-xs text-slate-400 mt-0.5">Full refund for defective products reported at delivery.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
+            <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
               <Truck className="w-6 h-6" />
             </div>
             <div>
               <h4 className="font-heading font-bold text-white text-sm">Cash on Delivery</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Pay in cash at your doorstep nationwide in Bangladesh.</p>
+              <p className="text-xs text-slate-400 mt-0.5">Pay in cash when you receive your order.</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
-            <div className="p-3 rounded-xl bg-[#E6FAF8] text-[#2EC4B6] shrink-0">
-              <ShieldCheck className="w-6 h-6" />
+            <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
+              <Phone className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-heading font-bold text-white text-sm">100% Non-Toxic & Safe</h4>
-              <p className="text-xs text-slate-400 mt-0.5">ASTM F963 & CE certified child-safe materials.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
-            <div className="p-3 rounded-xl bg-[#FFF0F0] text-[#FF6B6B] shrink-0">
-              <RotateCcw className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="font-heading font-bold text-white text-sm">7-Day Easy Returns</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Hassle-free replacement for defective or broken toys.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-900/40 border border-slate-800">
-            <div className="p-3 rounded-xl bg-[#FFF8E6] text-[#FFC93C] shrink-0">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="font-heading font-bold text-white text-sm">Original Brand Toys</h4>
-              <p className="text-xs text-slate-400 mt-0.5">Genuine imported building sets, STEM kits & plushies.</p>
+              <h4 className="font-heading font-bold text-white text-sm">Order Support</h4>
+              <p className="text-xs text-slate-400 mt-0.5">Call or WhatsApp 01712-039707</p>
             </div>
           </div>
         </div>
@@ -87,10 +87,9 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-11 h-11 rounded-full overflow-hidden bg-white p-0.5 shrink-0 shadow-sm border border-[#DC012B]/40 movable-logo">
                 <Image
-                  src="/images/khelna-bazar-logo.gif"
+                  src="/images/khelna-bazar-logo.png"
                   alt="Khelna Bazar Logo"
                   fill
-                  unoptimized
                   className="object-contain"
                 />
               </div>
@@ -109,22 +108,36 @@ export function Footer() {
             </p>
 
             <div className="space-y-2 text-xs text-slate-400 pt-2">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#FFC93C]" />
-                <span className="font-semibold text-white">{siteConfig.contact.phone}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#DC012B]" />
-                <span>{siteConfig.contact.email}</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#FF6B6B] shrink-0 mt-0.5" />
-                <span>{siteConfig.contact.address}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#2EC4B6]" />
-                <span>{siteConfig.contact.hours}</span>
-              </div>
+              {siteConfig.contact.phone && (
+                <a href={`tel:${siteConfig.contact.whatsapp}`} className="flex items-center gap-2 hover:text-white transition-colors">
+                  <Phone className="w-4 h-4 text-amber-400" />
+                  <span className="font-semibold text-white">Hotline: {siteConfig.contact.phone}</span>
+                </a>
+              )}
+              {siteConfig.contact.whatsapp && (
+                <a href={`https://wa.me/88${siteConfig.contact.whatsapp}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                  <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">W</span>
+                  <span className="font-semibold text-white">WhatsApp: {siteConfig.contact.whatsappDisplay || siteConfig.contact.phone}</span>
+                </a>
+              )}
+              {siteConfig.contact.email ? (
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-[var(--primary)]" />
+                  <span>{siteConfig.contact.email}</span>
+                </div>
+              ) : null}
+              {siteConfig.contact.address ? (
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-[var(--primary)] shrink-0 mt-0.5" />
+                  <span>{siteConfig.contact.address}</span>
+                </div>
+              ) : null}
+              {siteConfig.contact.hours ? (
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-[var(--tertiary)]" />
+                  <span>{siteConfig.contact.hours}</span>
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -185,8 +198,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/pages/returns-policy" className="hover:text-[#DC012B] transition-colors">
-                  7-Day Returns Policy
+                <Link href="/pages/return-refund-policy" className="hover:text-[#DC012B] transition-colors">
+                  Delivery Return &amp; Refund Policy
                 </Link>
               </li>
               <li>

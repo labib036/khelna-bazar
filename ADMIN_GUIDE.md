@@ -7,9 +7,9 @@ This guide explains how the owner and staff operate the daily business of **KHEL
 ## 1. How to Access the Admin Console
 1. Navigate to your website URL: `https://your-site.vercel.app/admin` (or `http://localhost:3000/admin` locally).
 2. If not logged in, you will be redirected to the sign-in page.
-3. Sign in with your owner credentials:
-   * **Email**: `admin@khelnabazar.com`
-   * **Password**: `Admin@Khelna123`
+3. Sign in with your owner administrator account provisioned via `npm run admin:create`:
+   * **Email**: Your provisioned administrator email
+   * **Password**: Your secure administrator password
 
 ---
 
@@ -24,7 +24,7 @@ Because KHELNA BAZAR is strictly Cash on Delivery, your fulfillment workflow loo
 ### Step 2: Verification Call
 * Open **Orders & COD Cash** from the sidebar.
 * Call the customer's phone number to verify:
-  * "Hello, is this Tanzim? We are calling from Khelna Bazar regarding your order for the Space Explorer rocket set. Are you available to receive the package tomorrow?"
+  * "Hello, is this [Customer Name]? We are calling from Khelna Bazar regarding your order. Are you available to receive the package tomorrow?"
 * Click the status dropdown and change status to **`CONFIRMED`**.
 
 ### Step 3: Packing & Courier Dispatch

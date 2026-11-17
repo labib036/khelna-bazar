@@ -229,7 +229,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 </span>
               )}
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] text-xs font-black shadow-xs uppercase tracking-wider">
-                <Award className="w-3.5 h-3.5 text-[var(--primary)]" /> ASTM &amp; CE Certified Safe
+                <ShieldCheck className="w-3.5 h-3.5 text-[var(--primary)]" /> Inspect At Delivery
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--accent)] text-white text-xs font-black shadow-xs uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" /> Age {ageYears}
@@ -342,24 +342,32 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
 
           {/* Rating & Review Strip */}
           <div className="flex items-center gap-3 pb-2 border-b border-[var(--border)]">
-            <div className="flex items-center gap-1 bg-[var(--secondary-container)]/20 px-3 py-1 rounded-full">
-              <div className="flex text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-3.5 h-3.5 ${
-                      i < Math.round(product.ratingAvg || 5) ? "fill-current" : "opacity-30"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-xs font-black text-[var(--on-secondary-container)] ml-1">
-                {(product.ratingAvg || 4.9).toFixed(1)}
+            {product.ratingCount && product.ratingCount > 0 ? (
+              <>
+                <div className="flex items-center gap-1 bg-[var(--secondary-container)]/20 px-3 py-1 rounded-full">
+                  <div className="flex text-amber-500">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${
+                          i < Math.round(product.ratingAvg || 0) ? "fill-current" : "opacity-30"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs font-black text-[var(--on-secondary-container)] ml-1">
+                    {(product.ratingAvg || 0).toFixed(1)}
+                  </span>
+                </div>
+                <a href="#reviews-section" className="text-xs font-bold text-[var(--primary)] hover:underline">
+                  ({product.ratingCount} verified customer {product.ratingCount === 1 ? "review" : "reviews"})
+                </a>
+              </>
+            ) : (
+              <span className="text-xs text-[var(--text-muted)] font-medium">
+                No customer reviews yet &bull; Be the first to review
               </span>
-            </div>
-            <a href="#reviews-section" className="text-xs font-bold text-[var(--primary)] hover:underline">
-              ({product.ratingCount || 128} verified parent reviews)
-            </a>
+            )}
           </div>
 
           {/* Price & Savings Ledger */}
@@ -549,7 +557,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 </span>
               </div>
               <p className="text-[10px] text-[var(--text-muted)]">
-                Doorstep parcel unboxing permitted before payment. 7-day replacement guarantee.
+                ডেলিভারির সময় দেখে নিয়ে গ্রহণ করুন। ডেলিভারির সময় ত্রুটি ধরা পড়লে রিফান্ড।
               </p>
             </div>
           </div>
@@ -559,7 +567,8 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
       {/* DEDICATED SAFETY & CHOKING HAZARD PANEL */}
       <SafetyPanel
         ageRange={ageYears}
-        chokingHazard={product.chokingHazard ?? true}
+        materials={product.material || undefined}
+        chokingHazard={product.chokingHazard ?? false}
       />
 
       {/* MODULAR TABS SECTION */}
@@ -741,14 +750,18 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                   {Math.floor(product.minAgeMonths / 12)} to {Math.floor(product.maxAgeMonths / 12)} Years
                 </span>
               </div>
-              <div className="py-3 flex justify-between">
-                <span className="text-[var(--text-muted)] font-medium">Materials</span>
-                <span className="font-bold text-[var(--text-primary)]">{product.material || "Non-Toxic ABS Resin"}</span>
-              </div>
-              <div className="py-3 flex justify-between">
-                <span className="text-[var(--text-muted)] font-medium">Battery Requirements</span>
-                <span className="font-bold text-[var(--text-primary)]">{product.batteryInfo || "Built-in Rechargeable (USB-C Included)"}</span>
-              </div>
+              {product.material && (
+                <div className="py-3 flex justify-between">
+                  <span className="text-[var(--text-muted)] font-medium">Materials</span>
+                  <span className="font-bold text-[var(--text-primary)]">{product.material}</span>
+                </div>
+              )}
+              {product.batteryInfo && (
+                <div className="py-3 flex justify-between">
+                  <span className="text-[var(--text-muted)] font-medium">Battery Requirements</span>
+                  <span className="font-bold text-[var(--text-primary)]">{product.batteryInfo}</span>
+                </div>
+              )}
               <div className="py-3 flex justify-between">
                 <span className="text-[var(--text-muted)] font-medium">Model / SKU</span>
                 <span className="font-mono text-[var(--text-primary)] font-bold">{currentVariant.sku}</span>

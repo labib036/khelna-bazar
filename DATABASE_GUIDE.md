@@ -56,11 +56,17 @@ npm run db:push
 ```
 *What this does*: Creates all 25+ database tables (User, Product, Order, Category, Brand, Review, etc.) in your Neon database.
 
-### 2. Seed Realistic Catalog Data
+### 2. Seed Essential Store Infrastructure
 ```bash
-npm run db:seed
+npm run db:seed:essential
 ```
-*What this does*: Populates your database with 60+ realistic toy products, 12 brands, categories, flash deals, coupons (`PLAY10`, `FREESHIP`), sample orders, and demo accounts (`admin@khelnabazar.com`, `staff@khelnabazar.com`, `customer@khelnabazar.com`).
+*What this does*: Populates essential store configuration, official category taxonomy, launch coupon, and policy pages without any fake accounts or fake orders.
+
+### 3. Provision Administrator Account
+```bash
+npm run admin:create
+```
+*What this does*: Creates the store administrator account with a secure one-time password.
 
 ---
 

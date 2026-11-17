@@ -65,7 +65,8 @@ export function Header() {
   const pathname = usePathname();
   const mounted = useMounted();
   const { t, locale } = useLanguage();
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const user = session?.user;
   const isStaffOrAdmin = user?.role === "ADMIN" || user?.role === "STAFF";
 
@@ -154,7 +155,6 @@ export function Header() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsSearchFocused(false);
-        setIsAgeMenuOpen(false);
         setIsUserMenuOpen(false);
         setIsMobileMenuOpen(false);
       }
@@ -221,7 +221,7 @@ export function Header() {
             </a>
             <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
               <Truck className="w-3.5 h-3.5" />
-              <span>Cash on Delivery across all 64 districts</span>
+              <span>Cash on Delivery Available</span>
             </div>
           </div>
 

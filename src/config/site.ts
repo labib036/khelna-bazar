@@ -7,29 +7,29 @@ export const siteConfig = {
   // LOGO CONFIGURATION POINT:
   logo: {
     path: "/images/khelna-bazar-logo.png",
-    animatedGif: "/images/khelna-bazar-logo.gif",
-    videoPath: "/images/khelna-bazar-logo.mp4",
-    badgePath: "/images/khelna-bazar-logo.png",
     favicon: "/favicon.png",
     width: 180,
     height: 48,
     alt: "Khelna Bazar Official Logo",
-    useTextFallback: false, // Set to false to show the real official logo
-    useAnimatedLogo: true,  // Displays the moving/animated logo in the storefront
+    useTextFallback: false,
+    useAnimatedLogo: false,
   },
 
   contact: {
-    phone: "+880 1700-000000",
-    email: "support@khelnabazar.com",
-    address: "House 42, Road 11, Banani, Dhaka-1213, Bangladesh",
-    hours: "Sat - Thu: 9:00 AM - 9:00 PM (BST)",
+    phone: "01712-039707",
+    hotline: process.env.NEXT_PUBLIC_STORE_HOTLINE || "01712-039707",
+    whatsapp: "01712039707",
+    whatsappDisplay: "01712-039707",
+    email: process.env.NEXT_PUBLIC_STORE_EMAIL || "",
+    address: process.env.NEXT_PUBLIC_STORE_ADDRESS || "",
+    hours: "",
   },
 
   social: {
-    facebook: "https://facebook.com/khelnabazar",
-    instagram: "https://instagram.com/khelnabazar",
-    youtube: "https://youtube.com/@khelnabazar",
-    tiktok: "https://tiktok.com/@khelnabazar",
+    facebook: "",
+    instagram: "",
+    youtube: "",
+    tiktok: "",
   },
 
   // Localization and Currency
@@ -61,27 +61,27 @@ export const siteConfig = {
     birthdayPoints: 200,
   },
 
-  // Trust Badges
+  // Trust Badges (Owner Confirmed)
   trustBadges: [
     {
-      title: "Cash on Delivery",
-      description: "Pay with cash at your doorstep across Bangladesh",
-      icon: "Truck",
-    },
-    {
-      title: "100% Non-Toxic & Safe",
-      description: "Tested and certified safe toys for children",
+      title: "Inspect Before You Accept",
+      description: "Check your toy in front of the delivery person",
       icon: "ShieldCheck",
     },
     {
-      title: "7-Day Easy Returns",
-      description: "Hassle-free replacement for defective products",
+      title: "Defective? We Refund",
+      description: "Full refund for defective products reported at delivery",
       icon: "RotateCcw",
     },
     {
-      title: "Authentic & Verified",
-      description: "Directly imported genuine brands and toys",
-      icon: "Sparkles",
+      title: "Cash on Delivery",
+      description: "Pay when you receive your order",
+      icon: "Truck",
+    },
+    {
+      title: "Order Support",
+      description: "Call or WhatsApp 01712-039707",
+      icon: "Phone",
     },
   ],
 };

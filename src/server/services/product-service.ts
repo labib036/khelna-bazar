@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { MOCK_PRODUCTS, MOCK_CATEGORIES, ToyProduct } from "@/server/mock-data";
+import { ToyProduct, StoreCategory } from "@/types/store";
 
 export async function getProducts(params?: {
   category?: string;
@@ -111,7 +111,7 @@ export async function getProducts(params?: {
         descriptionHtml: p.descriptionHtml,
         minAgeMonths: p.minAgeMonths,
         maxAgeMonths: p.maxAgeMonths,
-        material: p.material || "Non-Toxic ABS",
+        material: p.material || undefined,
         batteryInfo: p.batteryInfo || "None required",
         chokingHazard: p.chokingHazard,
         chokingWarning: p.chokingWarning || undefined,
@@ -136,54 +136,12 @@ export async function getProducts(params?: {
 
       return { products: mapped, total };
     }
+
+    return { products: [], total: 0 };
   } catch (error) {
-    // Database connection or table not yet initialized; fallback to mock data
-    console.warn("Falling back to rich catalog mock data:", (error as Error).message);
+    console.error("Database lookup error in getProducts:", (error as Error).message);
+    return { products: [], total: 0 };
   }
-
-  // Fallback to MOCK_PRODUCTS
-  let filtered = [...MOCK_PRODUCTS];
-
-  if (params?.category) {
-    filtered = filtered.filter((p) => p.categorySlug === params.category);
-  }
-
-  if (params?.brand) {
-    filtered = filtered.filter(
-      (p) => p.brand.toLowerCase().replace(/\s+/g, "-") === params.brand
-    );
-  }
-
-  if (params?.minPrice !== undefined) {
-    filtered = filtered.filter((p) => p.basePrice >= params.minPrice!);
-  }
-
-  if (params?.maxPrice !== undefined) {
-    filtered = filtered.filter((p) => p.basePrice <= params.maxPrice!);
-  }
-
-  if (params?.isDeal) {
-    filtered = filtered.filter((p) => p.isDeal);
-  }
-
-  if (params?.query) {
-    const q = params.query.toLowerCase();
-    filtered = filtered.filter(
-      (p) => p.name.toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)
-    );
-  }
-
-  if (params?.sort === "price-asc") {
-    filtered.sort((a, b) => a.basePrice - b.basePrice);
-  } else if (params?.sort === "price-desc") {
-    filtered.sort((a, b) => b.basePrice - a.basePrice);
-  } else if (params?.sort === "rating") {
-    filtered.sort((a, b) => b.ratingAvg - a.ratingAvg);
-  } else if (params?.sort === "bestselling") {
-    filtered.sort((a, b) => b.soldCount - a.soldCount);
-  }
-
-  return { products: filtered, total: filtered.length };
 }
 
 export async function getProductBySlug(slug: string): Promise<ToyProduct | null> {
@@ -213,7 +171,7 @@ export async function getProductBySlug(slug: string): Promise<ToyProduct | null>
         descriptionHtml: dbProduct.descriptionHtml,
         minAgeMonths: dbProduct.minAgeMonths,
         maxAgeMonths: dbProduct.maxAgeMonths,
-        material: dbProduct.material || "Non-Toxic Child Safe",
+        material: dbProduct.material || undefined,
         batteryInfo: dbProduct.batteryInfo || "None required",
         chokingHazard: dbProduct.chokingHazard,
         chokingWarning: dbProduct.chokingWarning || undefined,
@@ -236,15 +194,14 @@ export async function getProductBySlug(slug: string): Promise<ToyProduct | null>
         attributes: dbProduct.attributes.map((a) => ({ name: a.name, value: a.value })),
       };
     }
+    return null;
   } catch (error) {
-    console.warn("DB lookup error, using mock catalog for slug:", slug);
+    console.error("DB lookup error for slug:", slug, (error as Error).message);
+    return null;
   }
-
-  const found = MOCK_PRODUCTS.find((p) => p.slug === slug);
-  return found || null;
 }
 
-export async function getCategories() {
+export async function getCategories(): Promise<StoreCategory[]> {
   try {
     const dbCategories = await db.category.findMany({
       where: { parentId: null },
@@ -261,14 +218,14 @@ export async function getCategories() {
         name: c.name,
         slug: c.slug,
         description: c.description || "",
-        image: c.image || "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=600&q=80",
+        image: c.image || null,
         itemCount: c._count.products,
         children: c.children.map((ch) => ({ name: ch.name, slug: ch.slug })),
       }));
     }
+    return [];
   } catch (error) {
-    // fallback
+    console.error("DB lookup error in getCategories:", (error as Error).message);
+    return [];
   }
-
-  return MOCK_CATEGORIES;
 }

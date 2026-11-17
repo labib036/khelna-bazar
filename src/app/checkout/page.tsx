@@ -65,7 +65,8 @@ const GIFT_WRAP_STYLES = [
 export default function CheckoutPage() {
   const router = useRouter();
   const mounted = useMounted();
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const user = session?.user;
   const idempotencyKey = useRef<string>(
     typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `idemp-${Date.now()}`
@@ -99,6 +100,7 @@ export default function CheckoutPage() {
   );
   const [mfsSenderNumber, setMfsSenderNumber] = useState("");
   const [mfsTrxId, setMfsTrxId] = useState("");
+  const [inspectAcknowledged, setInspectAcknowledged] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -146,8 +148,9 @@ export default function CheckoutPage() {
   }
 
   const subtotal = getSubtotal();
+  const userPoints = (user as any)?.loyaltyPoints || 0;
   const couponDiscount = getDiscount();
-  const playPointsDiscount = playPointsRedeemed ? 145 : 0;
+  const playPointsDiscount = playPointsRedeemed && userPoints > 0 ? Math.floor(userPoints / 10) : 0;
   const discount = couponDiscount + playPointsDiscount;
   const shippingFee = getShippingFee();
   const giftWrapFee = getGiftWrapFee();
@@ -205,6 +208,10 @@ export default function CheckoutPage() {
       }
     }
 
+    if (!inspectAcknowledged) {
+      newErrors.inspectAcknowledged = "Please acknowledge that toys must be inspected upon delivery.";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -246,6 +253,7 @@ export default function CheckoutPage() {
         paymentMethod,
         senderNumber: paymentMethod !== "CASH_ON_DELIVERY" ? mfsSenderNumber.trim() : undefined,
         trxId: paymentMethod !== "CASH_ON_DELIVERY" ? mfsTrxId.trim() : undefined,
+        inspectionAcknowledged: inspectAcknowledged,
         items: items.map((i) => ({
           variantId: i.variantId,
           quantity: i.quantity,
@@ -293,7 +301,7 @@ export default function CheckoutPage() {
             </span>
             <span>&bull;</span>
             <span className="flex items-center gap-1 text-[var(--secondary)] font-bold">
-              <ShieldCheck className="w-3.5 h-3.5" /> ASTM Non-Toxic
+              <ShieldCheck className="w-3.5 h-3.5" /> Inspect At Delivery
             </span>
             <span>&bull;</span>
             <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-bold">
@@ -795,10 +803,10 @@ export default function CheckoutPage() {
                         </div>
                         <div>
                           <span className="font-black text-xs sm:text-sm text-[var(--text-primary)] block">
-                            bKash Online Payment
+                            bKash Mobile Payment
                           </span>
-                          <span className="text-[11px] text-[var(--primary)] font-bold">
-                            ⚡ Instant Verification &bull; 5% Cashback up to ৳100
+                          <span className="text-[11px] text-[var(--text-muted)] font-medium">
+                            Send Money to <strong>01712-039707</strong> &bull; Verified before dispatch
                           </span>
                         </div>
                       </div>
@@ -809,8 +817,25 @@ export default function CheckoutPage() {
 
                     {paymentMethod === "BKASH" && (
                       <div className="p-3.5 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-3">
+                        <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+                          <div>
+                            <span className="text-[10px] text-[var(--text-muted)] block uppercase font-bold">bKash Number (Send Money)</span>
+                            <span className="font-mono font-black text-sm text-[var(--text-primary)] tracking-wider">01712-039707</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText("01712039707");
+                              toast.success("bKash number 01712039707 copied!");
+                            }}
+                            className="px-2.5 py-1 rounded-full bg-[var(--surface-container-high)] text-[var(--primary)] text-xs font-bold hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer"
+                          >
+                            Copy Number
+                          </button>
+                        </div>
                         <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
-                          Send payment to our merchant wallet: <strong>01700-000000</strong>. Enter your sender number and Transaction ID (TrxID) below:
+                          Send ৳{total.toLocaleString("en-BD")} to bKash number 01712-039707 (Send Money). Then enter the sender number and Transaction ID (TrxID) below:
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <input
@@ -852,8 +877,8 @@ export default function CheckoutPage() {
                           <span className="font-black text-xs sm:text-sm text-[var(--text-primary)] block">
                             Nagad Digital Payment
                           </span>
-                          <span className="text-[11px] text-[var(--secondary)] font-bold">
-                            Post Office Guaranteed &bull; Fast SMS confirmation
+                          <span className="text-[11px] text-[var(--text-muted)] font-medium">
+                            Send Money to <strong>01712-039707</strong> &bull; Verified before dispatch
                           </span>
                         </div>
                       </div>
@@ -864,8 +889,25 @@ export default function CheckoutPage() {
 
                     {paymentMethod === "NAGAD" && (
                       <div className="p-3.5 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-3">
+                        <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+                          <div>
+                            <span className="text-[10px] text-[var(--text-muted)] block uppercase font-bold">Nagad Number (Send Money)</span>
+                            <span className="font-mono font-black text-sm text-[var(--text-primary)] tracking-wider">01712-039707</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText("01712039707");
+                              toast.success("Nagad number 01712039707 copied!");
+                            }}
+                            className="px-2.5 py-1 rounded-full bg-[var(--surface-container-high)] text-[var(--primary)] text-xs font-bold hover:bg-[var(--primary)] hover:text-white transition-colors cursor-pointer"
+                          >
+                            Copy Number
+                          </button>
+                        </div>
                         <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
-                          Send payment to our merchant wallet: <strong>01700-000000</strong>. Enter your sender number and Transaction ID (TrxID) below:
+                          Send ৳{total.toLocaleString("en-BD")} to Nagad number 01712-039707 (Send Money). Then enter the sender number and Transaction ID (TrxID) below:
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <input
@@ -887,40 +929,73 @@ export default function CheckoutPage() {
                     )}
                   </label>
 
-                  {/* PlayPoints Loyalty Redemption Toggle Bar */}
-                  <div className="p-4 rounded-3xl bg-[var(--secondary-container)]/15 border border-[var(--secondary-container)]/40 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] flex items-center justify-center font-black">
-                        <Stars className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-[var(--text-primary)]">PlayPoints Loyalty Balance</span>
-                          <span className="px-2 py-0.5 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] text-[10px] font-black">
-                            1,450 Pts
+                  {/* PlayPoints Loyalty Redemption Toggle Bar (Only shown for members with positive balance) */}
+                  {userPoints > 0 && (
+                    <div className="p-4 rounded-3xl bg-[var(--secondary-container)]/15 border border-[var(--secondary-container)]/40 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] flex items-center justify-center font-black">
+                          <Stars className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-xs text-[var(--text-primary)]">PlayPoints Loyalty Balance</span>
+                            <span className="px-2 py-0.5 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] text-[10px] font-black">
+                              {userPoints} Pts
+                            </span>
+                          </div>
+                          <span className="text-[11px] text-[var(--text-muted)]">
+                            Redeem points for instant {formatPrice(Math.floor(userPoints / 10))} discount on this order.
                           </span>
                         </div>
-                        <span className="text-[11px] text-[var(--text-muted)]">
-                          Redeem points for instant ৳145 discount on this order.
-                        </span>
                       </div>
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={playPointsRedeemed}
+                          onChange={(e) => setPlayPointsRedeemed(e.target.checked)}
+                          className="w-5 h-5 rounded text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
+                        />
+                      </label>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                      <input
-                        type="checkbox"
-                        checked={playPointsRedeemed}
-                        onChange={(e) => setPlayPointsRedeemed(e.target.checked)}
-                        className="w-5 h-5 rounded text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
-                      />
-                    </label>
+                  )}
+                </div>
+              </div>
+
+              {/* Delivery Inspection Policy & Mandatory Checkbox */}
+              <div className="p-4 sm:p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center shrink-0 mt-0.5">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-black text-[var(--text-primary)]">
+                      ডেলিভারির সময় দেখে নিন / Inspect Toy Before Acceptance
+                    </h4>
+                    <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
+                      ডেলিভারি ম্যানের সামনে পণ্যটি দেখে নিয়ে তারপর গ্রহণ করুন। ডেলিভারির সময় ত্রুটি ধরা পড়লে পণ্য ফেরত ও রিফান্ড করা যাবে। পণ্য গ্রহণ করার পর রিফান্ড করা হবে না।
+                    </p>
                   </div>
                 </div>
+                <label className="flex items-start gap-2.5 pt-2 border-t border-[var(--border)] cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={inspectAcknowledged}
+                    onChange={(e) => setInspectAcknowledged(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer shrink-0"
+                  />
+                  <span className="text-[11px] font-bold text-[var(--text-primary)] leading-snug">
+                    আমি বুঝেছি যে ডেলিভারির সময় পণ্য দেখে নিতে হবে এবং গ্রহণ করার পর রিফান্ড করা হবে না। / I understand I must inspect the product at delivery, and that refunds are not possible after I accept it.
+                  </span>
+                </label>
+                {errors.inspectAcknowledged && (
+                  <p className="text-[11px] text-[var(--danger)] font-bold">{errors.inspectAcknowledged}</p>
+                )}
               </div>
 
               {/* Submit CTA (Desktop & Mobile) */}
               <Button
                 type="submit"
-                disabled={isSubmitting || items.length === 0}
+                disabled={isSubmitting || items.length === 0 || !inspectAcknowledged}
                 variant="pill-primary"
                 size="lg"
                 className="w-full h-14 font-black text-base shadow-[0_4px_0_#93000E] active:translate-y-[2px] active:shadow-[0_2px_0_#93000E] flex items-center justify-center gap-2"
@@ -1023,10 +1098,10 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {playPointsRedeemed && (
+                {playPointsRedeemed && userPoints > 0 && (
                   <div className="flex justify-between text-[var(--secondary)] font-bold">
-                    <span>PlayPoints (1,450 Pts)</span>
-                    <span>-৳145</span>
+                    <span>PlayPoints ({userPoints} Pts)</span>
+                    <span>-{formatPrice(Math.floor(userPoints / 10))}</span>
                   </div>
                 )}
 
@@ -1066,15 +1141,19 @@ export default function CheckoutPage() {
               <div className="p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)] space-y-2 text-xs">
                 <div className="flex items-center gap-2 text-[var(--text-primary)] font-bold">
                   <ShieldCheck className="w-4 h-4 text-[var(--primary)]" />
-                  <span>100% Non-Toxic &amp; Safety Certified</span>
+                  <span>Inspect Before You Accept at Doorstep</span>
                 </div>
                 <div className="flex items-center gap-2 text-[var(--text-primary)] font-bold">
                   <RotateCcw className="w-4 h-4 text-[var(--secondary)]" />
-                  <span>30-Day Zero-Tears Return Policy</span>
+                  <span>Defective? Refund Reported at Delivery</span>
                 </div>
                 <div className="flex items-center gap-2 text-[var(--text-primary)] font-bold">
-                  <Headphones className="w-4 h-4 text-[var(--accent)]" />
-                  <span>Live Parent Care: +880 9612-KHELNA</span>
+                  <Truck className="w-4 h-4 text-emerald-600" />
+                  <span>Cash on Delivery Available</span>
+                </div>
+                <div className="flex items-center gap-2 text-[var(--text-primary)] font-bold">
+                  <Headphones className="w-4 h-4 text-blue-600" />
+                  <span>Order Helpline: 01712-039707</span>
                 </div>
               </div>
             </div>

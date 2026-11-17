@@ -40,7 +40,8 @@ const BD_DIVISIONS = [
 
 export default function AddressesPage() {
   const mounted = useMounted();
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const user = session?.user;
 
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);

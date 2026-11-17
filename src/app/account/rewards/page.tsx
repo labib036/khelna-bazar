@@ -22,7 +22,8 @@ import { toast } from "sonner";
 
 export default function RewardsPage() {
   const mounted = useMounted();
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
   const user = session?.user;
   const [copied, setCopied] = useState(false);
 
@@ -111,9 +112,11 @@ export default function RewardsPage() {
               <span className="text-[11px] uppercase tracking-widest text-rose-200 font-extrabold">
                 Current PlayPoints Balance
               </span>
-              <div className="text-4xl sm:text-5xl font-heading font-black tracking-tight">1,450 Points</div>
+              <div className="text-4xl sm:text-5xl font-heading font-black tracking-tight">
+                {(user as any)?.loyaltyPoints ?? 0} Points
+              </div>
               <p className="text-xs text-rose-100 font-bold">
-                Worth <strong className="text-amber-300">৳145 in checkout discounts</strong>.
+                Worth <strong className="text-amber-300">৳{Math.floor(((user as any)?.loyaltyPoints ?? 0) / 10)} in checkout discounts</strong>.
               </p>
             </div>
 
@@ -122,9 +125,9 @@ export default function RewardsPage() {
                 Current Member Tier
               </span>
               <span className="font-heading text-xl font-black text-amber-300 mt-0.5 block">
-                SILVER EXPLORER 🌟
+                {(user as any)?.tier ? `${(user as any).tier} EXPLORER 🌟` : "BRONZE FRIEND 🌟"}
               </span>
-              <span className="text-[11px] text-rose-100 font-bold">1.5x Points + Birthday Gift Wrap</span>
+              <span className="text-[11px] text-rose-100 font-bold">Earn points on every Cash on Delivery order</span>
             </div>
           </div>
 

@@ -42,28 +42,26 @@ export function AnnouncementBar() {
         <p className="truncate text-[11px] sm:text-xs font-bold tracking-tight">
           {isBn ? (
             <>
-              🎉 ১,৫০০৳ এর বেশি অর্ডারে ফ্রি হোম ডেলিভারি • 🧸 ১০০% নন-টক্সিক ও সার্টিফাইড • কোড{" "}
-              <span className="px-2 py-0.5 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-black text-[10px] uppercase">
-                JOY10
-              </span>{" "}
-              দিয়ে ১০% ছাড়!
+              ডেলিভারি ম্যানের সামনে পণ্যটি দেখে নিয়ে গ্রহণ করুন • ত্রুটি ধরা পড়লে সাথে সাথে ফেরত ও রিফান্ড • কল/হোয়াটসঅ্যাপ:{" "}
+              <span className="font-extrabold text-[var(--secondary-container)]">
+                01712-039707
+              </span>
             </>
           ) : (
             <>
-              🎉 Free Magic Express Delivery over ৳1500 • 🧸 100% Non-Toxic &amp; Safety Certified • Use code{" "}
-              <span className="px-2 py-0.5 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-black text-[10px] uppercase">
-                JOY10
-              </span>{" "}
-              for 10% OFF!
+              Please inspect your toy at delivery before accepting • Refund for defectives reported at delivery • Helpline:{" "}
+              <span className="font-extrabold text-[var(--secondary-container)]">
+                01712-039707
+              </span>
             </>
           )}
         </p>
 
         <Link
-          href="/deals"
+          href="/pages/return-refund"
           className="hidden sm:inline-flex items-center gap-0.5 font-extrabold text-[var(--secondary-container)] hover:underline ml-1 shrink-0 text-xs"
         >
-          <span>{isBn ? "অফার দেখুন" : "Shop Deals"}</span>
+          <span>{isBn ? "নীতিমালা দেখুন" : "Policy"}</span>
           <ChevronRight className="w-3 h-3" />
         </Link>
       </div>

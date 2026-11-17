@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/auth-store";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Sparkles,
   Gift,
   ShieldCheck,
   Truck,
-  Star,
+  RotateCcw,
   Users,
   ArrowRight,
   UserCheck,
@@ -19,7 +19,8 @@ import {
 } from "lucide-react";
 
 export function MarketingDashboard() {
-  const { user } = useAuthStore();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -46,9 +47,7 @@ export function MarketingDashboard() {
                   Welcome back, <span className="text-[#DC012B]">{user.name}</span>!
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  You currently hold{" "}
-                  <strong className="text-[#F59E0B] font-extrabold">{user.loyaltyPoints} PlayPoints</strong> (
-                  {user.tier} Tier). Enjoy free nationwide Cash on Delivery on orders over ৳2,000!
+                  Enjoy free nationwide Cash on Delivery on orders over ৳2,000! Inspect your parcel before paying.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <Link href={user.role === "ADMIN" ? "/admin" : "/account"}>
@@ -74,8 +73,7 @@ export function MarketingDashboard() {
                   New to Khelna Bazar? Explore &amp; Claim <span className="text-[#DC012B]">৳100 Welcome Points</span>!
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Browse thousands of certified non-toxic toys with <strong>100% Cash on Delivery</strong> across all
-                  64 districts of Bangladesh. You can inspect your parcel at your doorstep before handing cash to the courier.
+                  Browse engaging and creative toys with <strong>Cash on Delivery</strong> available. You can inspect your parcel at your doorstep before accepting.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <Link href="/register">
@@ -117,37 +115,37 @@ export function MarketingDashboard() {
               <p className="text-[11px] text-slate-500 leading-tight">Pay only at your doorstep nationwide.</p>
             </div>
 
-            {/* Metric 2: Safety Certified */}
+            {/* Metric 2: Inspect at Doorstep */}
             <div className="p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-1">
               <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950/50 text-[#DC012B] flex items-center justify-center mb-2">
                 <ShieldCheck className="w-4 h-4" />
               </div>
               <span className="font-heading font-black text-sm text-[#18191F] dark:text-white block">
-                Safety Certified
+                Inspect First
               </span>
-              <p className="text-[11px] text-slate-500 leading-tight">EN-71 non-toxic, child-safe plastics.</p>
+              <p className="text-[11px] text-slate-500 leading-tight">Check your toy at delivery before accepting.</p>
             </div>
 
-            {/* Metric 3: Parent Reviews */}
+            {/* Metric 3: Defective Refund */}
             <div className="p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-1">
               <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-[#F59E0B] flex items-center justify-center mb-2">
-                <Star className="w-4 h-4 fill-current" />
+                <RotateCcw className="w-4 h-4" />
               </div>
               <span className="font-heading font-black text-sm text-[#18191F] dark:text-white block">
-                4.9/5 Rating
+                Defective? Refund
               </span>
-              <p className="text-[11px] text-slate-500 leading-tight">12,000+ satisfied Bangladeshi parents.</p>
+              <p className="text-[11px] text-slate-500 leading-tight">Full refund for defectives reported at delivery.</p>
             </div>
 
-            {/* Metric 4: Fast Dispatch */}
+            {/* Metric 4: Order Support */}
             <div className="p-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] shadow-xs space-y-1">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/50 text-[#8B5CF6] flex items-center justify-center mb-2">
-                <Clock className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/50 text-[#1E5BFF] flex items-center justify-center mb-2">
+                <HeartHandshake className="w-4 h-4" />
               </div>
               <span className="font-heading font-black text-sm text-[#18191F] dark:text-white block">
-                24h Dispatch
+                Order Support
               </span>
-              <p className="text-[11px] text-slate-500 leading-tight">Dhaka delivery in 24h &bull; BD in 48-72h.</p>
+              <p className="text-[11px] text-slate-500 leading-tight">Call or WhatsApp 01712-039707.</p>
             </div>
           </div>
         </div>

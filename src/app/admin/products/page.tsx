@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { AdminLayout } from "@/components/admin/admin-layout";
-import { MOCK_PRODUCTS, ToyProduct } from "@/server/mock-data";
+import { ToyProduct } from "@/types/store";
+import { getAdminProducts } from "@/server/actions/product-actions";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,13 +17,28 @@ import {
   Check,
   X,
   AlertTriangle,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<ToyProduct[]>(MOCK_PRODUCTS);
+  const [products, setProducts] = useState<ToyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    getAdminProducts().then((res) => {
+      if (mounted) {
+        setProducts(res.products);
+        setLoading(false);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // New product form states
   const [newName, setNewName] = useState("");
@@ -52,16 +68,16 @@ export default function AdminProductsPage() {
       categorySlug: "building-blocks",
       basePrice: priceNum,
       comparePrice: Math.round(priceNum * 1.2),
-      shortDesc: "High quality safe learning toy for children.",
-      descriptionHtml: `<p>Exciting new toy for curious kids. Tested non-toxic.</p>`,
+      shortDesc: "High quality engaging learning toy for children.",
+      descriptionHtml: `<p>Engaging learning toy for children.</p>`,
       minAgeMonths: parseInt(newMinAge) || 36,
       maxAgeMonths: 144,
-      material: "Non-Toxic Child-Safe ABS",
+      material: "ABS Plastic",
       batteryInfo: "None required",
       chokingHazard: newChoking,
-      certifications: ["ASTM F963", "CE Certified"],
-      ratingAvg: 5.0,
-      ratingCount: 1,
+      certifications: [],
+      ratingAvg: 0,
+      ratingCount: 0,
       soldCount: 0,
       isFeatured: true,
       isDeal: false,
@@ -157,8 +173,22 @@ export default function AdminProductsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {filtered.map((prod) => (
-                <tr key={prod.id} className="hover:bg-[#FAF8F6] dark:hover:bg-[#242531] transition-colors">
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-400">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#DC012B]" />
+                    <span>Loading catalog products...</span>
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-400">
+                    No products found in the catalog.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((prod) => (
+                  <tr key={prod.id} className="hover:bg-[#FAF8F6] dark:hover:bg-[#242531] transition-colors">
                   <td className="p-5">
                     <div className="flex items-center gap-3.5">
                       <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
@@ -221,7 +251,8 @@ export default function AdminProductsPage() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>

@@ -53,7 +53,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       description={
         isAll
           ? "Browse our full collection of safe, engaging, and creative toys with nationwide Cash on Delivery."
-          : category?.description
+          : (category?.description || undefined)
       }
       categorySlug={currentSlug}
     />

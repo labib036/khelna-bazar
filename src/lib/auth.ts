@@ -4,6 +4,11 @@ import { db } from "@/lib/db";
 import { normalizeIdentifier } from "@/lib/auth-utils";
 import bcrypt from "bcryptjs";
 
+// Validate AUTH_SECRET strictly in production
+if (process.env.NODE_ENV === "production" && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET.length < 32)) {
+  throw new Error("CRITICAL: AUTH_SECRET must be set and at least 32 characters long in production.");
+}
+
 declare module "next-auth" {
   interface User {
     role?: string;
@@ -19,7 +24,7 @@ declare module "next-auth" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET || "khelna_bazar_default_fallback_secret_32_characters_long",
+  secret: process.env.AUTH_SECRET || "khelna_bazar_dev_fallback_secret_32_chars_min",
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -51,27 +56,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           });
 
           if (!user || !user.passwordHash) {
-            // Seamless demo fallback in development or offline environments
-            if (process.env.NODE_ENV !== "production" || !process.env.DATABASE_URL) {
-              if (cleanId === "admin@khelnabazar.com" && password === "Admin@Khelna123") {
-                return {
-                  id: "usr_admin_demo",
-                  name: "Khelna Bazar Owner",
-                  email: "admin@khelnabazar.com",
-                  phone: "+880 1711-000001",
-                  role: "ADMIN" as const,
-                };
-              }
-              if (cleanId === "customer@khelnabazar.com" && password === "Customer@Khelna123") {
-                return {
-                  id: "usr_customer_demo",
-                  name: "Tanzim Ahmed",
-                  email: "customer@khelnabazar.com",
-                  phone: "+880 1819-123456",
-                  role: "CUSTOMER" as const,
-                };
-              }
-            }
             return null;
           }
 
@@ -93,25 +77,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           console.error("Authorize error in NextAuth:", (error as Error).message);
-          // Development resilience fallback for demo accounts
-          if (cleanId === "admin@khelnabazar.com" && password === "Admin@Khelna123") {
-            return {
-              id: "usr_admin_demo",
-              name: "Khelna Bazar Owner",
-              email: "admin@khelnabazar.com",
-              phone: "+880 1711-000001",
-              role: "ADMIN" as const,
-            };
-          }
-          if (cleanId === "customer@khelnabazar.com" && password === "Customer@Khelna123") {
-            return {
-              id: "usr_customer_demo",
-              name: "Tanzim Ahmed",
-              email: "customer@khelnabazar.com",
-              phone: "+880 1819-123456",
-              role: "CUSTOMER" as const,
-            };
-          }
           return null;
         }
       },

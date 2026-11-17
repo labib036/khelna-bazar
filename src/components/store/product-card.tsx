@@ -113,6 +113,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               priority={priority}
+              loading={priority ? "eager" : undefined}
               className={`object-cover photo-micro-zoom duration-500 ${
                 isOutOfStock ? "grayscale opacity-70" : ""
               }`}
@@ -218,8 +219,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               </div>
             ) : (
               <div className="text-[11px] text-[var(--text-muted)] mt-1.5 font-medium flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                <span>Certified Non-Toxic</span>
+                <ShieldCheck className="w-3 h-3 text-[var(--primary)]" />
+                <span>Inspect At Delivery</span>
               </div>
             )}
 
@@ -350,8 +351,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               </p>
 
               <div className="pt-2 flex flex-wrap gap-2 text-[11px]">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Safety Certified
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] font-semibold border border-[var(--primary)]/20">
+                  <ShieldCheck className="w-3.5 h-3.5" /> Inspect At Delivery
                 </span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--surface)] text-[var(--text-muted)] font-semibold border border-[var(--border)]">
                   Stock: {product.stock} units

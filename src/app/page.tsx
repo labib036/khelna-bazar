@@ -38,43 +38,13 @@ export default async function HomePage() {
 
   const curatedCategoryBento = [
     { name: "STEM & Robotics", slug: "stem-robotics", icon: "🔬", desc: "Build & Code", bg: "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20" },
-    { name: "Montessori & Wooden", slug: "baby-toddler", icon: "🪵", desc: "Eco Non-Toxic", bg: "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20" },
+    { name: "Montessori & Wooden", slug: "baby-toddler", icon: "🪵", desc: "Early Learning", bg: "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20" },
     { name: "Dolls & Plushies", slug: "baby-toddler", icon: "🧸", desc: "Snuggly Wonders", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
     { name: "RC & Diecast Vehicles", slug: "rc-vehicles", icon: "🏎️", desc: "High Speed Stunts", bg: "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20" },
     { name: "Creative Arts & Crafts", slug: "creative-arts-crafts", icon: "🎨", desc: "Paints & Slime", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
     { name: "Board Games & Puzzles", slug: "educational-board-games", icon: "🧩", desc: "Family Brain Play", bg: "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20" },
     { name: "Building Blocks & Lego", slug: "building-blocks", icon: "🧱", desc: "Architectural Sets", bg: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20" },
     { name: "Sensory & Calm", slug: "baby-toddler", icon: "✨", desc: "Quiet Focus Toys", bg: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20" },
-  ];
-
-  const parentReviews = [
-    {
-      author: "Sarah M.",
-      child: "Leo (4 Yrs)",
-      district: "Dhanmondi, Dhaka",
-      verified: true,
-      rating: 5,
-      date: "2 days ago",
-      text: "The Cosmic Bot arrived in 24 hours via Steadfast Courier! Beautiful packaging and Leo hasn't put down the sensory gears since morning. 100% child safe.",
-    },
-    {
-      author: "Tanvir Ahmed",
-      child: "Aayan (6 Yrs)",
-      district: "Agrabad, Chittagong",
-      verified: true,
-      rating: 5,
-      date: "1 week ago",
-      text: "Paid via Cash on Delivery after opening the parcel right in front of the rider. Exactly as shown on the website, no fake stock or broken pieces.",
-    },
-    {
-      author: "Nadia Rahman",
-      child: "Zara (2 Yrs)",
-      district: "Zindabazar, Sylhet",
-      verified: true,
-      rating: 5,
-      date: "2 weeks ago",
-      text: "The Montessori rainbow wooden stacker is completely smooth with no splinters. Natural pigments and food-safe smell. Will definitely shop again!",
-    },
   ];
 
   return (
@@ -227,125 +197,72 @@ export default async function HomePage() {
         <HomeProductsSection initialProducts={featuredProducts} filterType="featured" limit={8} />
       </section>
 
-      {/* 7. TRUST & SAFETY PROMISE */}
+      {/* 7. STORE COMMITMENT & QUALITY STANDARDS (Confirmed Owner Trust Pillars) */}
       <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 sm:p-10 rounded-4xl bg-[var(--surface)] border border-[var(--border)] shadow-sm space-y-6">
+        <div className="p-6 sm:p-10 rounded-4xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border)]">
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[var(--primary)] uppercase tracking-wider mb-1">
-                <ShieldCheck className="w-4 h-4" /> The Khelna Bazar Promise
+                <ShieldCheck className="w-4 h-4" /> আমাদের প্রতিশ্রুতি / Store Commitment
               </div>
               <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
-                Play With Complete Peace of Mind
+                Our 4-Point Promise to Every Family
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-md">
-              Every toy in our inventory meets rigorous child-safety standards and comes backed by our doorstep verification guarantee.
+              প্রতিটি খেলনা যাচাইকৃত ও আনন্দদায়ক। ডেলিভারির সময় দেখে নিয়ে গ্রহণ করার নিশ্চয়তা।
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-[var(--primary)]/15 text-[var(--primary)] flex items-center justify-center">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
-                100% Non-Toxic &amp; Safe
+                Inspect Before You Accept
               </h4>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                ASTM F963 &amp; CE tested. BPA-free, lead-free food-safe pigments for curious little hands.
+                ডেলিভারি ম্যানের সামনেই খেলনাটি পরীক্ষা করুন। Check your toy at delivery before accepting.
               </p>
             </div>
 
-            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
-              <div className="w-10 h-10 rounded-2xl bg-[var(--primary)]/15 text-[var(--primary)] flex items-center justify-center">
-                <Truck className="w-5 h-5" />
-              </div>
-              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
-                Nationwide Cash on Delivery
-              </h4>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                Pay in cash only after receiving and checking your parcel across all 64 districts.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
-              <div className="w-10 h-10 rounded-2xl bg-[var(--secondary-container)]/30 text-[var(--secondary)] flex items-center justify-center">
+            <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                 <RotateCcw className="w-5 h-5" />
               </div>
               <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
-                7-Day Easy Replacement
+                Defective? We Refund
               </h4>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                Damaged or missing pieces? We send an express replacement with zero hassle.
+                ডেলিভারির সময় ত্রুটি ধরা পড়লে ফেরত ও রিফান্ড। Refund for defective products reported at delivery.
               </p>
             </div>
 
-            <div className="p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
-              <div className="w-10 h-10 rounded-2xl bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center">
+            <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <Truck className="w-5 h-5" />
+              </div>
+              <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
+                Cash on Delivery
+              </h4>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                পণ্য হাতে পেয়ে টাকা দিন। Pay in cash when you receive your order.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h4 className="font-heading font-black text-sm text-[var(--text-primary)]">
-                Same-Day Dhaka Dispatch
+                Order Support
               </h4>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                Orders placed before 2:00 PM are dispatched same day from our local fulfillment center.
+                কল বা হোয়াটসঅ্যাপ: <strong>01712-039707</strong>. Real customer assistance anytime.
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 8. CUSTOMER REVIEWS & COMMUNITY LOVE */}
-      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
-              <span>Real Parent Stories</span>
-            </div>
-            <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
-              Loved by Families Across Bangladesh
-            </h2>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          {parentReviews.map((rev) => (
-            <div
-              key={rev.author}
-              className="p-5 sm:p-6 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs card-sensory-lift flex flex-col justify-between space-y-4"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-[var(--secondary-container)]">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current text-[var(--secondary-container)]" />
-                    ))}
-                  </div>
-                  <span className="text-[11px] text-[var(--text-muted)]">{rev.date}</span>
-                </div>
-
-                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed italic">
-                  &ldquo;{rev.text}&rdquo;
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between text-xs">
-                <div>
-                  <h4 className="font-bold text-[var(--text-primary)]">{rev.author}</h4>
-                  <span className="text-[11px] text-[var(--text-muted)]">
-                    {rev.child} • {rev.district}
-                  </span>
-                </div>
-
-                {rev.verified && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3" /> Verified Buyer
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
     </div>

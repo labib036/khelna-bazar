@@ -28,5 +28,10 @@ next-env.d.ts
 
 # OS generated files
 .DS_Store
+*.zip
+.env.test
 Thumbs.db
 AGENTS.md
+
+design-reference/
+

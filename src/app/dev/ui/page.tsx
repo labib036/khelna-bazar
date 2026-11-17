@@ -143,7 +143,7 @@ export default function DevUiPage() {
           <Badge variant="pill-trust">Same-Day Dispatch • Free Over ৳1500</Badge>
           <Badge variant="red">Hot Seller</Badge>
           <Badge variant="joy">Ages 3-6 Yrs</Badge>
-          <Badge variant="safety">100% Non-Toxic Certified</Badge>
+          <Badge variant="safety">Inspect At Delivery</Badge>
           <Badge variant="warning">Only 4 Left!</Badge>
           <Badge variant="outline">STEM &amp; Robotics</Badge>
           <Badge variant="neutral" dot>
@@ -343,7 +343,7 @@ export default function DevUiPage() {
             </TabsList>
             <TabsContent value="features" className="p-4 bg-[var(--surface-container-low)] rounded-2xl">
               <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
-                Featuring sensory sound gears, light-up LED eyes, and ASTM F963 non-toxic certified ABS build.
+                Featuring sensory sound gears, light-up LED eyes, and durable child-safe ABS build.
               </p>
             </TabsContent>
             <TabsContent value="specs" className="p-4 bg-[var(--surface-container-low)] rounded-2xl">

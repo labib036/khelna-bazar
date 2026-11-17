@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary-fixed": "#ffdad6",
+          "secondary-container": "#fcb812",
+          "on-surface": "#221a18",
+          "background": "#fff8f6",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed-variant": "#0039b5",
+          "outline": "#916f6b",
+          "on-error": "#ffffff",
+          "surface-container-low": "#fff0ed",
+          "surface-container-lowest": "#ffffff",
+          "surface-container": "#fceae6",
+          "primary": "#d71921",
+          "primary-fixed-dim": "#ffb4ac",
+          "surface-variant": "#f0dfdb",
+          "surface-dim": "#e7d6d3",
+          "primary-container": "#ae0012",
+          "tertiary-container": "#e05300",
+          "inverse-primary": "#ffb4ac",
+          "surface-tint": "#d71921",
+          "on-secondary-fixed-variant": "#5e4200",
+          "on-tertiary-fixed": "#001551",
+          "on-error-container": "#93000a",
+          "surface-container-high": "#f6e4e1",
+          "on-primary-fixed": "#410002",
+          "tertiary": "#c00015",
+          "on-primary-container": "#ffecea",
+          "tertiary-fixed": "#ffdad6",
+          "on-primary-fixed-variant": "#93000e",
+          "on-tertiary-container": "#ffffff",
+          "surface": "#fff8f6",
+          "secondary-fixed": "#ffdea7",
+          "inverse-surface": "#382e2c",
+          "on-primary": "#ffffff",
+          "secondary-fixed-dim": "#ffbb1e",
+          "on-background": "#221a18",
+          "surface-bright": "#fff8f6",
+          "on-tertiary": "#ffffff",
+          "on-secondary-container": "#553800",
+          "error-container": "#ffdad6",
+          "tertiary-fixed-dim": "#ffb4ac",
+          "secondary": "#b45309",
+          "outline-variant": "#e6bdb8",
+          "inverse-on-surface": "#ffede9",
+          "on-surface-variant": "#5d3f3c",
+          "on-secondary-fixed": "#271900",
+          "surface-container-highest": "#f0dfdb",
+          "error": "#ba1a1a"
+        },
+        "borderRadius": {
+          "DEFAULT": "1rem",
+          "lg": "2rem",
+          "xl": "3rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "gutter": "1.25rem",
+          "margin-mobile": "1rem",
+          "space-sm": "0.5rem",
+          "space-lg": "1.5rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem",
+          "gutter-mobile": "0.75rem",
+          "space-xl": "2.5rem"
+        },
+        "fontFamily": {
+          "body-sm": ["Inter", "sans-serif"],
+          "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+          "display": ["Plus Jakarta Sans", "sans-serif"],
+          "title-md": ["Plus Jakarta Sans", "sans-serif"],
+          "display-mobile": ["Plus Jakarta Sans", "sans-serif"],
+          "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+          "body-lg": ["Inter", "sans-serif"],
+          "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+          "body-md": ["Inter", "sans-serif"],
+          "label-md": ["Plus Jakarta Sans", "sans-serif"]
+        },
+        "fontSize": {
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "800"}],
+          "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+          "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+          "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "700"}],
+          "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+          "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+          "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+          "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+          "display": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+          "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+          "headline-xl-mobile": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "800"}],
+          "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}]
+        }
+      },
+    },
+  }
+</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-secondary-container selection:text-on-secondary-fixed"><div class="fixed top-0 left-0 right-0 z-50 flex flex-col bg-surface/95 backdrop-blur-xl shadow-[0_10px_30px_-4px_rgba(215,25,33,0.08)]"><div class="w-full bg-primary text-on-primary py-space-xs px-gutter-mobile md:px-margin text-center font-label-md text-label-md flex items-center justify-center gap-space-sm shadow-[inset_0_-1px_0_rgba(255,255,255,0.2)]"><span class="material-symbols-outlined text-[16px] text-secondary-container">celebration</span><span>🎉 Free Magic Express Delivery on orders over ৳1500 • 🧸 100% Non-Toxic &amp; Safety Certified • Use code <span class="font-label-lg text-on-secondary-container tracking-wide uppercase px-space-xs py-0.5 rounded-full bg-secondary-container font-extrabold">JOY10</span> for 10% OFF!</span></div><header class="w-full"><div class="h-20 max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-sm group" data-path="home" href="#"><img alt="Khelna Bazar Logo" class="h-14 w-auto object-contain rounded-full shadow-sm transition-transform group-hover:scale-105 ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjwaA3J7xPOBw2Eq9entQcbLEljq2uBpKa5PNFDMVaIm1l_GLKQ0_cT0PrnEb6-1q9AaSI_2XXhfAy5AgbdtAZkNl0RC0oXbOvEYZjZHKVPDZXAvcRnGrNVMQx-wbUazo1U6KsNuULicGTJkr4l4Jh6bCpmCeNUwwetj2sChUScWu5GGbKx599qTT6yPhSDNpRdobpEskIJKcCBHIDMiiXSGOM9KwO6iixmcugq3b1VdQ0tjvA4vj"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight leading-none font-extrabold">Khelna Bazar</span><span class="font-label-sm text-[10px] text-secondary font-bold tracking-tight mt-0.5">khelnabazar.com.bd • Joy Toy Boutique</span></div></a><button class="hidden xl:flex items-center gap-space-xs bg-surface-container text-on-surface hover:bg-surface-container-high font-label-md text-label-md px-space-md py-space-sm rounded-full transition-all border border-outline-variant/30" type="button"><span class="material-symbols-outlined text-[18px] text-primary">category</span><span>All Categories</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span></button></div><div class="flex-1 max-w-xl hidden lg:flex flex-col gap-1"><div class="relative flex items-center w-full"><span class="material-symbols-outlined absolute left-space-md text-primary text-[20px]">search</span><input class="w-full h-11 pl-11 pr-24 bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm text-body-sm rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all shadow-[0_4px_12px_-2px_rgba(215,25,33,0.04)]" placeholder="Search magical toys, LEGO, plushies, Montessori..." type="text"/><button class="absolute right-space-sm h-8 px-space-sm rounded-full bg-surface-container hover:bg-primary hover:text-on-primary text-primary transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[18px]">mic</span></button></div><div class="flex items-center gap-space-xs px-space-sm"><span class="font-label-sm text-label-sm text-outline uppercase font-bold">Trending:</span><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Lego Technic,</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Montessori Wooden,</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors font-medium" data-path="shop-catalog" href="#">Latim &amp; Spinning Tops</a></div></div><div class="flex items-center gap-space-sm shrink-0"><a class="relative p-space-sm rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface transition-transform hover:scale-105 flex items-center justify-center" data-path="wishlist" href="#"><span class="material-symbols-outlined text-[22px] text-primary">favorite</span><span class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">4</span></a><button class="flex items-center gap-space-xs bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed font-label-md text-label-md px-space-md py-2.5 rounded-full shadow-[0_4px_0_#b45309] active:translate-y-[2px] active:shadow-[0_2px_0_#b45309] transition-all" type="button"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="hidden sm:inline font-bold">৳ 2,450</span><span class="hidden sm:inline opacity-50">•</span><span class="px-space-xs py-0.5 rounded-full bg-on-secondary-fixed/10 font-bold">3 items</span></button><a class="flex items-center gap-space-xs p-1 rounded-full hover:bg-surface-container transition-colors pl-space-xs" data-path="customer-account" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWnBnUPzaVo-pqd0Ey6U9XdGGTFHSsHj6M2_YtW6y70StBPBGQKfuQNlAdouWMRha7bO8joPRmTjLCwIGPMgLqLlKgfAxE9_fGgai32egMJ3jHxBcG_tUxH6yY7IglwYV4Ba8iA7YtVSi5z4OpGd3h9bWNHYBc4UrEo0yzAUgEnx8Et7ypwYSoMvxSGn3g6TI1EnaOj0AOG4JW_q9yHl1RPrh9V0RvBWfEHNGqYc8"/><span class="material-symbols-outlined text-[18px] text-on-surface-variant hidden md:inline">expand_more</span></a></div></div><div class="w-full bg-surface-container-low/80 overflow-x-auto border-t border-outline-variant/20"><div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter py-2 flex items-center justify-between gap-space-md"><nav class="flex items-center gap-space-sm shrink-0" data-active-classes="bg-primary text-on-primary font-bold"><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="home" href="#">Home</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">All Toys</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">New Arrivals</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">Montessori &amp; Learning</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="shop-catalog" href="#">Outdoor &amp; Active</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-primary px-space-md py-1.5 rounded-full transition-colors" data-path="wonder-club" href="#">Wonder Club</a></nav><div class="flex items-center gap-space-xs shrink-0 pl-space-md"><span class="material-symbols-outlined text-[18px] text-primary">child_care</span><span class="font-label-sm text-label-sm text-secondary font-extrabold uppercase mr-1">Age:</span><div class="flex items-center gap-1.5"><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">0-12m</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-primary text-on-primary font-bold transition-all shadow-sm" data-path="shop-catalog" href="#">1-2y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">3-5y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">6-8y</a><a class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-surface-container-lowest text-on-surface hover:bg-secondary-container hover:text-on-secondary-fixed transition-all shadow-sm border border-outline-variant/30" data-path="shop-catalog" href="#">9+</a></div></div></div></div></header></div><main class="w-full pt-36 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-header Breadcrumb & Stepper Header Area -->
+<section class="w-full bg-surface-container-low/70 py-space-sm">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<!-- Breadcrumb Navigation -->
+<nav class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1" data-path="home" href="#">
+<span class="material-symbols-outlined text-[16px]">home</span>
+<span>Home</span>
+</a>
+<span class="text-outline-variant font-bold">/</span>
+<a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Cart (3 items)</a>
+<span class="text-outline-variant font-bold">/</span>
+<span class="text-primary font-bold">One-Page Express Checkout</span>
+</nav>
+<!-- Trust Assurance Barlet -->
+<div class="inline-flex items-center gap-space-sm text-body-sm font-label-sm text-on-surface-variant bg-surface-container-lowest px-space-md py-1 rounded-full shadow-sm">
+<span class="flex items-center gap-1 text-primary font-bold">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+          256-Bit SSL Encrypted
+        </span>
+<span class="text-outline-variant">•</span>
+<span class="flex items-center gap-1 text-secondary font-bold">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+          ASTM Non-Toxic
+        </span>
+<span class="text-outline-variant hidden sm:inline">•</span>
+<span class="hidden sm:flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-tertiary">local_shipping</span>
+          Free Magic Delivery
+        </span>
+</div>
+</div>
+</section>
+<!-- Interactive 3-Step Progress Stepper -->
+<section class="w-full bg-surface py-space-md">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="bg-surface-container-lowest p-space-md md:p-space-lg rounded-2xl shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md relative">
+<!-- Step 1 Indicator -->
+<div class="flex items-center gap-space-sm group cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Step 01 • Active</span>
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">Recipient &amp; Address</span>
+</div>
+</div>
+<!-- Step 2 Indicator -->
+<div class="flex items-center gap-space-sm group cursor-pointer opacity-95">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container font-headline-sm text-headline-sm flex items-center justify-center font-bold shadow-md">
+              2
+            </div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Step 02</span>
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">Magic Delivery &amp; Wrap</span>
+</div>
+</div>
+<!-- Step 3 Indicator -->
+<div class="flex items-center gap-space-sm group cursor-pointer opacity-80">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant font-headline-sm text-headline-sm flex items-center justify-center font-bold">
+              3
+            </div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase font-bold tracking-wider">Step 03</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant leading-tight">Instant Secure Payment</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Checkout Main Stage (Split 12-Column Desktop Grid) -->
+<main class="w-full pb-space-xl">
+<div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: The 3 Express Checkout Steps (Cols 1-7) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- STEP 1: Contact & Delivery Address -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm transition-all hover:shadow-md" id="step-1">
+<!-- Step Header Banner -->
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">1</span>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Contact &amp; Delivery Address</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Where should our toy elves send the excitement?</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[24px]">local_shipping</span>
+</div>
+<!-- Wonder Club Member Fast-Fill Banner -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between gap-space-sm mt-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary-container text-[24px]">auto_awesome</span>
+<p class="font-body-sm text-body-sm text-on-surface">
+                  Already in <strong class="font-bold text-primary">Wonder Club</strong>? Sign in for instant 1-click fill &amp; redeem <span class="font-bold text-secondary">145 PlayPoints (৳145)</span>.
+                </p>
+</div>
+<a class="shrink-0 px-space-md py-1.5 rounded-full bg-surface-container-lowest text-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md font-bold transition-all shadow-sm" data-path="customer-account" href="#">
+                Sign In
+              </a>
+</div>
+<!-- Input Fields Grid -->
+<form class="grid grid-cols-1 md:grid-cols-2 gap-space-md mt-space-md" onsubmit="event.preventDefault();">
+<!-- Recipient / Parent Full Name -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center gap-1">
+                  Parent / Customer Full Name <span class="text-primary">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-md text-outline text-[18px]">person</span>
+<input class="w-full h-11 pl-11 pr-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary shadow-sm" placeholder="Enter full name" required="" type="text" value="Mariam Khan"/>
+</div>
+</div>
+<!-- Phone Number (+880 Bangladesh) -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center justify-between">
+<span>Mobile Phone <span class="text-primary">*</span></span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">SMS parcel updates</span>
+</label>
+<div class="relative flex items-center">
+<span class="absolute left-space-md text-body-sm font-bold text-on-surface flex items-center gap-1">
+                    🇧🇩 +880
+                  </span>
+<input class="w-full h-11 pl-20 pr-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary shadow-sm" placeholder="17XX-XXXXXX" required="" type="tel" value="1712-498210"/>
+</div>
+</div>
+<!-- Email Address -->
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center gap-1">
+                  Email Address (for Order PDF &amp; Tracking Link) <span class="text-primary">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-md text-outline text-[18px]">mail</span>
+<input class="w-full h-11 pl-11 pr-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary shadow-sm" placeholder="you@domain.com" required="" type="email" value="mariam.khan@sparkmail.com"/>
+</div>
+</div>
+<!-- Division & Zone Dropdowns -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold">Division &amp; District <span class="text-primary">*</span></label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-md text-outline text-[18px]">explore</span>
+<select class="w-full h-11 pl-11 pr-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary appearance-none shadow-sm cursor-pointer">
+<option selected="">Dhaka Division (City Inside)</option>
+<option>Chittagong Division</option>
+<option>Sylhet Division</option>
+<option>Rajshahi Division</option>
+<option>Khulna Division</option>
+<option>Barisal &amp; Rangpur</option>
+</select>
+<span class="material-symbols-outlined absolute right-space-md text-outline text-[18px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Area / Neighborhood -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold">Specific Area / Thana <span class="text-primary">*</span></label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-md text-outline text-[18px]">location_on</span>
+<select class="w-full h-11 pl-11 pr-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary appearance-none shadow-sm cursor-pointer">
+<option selected="">Dhanmondi / Kalabagan</option>
+<option>Gulshan 1 &amp; 2</option>
+<option>Banani &amp; Baridhara</option>
+<option>Uttara Model Town</option>
+<option>Mirpur (DOHS / 1-14)</option>
+<option>Mohammadpur / Lalmatia</option>
+</select>
+<span class="material-symbols-outlined absolute right-space-md text-outline text-[18px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Street Address, House, Apartment Details -->
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold">Street Address, House &amp; Flat Details <span class="text-primary">*</span></label>
+<input class="w-full h-11 px-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary shadow-sm" placeholder="e.g. House #, Road #, Sector or Village" required="" type="text" value="House 42, Road 7/A, Apt 4B, Dhanmondi R/A"/>
+</div>
+<!-- Courier Delivery Landmark & Instructions -->
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center justify-between">
+<span>Landmark / Delivery Instructions (Optional)</span>
+<span class="font-label-sm text-label-sm text-outline">Rider guidance</span>
+</label>
+<input class="w-full h-11 px-space-md rounded-full bg-surface-container-low text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary shadow-sm" placeholder="Special gate code, landmark, or preferred delivery timing..." type="text" value="Near Dhanmondi Lake Park bridge. If absent, leave with building reception or ring 4B."/>
+</div>
+<!-- Child Birthday Recipient Surprise Toggle Box -->
+<div class="md:col-span-2 bg-surface-container-low/70 rounded-2xl p-space-md mt-space-xs">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input checked="" class="w-5 h-5 rounded-md accent-primary text-primary focus:ring-0 cursor-pointer" id="kidSurpriseToggle" type="checkbox"/>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-tertiary">celebration</span>
+<span class="font-label-lg text-label-lg text-on-surface font-bold">🎁 This magical parcel is a Birthday Surprise for a child!</span>
+</div>
+</label>
+<!-- Hidden / Expandable Child Info Badge -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md mt-space-md pt-space-sm" id="kidSurpriseDetails">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-secondary font-bold">Little Explorer's Name &amp; Age</label>
+<input class="w-full h-10 px-space-md rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary-container shadow-sm" type="text" value="Leo (Turning 4 years old)"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-secondary font-bold">Birthday / Celebration Date</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-space-md text-outline text-[18px]">cake</span>
+<input class="w-full h-10 pl-11 pr-space-md rounded-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary-container shadow-sm" type="date" value="2025-05-18"/>
+</div>
+</div>
+</div>
+</div>
+</form>
+</section>
+<!-- STEP 2: Delivery Method & Magical Gift Wrapping -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm transition-all hover:shadow-md" id="step-2">
+<!-- Step Header -->
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-full bg-secondary-container/20 text-secondary font-bold flex items-center justify-center">2</span>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Delivery Method &amp; Gift Magic</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Select your transport speed and unboxing delights.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]">rocket_launch</span>
+</div>
+<!-- Selectable Delivery Speed Options -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md mt-space-md">
+<!-- Option 1: Magic Express (Selected) -->
+<label class="relative flex flex-col p-space-md rounded-2xl bg-surface-container-low cursor-pointer transition-all shadow-sm ring-2 ring-primary">
+<input checked="" class="sr-only" name="delivery_method" type="radio" value="express"/>
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[12px] font-bold">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">🚀 Magic Express</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-outline line-through text-body-sm">৳120</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-extrabold uppercase">FREE</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">
+                  Same-day 4-6 hours delivery across Dhaka with live GPS courier tracking &amp; toy safety seals.
+                </p>
+<div class="mt-auto pt-2 flex items-center gap-1 text-primary font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+<span>Estimated Arrival: Today by 6:30 PM</span>
+</div>
+</label>
+<!-- Option 2: Standard Joy Parcel -->
+<label class="relative flex flex-col p-space-md rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer transition-all shadow-sm">
+<input class="sr-only" name="delivery_method" type="radio" value="standard"/>
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center text-[12px]"></span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">📦 Standard Joy Parcel</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">৳60</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">
+                  Reliable door-to-door delivery across all 64 districts in 2-3 business days.
+                </p>
+<div class="mt-auto pt-2 flex items-center gap-1 text-outline font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Estimated Arrival: 2 - 3 Days</span>
+</div>
+</label>
+</div>
+<!-- Complimentary Toy Boutique Gift Wrapping Section -->
+<div class="mt-space-lg p-space-md md:p-space-lg rounded-2xl bg-surface-container-low/70">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[28px]">redeem</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Artisan Gift Wrapping &amp; Hand-lettered Card</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Packed with love in authentic Khelna Bazar festive ribbon &amp; non-toxic confetti.</p>
+</div>
+</div>
+<span class="px-space-sm py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold uppercase shrink-0">
+                  Complimentary
+                </span>
+</div>
+<!-- Gift Wrap Style Selection Preview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm mt-space-md">
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest shadow-sm ring-2 ring-primary cursor-pointer">
+<img class="w-12 h-12 rounded-lg object-cover" data-alt="Vibrant handcrafted gift wrapping paper with spinning latim tops, confetti stars and a lush red satin bow on pure ivory studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4SBYDEN2kisdWv4Yr-jdGcDtnlp5RwuiK1j7GtIU50wg_6KkbeI0YbjETsxw7giuhG5UOmRniolAH3UKfJtOT1lVkOojRyLFLn2I2hyPMFhDnjhmdhS-wNtoSpIJ3LtpumFbzYtFrEpeFxcJVSfiDKbTNyGTfyzqWfCLAA3J5V9qkMYIVoWgMPKOA2WbM7vE_ZBms79O3QMc_cvb56FV524pWkLuLY3kBLHu8CDQ"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Confetti &amp; Red Satin</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Selected</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest opacity-75 hover:opacity-100 cursor-pointer shadow-sm transition-all">
+<img class="w-12 h-12 rounded-lg object-cover" data-alt="Eco friendly natural kraft gift wrap paper adorned with playful pastel safari animal illustrations and organic jute twine ribbon." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSk7SrJ44_l8PtYComDVwYfuiOya2k6bnEXGudEZm-ibQMMvbFSspbHso5nReZLYTTGH3lR3y3o5cIj9MIenlpvOAcZg7t36AXC9FoPtquQ0hHJltIYn1FN17kEasOeA4djMmkTVLMWDrQtGRnrPAwXInlImD_z8qH0r1GwfQyjisQMshIRSX39TjX4L_b7cs-Hjmt-XRfo3OfRGZD6chSF9KZgQMxeKZp-L2-x40"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Eco Kraft &amp; Twine</span>
+<span class="font-label-sm text-label-sm text-outline">Eco Classic</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest opacity-75 hover:opacity-100 cursor-pointer shadow-sm transition-all">
+<img class="w-12 h-12 rounded-lg object-cover" data-alt="Playful royal blue wrapping paper with golden rocket ships, planets, yellow stars, and metallic gold ribbon bow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkluctwU5etK6SWknHFJ-Sj5I4eg3pHYHzcnOQ8kLwRmbPTN8RI_HC-ZMRk4-fiJbJVn7Yb58LWcNlJROuNnWHFIKnUHvQL2g7T-Etuv_tZk1hIVCZ19jzUQzTTXdI1ymvFklGnWerhDyezcc3JbiGyLdvBNav5NHFRt_9q3z-YPEp9pz9LTSZPr7xlATKf-iZ5eoOjZi_Nv_sHmEiZsfcQ81ZgFs00MTYOn3oklw"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Galaxy Blue &amp; Gold</span>
+<span class="font-label-sm text-label-sm text-outline">Astronaut Theme</span>
+</div>
+</div>
+</div>
+<!-- Handwritten Note Card Message Area -->
+<div class="flex flex-col gap-1.5 mt-space-md">
+<label class="font-label-md text-label-md text-on-surface font-bold flex items-center justify-between">
+<span>Handwritten Card Message (Written by our elves with calligraphy pen)</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Max 150 chars</span>
+</label>
+<div class="relative">
+<textarea class="w-full p-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary shadow-sm resize-none" maxlength="150" rows="2">Happy 4th Birthday to our little astronaut Leo! Keep spinning high and dreaming big! Love, Auntie Mariam 🚀✨</textarea>
+<span class="material-symbols-outlined absolute right-3 bottom-3 text-secondary text-[20px]">edit_note</span>
+</div>
+</div>
+</div>
+</section>
+<!-- STEP 3: Comprehensive Payment Selection (Bangladeshi MFS + Cards + COD) -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm transition-all hover:shadow-md" id="step-3">
+<!-- Step Header -->
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-full bg-tertiary/10 text-tertiary font-bold flex items-center justify-center">3</span>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Secure Payment Method</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Zero hidden fees. Bank-grade SSLCommerz protected gateway.</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary text-[24px]">verified_user</span>
+</div>
+<!-- Payment Method Radio List -->
+<div class="flex flex-col gap-space-md mt-space-md">
+<!-- 1. bKash / Nagad / Upay (Instant MFS - Selected) -->
+<div class="p-space-md rounded-2xl bg-surface-container-low ring-2 ring-primary shadow-sm flex flex-col gap-space-sm cursor-pointer">
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input checked="" class="w-5 h-5 accent-primary" name="payment_choice" type="radio" value="mfs"/>
+<div>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">bKash / Nagad / Rocket / Upay (Instant MFS)</span>
+<span class="block font-body-sm text-body-sm text-primary font-bold">⚡ Instant Checkout + 5% Cashback up to ৳100</span>
+</div>
+</label>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-[#e2136e] text-white font-label-sm text-label-sm font-extrabold tracking-tight">bKash</span>
+<span class="px-2 py-0.5 rounded-md bg-[#f7941d] text-white font-label-sm text-label-sm font-extrabold tracking-tight">Nagad</span>
+<span class="px-2 py-0.5 rounded-md bg-[#8c338f] text-white font-label-sm text-label-sm font-extrabold tracking-tight">Rocket</span>
+</div>
+</div>
+<!-- Instant MFS Instruction Card -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl text-body-sm text-on-surface-variant flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">info</span>
+<div class="flex flex-col gap-1">
+<p class="font-body-sm text-body-sm text-on-surface">
+                      You will be seamlessly redirected to the official encrypted bKash / Nagad payment screen to confirm your PIN securely. No card details stored.
+                    </p>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Transaction ID auto-verifies within 3 seconds.</span>
+</div>
+</div>
+</div>
+<!-- 2. Debit / Credit Card (Visa, Mastercard, Amex) -->
+<div class="p-space-md rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low transition-all shadow-sm flex flex-col gap-space-sm cursor-pointer">
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input class="w-5 h-5 accent-primary" name="payment_choice" type="radio" value="card"/>
+<div>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Credit / Debit Card</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Visa, MasterCard, American Express, UnionPay</span>
+</div>
+</label>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">credit_card</span>
+<span class="material-symbols-outlined text-[24px]">payments</span>
+</div>
+</div>
+</div>
+<!-- 3. Cash on Delivery (COD) -->
+<div class="p-space-md rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low transition-all shadow-sm flex flex-col gap-space-sm cursor-pointer">
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input class="w-5 h-5 accent-primary" name="payment_choice" type="radio" value="cod"/>
+<div>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Cash on Delivery (COD)</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Inspect package at your doorstep before handing payment.</span>
+</div>
+</label>
+<span class="material-symbols-outlined text-secondary text-[24px]">local_atm</span>
+</div>
+</div>
+<!-- 4. PlayPoints Loyalty Redemption Toggle Bar -->
+<div class="bg-secondary-container/15 rounded-2xl p-space-md flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[22px]">stars</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">PlayPoints Loyalty Balance</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-extrabold">1,450 Pts</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Redeem points for instant ৳145 discount on this order.</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN: Sticky Order Summary & High-Trust Assurance (Cols 8-12) -->
+<aside class="lg:col-span-5 flex flex-col gap-space-lg sticky top-40">
+<!-- Sticky Order Summary Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-xl">
+<!-- Summary Header -->
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Order Summary</h3>
+<span class="w-6 h-6 rounded-full bg-primary/10 text-primary font-label-md text-label-md flex items-center justify-center font-bold">3</span>
+</div>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors font-bold underline" data-path="shop-catalog" href="#">Edit Cart</a>
+</div>
+<!-- Cart Items Preview List -->
+<div class="flex flex-col gap-space-md py-space-md">
+<!-- Item 1: Cosmic Bot 3000 -->
+<div class="flex items-center gap-space-md group">
+<div class="relative shrink-0">
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" data-alt="Playful cosmic programmable companion robot toy with smiling LED face and moving arms on crisp clean studio surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM8mC8SORU1JiRgJB3WM75U04VtlQiaU18zhq7t-V7DxwYq_mlDVagFmzFR8OnSallxjmWyMhdaDj_rWDam2x_ukeHwyri8SV7FBcPg78WZSJSmSesEwAYCnXExM6KclvXAfUhy5U8-U2EUR6ZHKNOKtdPD6erd0hjU7y5y3BXxhAGDaNEEoczvDRExxFIxy_-wXDhsx16c5ZeTafQIgqfnwy4979tBdH1vldvmHk"/>
+<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">1</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface truncate font-bold">Cosmic Bot 3000 STEM Companion</h4>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary font-label-sm text-label-sm font-bold">Age 6+</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Non-Toxic</span>
+</div>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-extrabold shrink-0">
+                  ৳3,450
+                </div>
+</div>
+<!-- Item 2: Montessori Rainbow Arch -->
+<div class="flex items-center gap-space-md group">
+<div class="relative shrink-0">
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" data-alt="Charming Montessori wooden rainbow arch stacker handcrafted from FSC beechwood painted in smooth pastel non toxic water based colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_Srf6kwi221wAa3IwFOgCAng0Pwt-mu1hNCgBKoYziZVuCB9Fi2DdpW7QQUcbqVR0lxkB7ajZJJmUk1yB-uVxl0ioZf-42aHhxLBnaD5as-nxguYy8brQR55Mvi11smo_VllwdNSFuyb6ekjcQVtMkpuFAVsmoz-2L15l-tzSg8t-R93kxKLoVlYpNsdxxjl7efNj4IcDtkdlnoN2QjEcpRBvJPDl8CWEbm48KaE"/>
+<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">1</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface truncate font-bold">Montessori Pastel Rainbow Stacker</h4>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">Age 1-3y</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">FSC Beech</span>
+</div>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-extrabold shrink-0">
+                  ৳1,250
+                </div>
+</div>
+<!-- Item 3: AeroSparks Drone -->
+<div class="flex items-center gap-space-md group">
+<div class="relative shrink-0">
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" data-alt="Futuristic safe mesh sphere hand gesture flying drone toy glowing with soft golden ambient lights for children." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9c_H9WrTgAcsLL32JqP7WVoEo3B0n-evLZZ27mmNpVNRQxuZai3aNP2Z4UMLdo7yePOX-GecRr17y0RDWD9DktFQf_EXMHaO0Ftp5tAJkxjcEIpRQHfifUGcLf7lNnjRBSTBVY5pjQnUH_dtj2B4RRHy4goBc06u_VFuGRhS7S5FysJMPtfVOSOWB5Eb5E7SPIx5-kqpeLi_PMyHMWwePG4or8w9rJ61DbCQMZYY"/>
+<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm flex items-center justify-center font-bold">1</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-label-lg text-label-lg text-on-surface truncate font-bold">AeroSparks Hand-Sensor Flying Drone</h4>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">Age 8+</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">USB Cable</span>
+</div>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-extrabold shrink-0">
+                  ৳950
+                </div>
+</div>
+</div>
+<!-- Promo Code / Voucher Input -->
+<div class="pt-space-md flex flex-col gap-space-xs">
+<label class="font-label-sm text-label-sm text-on-surface font-bold uppercase tracking-wider">Coupon / Wonder Club Code</label>
+<div class="flex items-center gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-space-md text-primary text-[18px]">sell</span>
+<input class="w-full h-11 pl-11 pr-space-md rounded-full bg-surface-container-low text-on-surface font-label-md text-label-md font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="WONDER10"/>
+</div>
+<button class="h-11 px-space-lg rounded-full bg-secondary-container hover:bg-secondary-fixed text-on-secondary-fixed font-label-lg text-label-lg font-bold transition-all shadow-sm" type="button">
+                  Applied
+                </button>
+</div>
+<div class="flex items-center gap-1 text-primary font-label-sm text-label-sm font-bold mt-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Code "WONDER10" applied successfully! 10% OFF</span>
+</div>
+</div>
+<!-- Price Breakdown Calculation Ledger -->
+<div class="flex flex-col gap-space-xs pt-space-md text-body-md text-on-surface-variant">
+<div class="flex justify-between items-center">
+<span>Subtotal (3 items)</span>
+<span class="font-bold text-on-surface font-headline-sm text-headline-sm">৳5,650</span>
+</div>
+<div class="flex justify-between items-center text-primary font-bold">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">celebration</span>
+                  Wonder Club Discount (10% OFF)
+                </span>
+<span>-৳565</span>
+</div>
+<div class="flex justify-between items-center text-secondary font-bold">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">stars</span>
+                  PlayPoints Redeemed (1,450 pts)
+                </span>
+<span>-৳145</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary">local_shipping</span>
+                  Magic Express Same-Day Delivery
+                </span>
+<span class="font-bold text-primary uppercase text-label-sm">FREE</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">redeem</span>
+                  Artisan Holiday Gift Wrapping
+                </span>
+<span class="font-bold text-primary uppercase text-label-sm">FREE</span>
+</div>
+<!-- Grand Payable Price -->
+<div class="pt-space-md mt-space-xs flex justify-between items-baseline">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-extrabold">Total Payable</span>
+<span class="font-label-sm text-label-sm text-outline">Inclusive of all local VAT &amp; taxes</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-headline-xl text-headline-xl text-primary font-extrabold leading-none">৳4,940</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold mt-1">You save ৳710 today! 🎉</span>
+</div>
+</div>
+</div>
+<!-- Primary Action Buy Button (Large, Bouncy Brand Red Pill) -->
+<button class="w-full mt-space-lg h-14 rounded-full bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-headline-sm font-extrabold shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-space-sm group" type="button">
+<span>Complete Order &amp; Spark Joy ✨</span>
+<span class="w-7 h-7 rounded-full bg-on-primary/20 flex items-center justify-center text-on-primary group-hover:translate-x-1 transition-transform">
+                ➔
+              </span>
+</button>
+<!-- Legal & Return Policy Micro-copy -->
+<p class="font-body-sm text-body-sm text-outline text-center mt-space-sm leading-tight">
+              By confirming your order, you agree to our 30-Day Zero-Tears Return Policy and ASTM Toy Safety Standards.
+            </p>
+<!-- High-Trust Assurance Guarantee Badges -->
+<div class="mt-space-md pt-space-md flex flex-col gap-space-sm bg-surface-container-low/60 p-space-md rounded-2xl">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">health_and_safety</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">100% Non-Toxic &amp; Safety Certified</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ASTM F963, CE, and Bangladesh BSTI verified safe toys.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">replay_circle_filled</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">30-Day Zero-Tears Return Policy</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Instant replacement or full refund if little hearts aren't happy.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[22px]">headset_mic</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Live Parent Care Elf Online</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Available in Bangla &amp; English: +880 9612-KHELNA.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Joy Badge (Traditional Latim Pride) -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[28px]">toys</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight">Every Toy Sparks Wonder</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Handpicked by child development specialists &amp; Bangladeshi traditional artisans.
+              </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+</div>
+<script>
+  // Simple interactive micro-behavior for the Birthday child form toggle
+  const kidToggle = document.getElementById('kidSurpriseToggle');
+  const kidDetails = document.getElementById('kidSurpriseDetails');
+  if (kidToggle && kidDetails) {
+    kidToggle.addEventListener('change', () => {
+      if (kidToggle.checked) {
+        kidDetails.classList.remove('hidden');
+      } else {
+        kidDetails.classList.add('hidden');
+      }
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-low text-on-surface mt-space-xl border-t border-outline-variant/30"><div class="bg-primary text-on-primary py-space-lg px-gutter-mobile md:px-margin"><div class="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[44px] text-secondary-container p-space-sm bg-white/10 rounded-full">auto_awesome</span><div><h4 class="font-headline-sm text-headline-sm text-on-primary font-bold">Join the Wonder Club</h4><p class="font-body-md text-body-md text-on-primary-container">Get 15% off your first magical order + a birthday surprise for your little one!</p></div></div><div class="flex w-full md:w-auto max-w-md items-center gap-space-xs"><input class="w-full h-12 px-space-md bg-surface-container-lowest text-on-surface rounded-full font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary-container" placeholder="Enter your parent email..." type="email"/><button class="shrink-0 h-12 px-space-lg rounded-full bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed font-label-lg text-label-lg font-bold transition-all shadow-[0_4px_0_#b45309] active:translate-y-[2px]" type="button">Unlock 15%</button></div></div></div><div class="max-w-[1360px] mx-auto px-gutter-mobile md:px-gutter py-space-xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg pb-space-lg border-b border-outline-variant/20"><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">verified_user</span><div><div class="font-title-md text-title-md">ASTM &amp; CE Certified</div><div class="font-body-sm text-body-sm text-on-surface-variant">100% lab tested non-toxic</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-secondary">rocket_launch</span><div><div class="font-title-md text-title-md">Magic Express Post</div><div class="font-body-sm text-body-sm text-on-surface-variant">Free delivery over ৳1500</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">change_circle</span><div><div class="font-title-md text-title-md">30-Day Easy Returns</div><div class="font-body-sm text-body-sm text-on-surface-variant">Zero tears refund policy</div></div></div><div class="flex items-center gap-space-md p-space-md rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[32px] text-primary">support_agent</span><div><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div><div class="font-title-md text-title-md">Support: Online</div></div><div class="font-body-sm text-body-sm text-on-surface-variant">Live Parent Care Elf</div></div></div></div><div class="grid grid-cols-2 md:grid-cols-5 gap-space-lg pt-space-xl"><div class="col-span-2"><div class="flex items-center gap-space-sm mb-space-sm"><img alt="Khelna Bazar Logo" class="h-12 w-auto object-contain rounded-full shadow-sm ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjwaA3J7xPOBw2Eq9entQcbLEljq2uBpKa5PNFDMVaIm1l_GLKQ0_cT0PrnEb6-1q9AaSI_2XXhfAy5AgbdtAZkNl0RC0oXbOvEYZjZHKVPDZXAvcRnGrNVMQx-wbUazo1U6KsNuULicGTJkr4l4Jh6bCpmCeNUwwetj2sChUScWu5GGbKx599qTT6yPhSDNpRdobpEskIJKcCBHIDMiiXSGOM9KwO6iixmcugq3b1VdQ0tjvA4vj"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-tight font-extrabold">Khelna Bazar</span><span class="font-label-sm text-[11px] text-secondary font-bold tracking-tight">khelnabazar.com.bd</span></div></div><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md max-w-sm">Crafting unforgettable childhood memories through joyful, safe, and thoughtfully curated sensory toys from around the globe.</p><div class="flex items-center gap-space-xs"><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">star</span><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">favorite</span><span class="p-2 rounded-full bg-surface-container hover:bg-primary hover:text-on-primary transition-colors cursor-pointer material-symbols-outlined text-[20px]">share</span></div></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">Explore Boutique</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Sensory &amp; Soft Toys</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Montessori Woodcraft</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">STEM &amp; Science Kits</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Eco-Friendly Picks</a></li><li><a class="hover:text-primary transition-colors" data-path="shop-catalog" href="#">Gift Sets by Age</a></li></ul></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">Parent Support</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="order-tracking" href="#">Track Magic Box</a></li><li><a class="hover:text-primary transition-colors" data-path="customer-account" href="#">Returns &amp; Exchanges</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Toy Safety Labs</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Parent Care Concierge</a></li><li><a class="hover:text-primary transition-colors" data-path="wonder-club" href="#">Gift Registry</a></li></ul></div><div><div class="font-title-md text-title-md mb-space-md text-on-surface">The Wonder Store</div><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" data-path="our-story" href="#">Our Joyful Story</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Artisan Toymakers</a></li><li><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Boutique Locations</a></li><li><a class="hover:text-primary transition-colors" data-path="wonder-club" href="#">Wonder Club Rewards</a></li><li><a class="hover:text-primary transition-colors" data-path="our-story" href="#">Impact &amp; Donations</a></li></ul></div></div><div class="mt-space-xl pt-space-md border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-label-sm text-label-sm gap-space-sm"><div>© 2025 Khelna Bazar (khelnabazar.com.bd) Joy Toy Boutique. All rights reserved. Sparking childhood wonder daily across Bangladesh.</div><div class="flex items-center gap-space-md"><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Privacy Policy</a><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Terms of Delight</a><a class="hover:text-primary transition-colors" data-path="safety-standards" href="#">Safety Certifications</a></div></div></div></footer>
+</body></html>

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MOCK_PRODUCTS, ToyProduct } from "@/server/mock-data";
+import { ToyProduct } from "@/types/store";
+import { getGiftRecommendations } from "@/server/actions/product-actions";
 import { ProductCard } from "@/components/store/product-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +15,7 @@ import {
   ChevronRight,
   Smile,
   Heart,
+  Loader2,
 } from "lucide-react";
 
 export default function GiftFinderPage() {
@@ -23,6 +25,8 @@ export default function GiftFinderPage() {
   const [selectedInterests, setSelectedInterests] = useState<string[]>(["building"]);
   const [targetBudget, setTargetBudget] = useState<number>(3000);
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [matchedProducts, setMatchedProducts] = useState<ToyProduct[]>([]);
 
   const interestOptions = [
     { id: "building", label: "Building & Bricks", emoji: "🧱" },
@@ -40,21 +44,27 @@ export default function GiftFinderPage() {
     );
   };
 
-  const handleFinishQuiz = () => {
-    setShowResults(true);
+  const handleFinishQuiz = async () => {
+    setIsLoading(true);
+    try {
+      const results = await getGiftRecommendations({
+        ageRange: targetAge,
+        maxBudget: targetBudget,
+      });
+      setMatchedProducts(results);
+    } catch {
+      setMatchedProducts([]);
+    } finally {
+      setIsLoading(false);
+      setShowResults(true);
+    }
   };
 
   const resetQuiz = () => {
     setStep(1);
     setShowResults(false);
+    setMatchedProducts([]);
   };
-
-  // Filter recommendations based on quiz inputs
-  const matchedProducts = MOCK_PRODUCTS.filter((p) => {
-    // Budget check
-    if (p.basePrice > targetBudget * 1.2) return false;
-    return true;
-  }).slice(0, 8);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
@@ -233,9 +243,13 @@ export default function GiftFinderPage() {
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             ) : (
-              <Button onClick={handleFinishQuiz} variant="sun" size="lg" className="shadow-md">
-                <Sparkles className="w-4 h-4 mr-1.5" />
-                <span>Show Handpicked Toys</span>
+              <Button onClick={handleFinishQuiz} disabled={isLoading} variant="sun" size="lg" className="shadow-md">
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                ) : (
+                  <Sparkles className="w-4 h-4 mr-1.5" />
+                )}
+                <span>{isLoading ? "Matching Toys..." : "Show Handpicked Toys"}</span>
               </Button>
             )}
           </div>
@@ -259,11 +273,24 @@ export default function GiftFinderPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {matchedProducts.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          {matchedProducts.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {matchedProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 px-4 rounded-2xl bg-white dark:bg-[#1B1C24] border border-[#E8E2DE] dark:border-[#2E303E] space-y-4">
+              <p className="text-slate-600 dark:text-slate-300 text-sm">
+                No products found matching these exact criteria right now.
+              </p>
+              <Link href="/c/all">
+                <Button variant="primary" size="md">
+                  Browse All Available Toys
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

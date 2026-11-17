@@ -169,7 +169,7 @@ export default function ComparePage() {
               <td className="p-4 font-bold text-[var(--text-muted)] bg-[var(--surface)]">Materials</td>
               {products.map((p) => (
                 <td key={p.id} className="p-4 text-[var(--text-muted)]">
-                  {p.material || "Non-toxic child-safe plastic"}
+                  {p.material || "—"}
                 </td>
               ))}
             </tr>

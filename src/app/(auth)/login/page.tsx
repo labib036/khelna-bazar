@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Sparkles, KeyRound } from "lucide-react";
+import { Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 function LoginForm() {
@@ -72,12 +72,6 @@ function LoginForm() {
     }
   };
 
-  const fillDemoCredentials = (id: string, pass: string) => {
-    setIdentifier(id);
-    setPassword(pass);
-    toast.info(`Filled credentials for ${id}`);
-  };
-
   return (
     <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-4xl overflow-hidden border border-[var(--border)] shadow-2xl bg-[var(--surface-container-low)]">
       {/* Left Brand Illustration & Benefit Panel (Desktop only) */}
@@ -93,7 +87,7 @@ function LoginForm() {
         <div className="relative z-10 space-y-4">
           <Link href="/" className="inline-flex items-center gap-2.5">
             <div className="relative w-12 h-12 rounded-2xl bg-white p-1 overflow-hidden shadow-md">
-              <Image src="/images/logo-placeholder.svg" alt="Logo" fill className="object-contain p-1" sizes="48px" />
+              <Image src="/images/khelna-bazar-logo.png" alt="Logo" fill className="object-contain p-1" sizes="48px" />
             </div>
             <div>
               <span className="font-heading font-black text-xl tracking-tight block">Khelna Bazar</span>
@@ -102,7 +96,7 @@ function LoginForm() {
           </Link>
 
           <h2 className="font-heading text-3xl font-black leading-tight pt-4">
-            Joyful, Safe &amp; Tested Toys for Every Stage
+            Joyful, Engaging &amp; Tested Toys for Every Child
           </h2>
           <p className="text-sm text-white/90 leading-relaxed">
             Sign in to manage your Cash on Delivery orders, track delivery milestones, and redeem PlayPoints rewards.
@@ -112,7 +106,7 @@ function LoginForm() {
         <div className="relative z-10 space-y-3 pt-8 border-t border-white/20 text-xs">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-4 h-4 text-emerald-300 shrink-0" />
-            <span>ASTM F963 &amp; CE Certified Safe Toys</span>
+            <span>Inspect Before You Accept at Delivery</span>
           </div>
           <div className="flex items-center gap-2.5">
             <Truck className="w-4 h-4 text-amber-200 shrink-0" />
@@ -131,7 +125,7 @@ function LoginForm() {
           {/* Mobile brand mark */}
           <div className="md:hidden flex items-center gap-2 mb-2">
             <div className="relative w-9 h-9 rounded-full bg-white p-0.5 overflow-hidden border border-[var(--border)] shadow-xs">
-              <Image src="/images/logo-placeholder.svg" alt="Logo" fill className="object-contain" sizes="36px" />
+              <Image src="/images/khelna-bazar-logo.png" alt="Logo" fill className="object-contain" sizes="36px" />
             </div>
             <span className="font-heading font-black text-lg text-[var(--text-primary)]">Khelna Bazar</span>
           </div>
@@ -142,30 +136,6 @@ function LoginForm() {
           <p className="text-xs text-[var(--text-muted)]">
             Sign in with your mobile phone or registered email
           </p>
-        </div>
-
-        {/* Demo Fast-Fill Chips for Instant Testability */}
-        <div className="p-3 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-1.5">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)]">
-            <KeyRound className="w-3.5 h-3.5 text-[var(--primary)]" />
-            <span>Quick Demo Sign-in:</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              type="button"
-              onClick={() => fillDemoCredentials("admin@khelnabazar.com", "Admin@Khelna123")}
-              className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--primary)] hover:border-[var(--primary)] transition-colors cursor-pointer"
-            >
-              Demo Admin
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemoCredentials("customer@khelnabazar.com", "Customer@Khelna123")}
-              className="px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--secondary)] hover:border-[var(--secondary)] transition-colors cursor-pointer"
-            >
-              Demo Customer
-            </button>
-          </div>
         </div>
 
         {/* Error Alert */}

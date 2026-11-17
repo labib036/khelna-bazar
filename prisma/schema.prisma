@@ -143,16 +143,16 @@ model Product {
   // Toy Safety & Developmental Specs
   minAgeMonths    Int           @default(36) // e.g. 36 months (3 years)
   maxAgeMonths    Int           @default(144) // e.g. 144 months (12 years)
-  material        String?       // e.g. BPA-Free Plastic, Solid Wood, Organic Cotton
+  material        String?       // e.g. Solid Wood, Organic Cotton
   dimensions      String?       // e.g. 25 x 15 x 10 cm
   weightGrams     Int?          // e.g. 450
   batteryInfo     String?       // e.g. 2 x AA Required (Not Included)
   chokingHazard   Boolean       @default(false)
-  chokingWarning  String?       @default("WARNING: CHOKING HAZARD - Small parts. Not for children under 3 years.")
-  certifications  String[]      @default(["ASTM F963", "EN71", "CE Certified"])
+  chokingWarning  String?
+  certifications  String[]      @default([])
   
   // Metrics & Flags
-  ratingAvg       Float         @default(5.0)
+  ratingAvg       Float         @default(0.0)
   ratingCount     Int           @default(0)
   soldCount       Int           @default(0)
   isFeatured      Boolean       @default(false)
@@ -331,11 +331,13 @@ enum CodCollectionStatus {
 
 enum PaymentMethod {
   CASH_ON_DELIVERY
+  BKASH
+  NAGAD
 }
 
 model Order {
   id                 String                 @id @default(cuid())
-  orderNumber        String                 @unique // e.g. KB-100245
+  orderNumber        String                 @unique // e.g. KB-2611-100245
   userId             String?
   customerName       String
   customerEmail      String
@@ -346,6 +348,25 @@ model Order {
   codStatus          CodCollectionStatus    @default(UNCOLLECTED)
   paymentMethod      PaymentMethod          @default(CASH_ON_DELIVERY)
   
+  // Inspection Acknowledgement (Mandatory Policy Compliance)
+  inspectionAcknowledged Boolean            @default(false)
+  inspectionAcknowledgedAt DateTime?
+
+  // Manual MFS Payment Verification Details (bKash & Nagad)
+  mfsSenderNumber    String?
+  mfsTrxId           String?
+  paymentStatus      String                 @default("PENDING") // PENDING, AWAITING_VERIFICATION, VERIFIED, REJECTED, COLLECTED
+  paymentVerifiedAt  DateTime?
+  paymentVerifiedBy  String?
+  paymentRejectReason String?
+
+  // Operational Return & Refund State
+  refundStatus       String                 @default("NONE") // NONE, REFUND_PENDING, REFUNDED
+  refundAmount       Int?
+  refundMethod       String?
+  refundReference    String?
+  refundDate         DateTime?
+
   // Cash on Delivery Audit Details
   codCollectedAmount Int?
   codCollectionDate  DateTime?
@@ -354,7 +375,7 @@ model Order {
   // Financial Breakdown (in Taka)
   subtotal           Int
   discount           Int                    @default(0)
-  shippingFee        Int                    @default(60)
+  shippingFee        Int                    @default(0)
   giftWrapFee        Int                    @default(0)
   tax                Int                    @default(0)
   total              Int
@@ -365,7 +386,7 @@ model Order {
   deliveryZone       String                 @default("Inside Dhaka")
   shippingMethod     String                 @default("Standard Delivery")
   trackingNumber     String?
-  carrier            String?                @default("Steadfast Courier")
+  carrier            String?
   
   // Customer & Admin Notes
   customerNotes      String?
@@ -482,9 +503,9 @@ model Review {
   title            String?
   body             String
   images           String[]     @default([])
-  status           ReviewStatus @default(APPROVED)
+  status           ReviewStatus @default(PENDING)
   helpfulCount     Int          @default(0)
-  verifiedPurchase Boolean      @default(true)
+  verifiedPurchase Boolean      @default(false)
   adminReply       String?
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt

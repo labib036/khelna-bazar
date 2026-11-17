@@ -2,6 +2,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { siteConfig } from "@/config/site";
 
+export const SHIPPING_CONFIG = {
+  freeShippingThreshold: siteConfig.shippingDefaults.freeShippingThreshold,
+  insideDhakaRate: siteConfig.shippingDefaults.insideDhakaRate,
+  outsideDhakaRate: siteConfig.shippingDefaults.outsideDhakaRate,
+  expressDhakaRate: siteConfig.shippingDefaults.expressDhakaRate,
+};
+
 export interface CartItem {
   id: string; // Composite unique key e.g. "prod1-var1"
   productId: string;
@@ -39,6 +46,7 @@ interface CartState {
   addItem: (item: Omit<CartItem, "quantity" | "giftWrap">, quantity?: number) => void;
   removeItem: (id: string) => void;
   restoreLastRemovedItem: () => void;
+  undoRemove: () => void;
   updateQuantity: (id: string, delta: number) => void;
   setQuantity: (id: string, quantity: number) => void;
   toggleGiftWrap: (id: string) => void;
@@ -113,6 +121,10 @@ export const useCartStore = create<CartState>()(
             lastRemovedItem: null,
           };
         });
+      },
+
+      undoRemove: () => {
+        get().restoreLastRemovedItem();
       },
 
       updateQuantity: (id, delta) => {

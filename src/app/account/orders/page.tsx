@@ -12,7 +12,9 @@ import { Package, ArrowRight, Ban, Eye, Loader2, RotateCcw, Truck } from "lucide
 import { toast } from "sonner";
 
 export default function CustomerOrdersPage() {
-  const { data: session, status } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data;
+  const status = sessionResult?.status ?? "unauthenticated";
   const user = session?.user;
   const [orders, setOrders] = useState<StoreOrder[]>([]);
   const [loading, setLoading] = useState(true);

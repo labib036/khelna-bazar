@@ -13,54 +13,55 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
     title: "About Khelna Bazar",
     html: `
       <h2>Welcome to KHELNA BAZAR</h2>
-      <p>Khelna Bazar is Bangladesh's premier online boutique dedicated to certified-safe, joy-sparking, and intellectually stimulating toys. We believe play is essential to childhood—fostering analytical problem solving, emotional resilience, fine motor skills, and boundless imagination.</p>
-      <h3>Why Parents Trust Us</h3>
+      <p>Khelna Bazar is an online toy marketplace dedicated to joyful, engaging, and developmental toys in Bangladesh. We believe creative play is essential to childhood—fostering analytical problem solving, coordination, and imagination.</p>
+      <h3>Why Shop With Us</h3>
       <ul>
-        <li><strong>Strict Child-Safety Standards:</strong> Every single toy is vetted against international ASTM F963 and European EN71 safety directives.</li>
-        <li><strong>Reliable Cash on Delivery:</strong> Inspect the package at your doorstep anywhere in Bangladesh before paying the courier.</li>
-        <li><strong>Authentic Brands:</strong> We directly import genuine items from top manufacturers with zero counterfeit items.</li>
+        <li><strong>Curated Quality:</strong> Every toy is selected with care, clearly labeled with recommended age ranges and safety notices.</li>
+        <li><strong>Inspect Before You Accept:</strong> Check your package in front of the delivery person before accepting or paying.</li>
+        <li><strong>Cash on Delivery:</strong> Safe and reliable Cash on Delivery available.</li>
       </ul>
     `,
   },
   "toy-safety": {
-    title: "Toy Safety & Compliance Standards",
+    title: "Toy Safety & Quality Guidelines",
     html: `
-      <h2>Our Zero-Compromise Child Safety Guarantee</h2>
-      <p>Nothing matters more than your child's well-being. At Khelna Bazar, every item in our inventory passes strict non-toxic testing.</p>
-      <h3>Safety Directives We Follow</h3>
+      <h2>Our Commitment to Child Safety</h2>
+      <p>Nothing matters more than your child's well-being. At Khelna Bazar, every item in our catalog is chosen with developmental appropriateness and safety in mind.</p>
+      <h3>Our Guidelines</h3>
       <ul>
-        <li><strong>BPA & Phthalate-Free:</strong> Only food-grade silicone and virgin ABS plastics are accepted.</li>
-        <li><strong>Lead-Free Water Paints:</strong> Colored with non-toxic, eco-friendly pigments that will not leach if mouthed.</li>
-        <li><strong>Choking Hazard Warning Badges:</strong> Clear labeling on every product containing small balls, marbles, or small parts unsuitable for under-3-year-olds.</li>
-        <li><strong>Smooth Sanded Edges:</strong> Wooden toys are splinter-free with rounded corners.</li>
+        <li><strong>Age-Appropriate Design:</strong> Every product includes clear age recommendations so you can choose the right toy for your child.</li>
+        <li><strong>Choking Hazard Warnings:</strong> Transparent labels on all toys containing small components unsuitable for children under 3 years old.</li>
+        <li><strong>Inspect At Delivery:</strong> We encourage all parents to inspect their toys in front of the delivery person upon arrival.</li>
       </ul>
     `,
   },
   "shipping-policy": {
-    title: "Cash on Delivery & Shipping Policy",
+    title: "Shipping & Delivery Policy",
     html: `
-      <h2>Nationwide Cash on Delivery (COD)</h2>
-      <p>We deliver across all 64 districts of Bangladesh with convenient cash payment on delivery.</p>
-      <h3>Delivery Charges & Timeline</h3>
+      <h2>Delivery Across Bangladesh</h2>
+      <p>We provide doorstep delivery with Cash on Delivery options.</p>
+      <h3>Delivery Rates</h3>
       <ul>
-        <li><strong>Inside Dhaka City:</strong> ৳60 flat fee. Delivered within 24 to 48 hours.</li>
-        <li><strong>Outside Dhaka (Nationwide):</strong> ৳120 flat fee. Delivered within 2 to 4 business days.</li>
-        <li><strong>FREE DELIVERY:</strong> All orders totaling ৳1,500 or more receive 100% free home delivery!</li>
+        <li><strong>Inside Dhaka City:</strong> ৳60 standard delivery fee (24–48 hours).</li>
+        <li><strong>Outside Dhaka:</strong> ৳120 delivery fee (2–4 business days).</li>
+        <li><strong>FREE DELIVERY:</strong> Orders of ৳1,500 or more receive free delivery!</li>
       </ul>
-      <h3>How Doorstep Cash on Delivery Works</h3>
-      <p>When the courier reaches your address, they will call your mobile number. You can verify the parcel's condition and hand the exact cash amount to the delivery agent.</p>
+      <h3>Inspection At Doorstep</h3>
+      <p>When the delivery rider arrives, please open the package and inspect the item before accepting and paying.</p>
     `,
   },
   "returns-policy": {
-    title: "7-Day Easy Returns & Exchange Guarantee",
+    title: "Returns and Refund Policy",
     html: `
-      <h2>Hassle-Free Returns</h2>
-      <p>If an item arrives damaged, defective, or missing components, we provide a 100% free replacement or full refund within 7 days of delivery.</p>
-      <h3>How to Initiate a Return</h3>
+      <h2>Returns and Refund Policy</h2>
       <ol>
-        <li>Contact our customer care team via our hotline or official email address.</li>
-        <li>Provide your Order Number (e.g. KB-2611-XXXXXX) and a quick photo/video of the issue.</li>
-        <li>Our courier partner will pick up the parcel from your address at zero extra cost to you.</li>
+        <li><strong>Inspect at delivery:</strong> When your order arrives, please open and check the product in front of the delivery person before you accept it and before you pay (for Cash on Delivery).</li>
+        <li><strong>Defective or wrong products:</strong> If the product is defective, damaged, or not what you ordered, inform the delivery person and refuse the item at the door. Contact us on 01712-039707 (call or WhatsApp) the same day. We will refund you (or replace the item if you prefer, subject to stock).</li>
+        <li><strong>Cash on Delivery orders:</strong> If you refuse a defective item at delivery, you do not pay for it.</li>
+        <li><strong>Prepaid orders (bKash/Nagad):</strong> If a defective item is returned at delivery, we refund the amount to the number you paid from.</li>
+        <li><strong>After you accept the product:</strong> Once you have inspected the product, accepted it, and received it, it cannot be refunded or returned.</li>
+        <li><strong>Change of mind:</strong> Products cannot be returned or refunded due to a change of mind after acceptance.</li>
+        <li><strong>Contact:</strong> Call or WhatsApp 01712-039707.</li>
       </ol>
     `,
   },
@@ -69,24 +70,25 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
     html: `
       <h2>Your Privacy is Respected</h2>
       <p>Khelna Bazar values your privacy. We collect only necessary delivery information (Name, Contact Number, and Shipping Address) solely to fulfill your orders.</p>
-      <p>We do not share your information with third-party marketing brokers. All customer data is encrypted and securely maintained.</p>
+      <p>We do not share your information with third-party marketing brokers. All customer data is maintained securely.</p>
     `,
   },
   "terms": {
     title: "Terms & Conditions",
     html: `
       <h2>Terms of Service</h2>
-      <p>By placing an order on Khelna Bazar, you agree to inspect the delivery package and provide cash payment upon arrival. All prices are listed in Bangladeshi Taka (BDT) including applicable taxes.</p>
+      <p>By placing an order on Khelna Bazar, you agree to inspect the delivery package and provide payment upon arrival. All prices are listed in Bangladeshi Taka (BDT) including applicable taxes.</p>
+      <p>Customers agree to inspect goods in front of the courier before acceptance. Items cannot be returned or refunded once inspected and accepted.</p>
     `,
   },
   "contact": {
     title: "Contact Customer Care",
     html: `
       <h2>We are Here to Help</h2>
-      <p>Have questions about toy safety, delivery timeline, or placing a bulk order? Reach out to our dedicated support team in Dhaka.</p>
+      <p>Have questions about your order or product inquiries? Contact our customer care:</p>
       <ul>
-        <li><strong>Operating Hours:</strong> Saturday – Thursday: 9:00 AM – 10:00 PM BST</li>
-        <li><strong>Coverage:</strong> All 64 Districts of Bangladesh</li>
+        <li><strong>Hotline:</strong> 01712-039707 (Call)</li>
+        <li><strong>WhatsApp:</strong> 01712-039707</li>
       </ul>
     `,
   },

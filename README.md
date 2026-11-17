@@ -109,31 +109,27 @@ The website will start immediately with the complete interactive storefront!
 
 ---
 
-## 🔑 Demo Login Accounts
+## 🔐 Administrator Account Provisioning
 
-For local testing and demonstration, use these pre-configured credentials:
+No default or demo accounts exist. To create your first store administrator account, run:
 
-| Role | Email Address | Password | Permissions |
-| :--- | :--- | :--- | :--- |
-| **👑 Admin (Owner)** | `admin@khelnabazar.com` | `Admin@Khelna123` | Full control: products, orders, COD cash, settings |
-| **👔 Staff** | `staff@khelnabazar.com` | `Staff@Khelna123` | Orders, packing, inventory management |
-| **🛍️ Customer** | `customer@khelnabazar.com` | `Customer@Khelna123` | Order tracking, wishlist, saved addresses, PlayPoints |
+```bash
+npm run admin:create
+```
 
-*(On the login screen, you can also click the quick **1-Click Demo Buttons** to log in instantly without typing).*
+Follow the CLI prompts to specify your administrator email and phone number. A cryptographically secure one-time password will be generated.
 
 ---
 
-## 📚 Complete Beginner Guides
+## 📚 Documentation & Guides
 
-We have prepared comprehensive, jargon-free step-by-step guides for beginners:
-* 📖 [**BEGINNER_GUIDE.md**](./BEGINNER_GUIDE.md) - A slow, friendly walkthrough from zero knowledge.
-* ⚙️ [**SETUP_GUIDE.md**](./SETUP_GUIDE.md) - Exact local setup instructions.
-* 🐙 [**GITHUB_GUIDE.md**](./GITHUB_GUIDE.md) - How to push your project to GitHub safely.
-* ☁️ [**VERCEL_DEPLOYMENT_GUIDE.md**](./VERCEL_DEPLOYMENT_GUIDE.md) - How to deploy on Vercel for free.
-* 🗄️ [**DATABASE_GUIDE.md**](./DATABASE_GUIDE.md) - Creating a free Neon Serverless PostgreSQL database.
-* 🛡️ [**ADMIN_GUIDE.md**](./ADMIN_GUIDE.md) - How the store owner uses every admin screen.
-* 🔧 [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) - Common errors and their exact solutions.
-* ⚖️ [**DECISIONS.md**](./DECISIONS.md) - Architectural decisions and deviations from the work order.
+Comprehensive guides for deploying, securing, and operating Khelna Bazar:
+* 🛡️ [**ADMIN_GUIDE.md**](./ADMIN_GUIDE.md) - How the store owner manages orders, products, and fulfillment.
+* ⚙️ [**SETUP_GUIDE.md**](./SETUP_GUIDE.md) - Local development environment setup instructions.
+* 🗄️ [**DATABASE_GUIDE.md**](./DATABASE_GUIDE.md) - PostgreSQL configuration and seeding.
+* 🔒 [**SECURITY.md**](./SECURITY.md) - Production security architecture, role authorization, and secrets.
+* 🚀 [**LAUNCH_CHECKLIST.md**](./LAUNCH_CHECKLIST.md) - Pre-flight verification checklist before public launch.
+* 🎨 [**DESIGN_SYSTEM.md**](./DESIGN_SYSTEM.md) - Google Stitch design system specifications.
 
 ---
 
