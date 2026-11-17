@@ -149,7 +149,21 @@ export interface StoreOrder {
   updatedAt: string | Date;
   items: OrderItemSnapshot[];
   events: OrderEventEntry[];
-  // Manual bKash/Nagad verification fields
+  // Mandatory Inspection Compliance & MFS Verification
+  inspectionAcknowledged?: boolean;
+  inspectionAcknowledgedAt?: string | Date | null;
+  mfsSenderNumber?: string | null;
+  mfsTrxId?: string | null;
+  paymentStatus?: string;
+  paymentVerifiedAt?: string | Date | null;
+  paymentVerifiedBy?: string | null;
+  paymentRejectReason?: string | null;
+  refundStatus?: string;
+  refundAmount?: number | null;
+  refundMethod?: string | null;
+  refundReference?: string | null;
+  refundDate?: string | Date | null;
+  // Legacy / helper payment details
   paymentDetails?: {
     senderPhone?: string;
     trxId?: string;

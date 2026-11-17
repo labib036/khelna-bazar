@@ -96,7 +96,7 @@ export default function CartPage() {
 
   const handleRemove = (id: string, name: string) => {
     removeItem(id);
-    toast(`Removed "${name}" from basket`, {
+    toast(`Removed "${name}" from cart`, {
       action: {
         label: "Undo",
         onClick: () => undoRemove(),
@@ -109,8 +109,8 @@ export default function CartPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <EmptyState
           illustration={<EmptyCartIllustration className="w-40 h-40" />}
-          title="Your Toy Basket is Empty"
-          description="Looks like you haven't added any joy to your cart yet. Discover our certified safe toys, STEM robotics, and Montessori sets!"
+          title="Your Toy Cart is Empty"
+          description="Looks like you haven't added any toys to your cart yet. Discover our curated collection of safe toys!"
           action={
             <Link href="/c/all">
               <Button variant="primary" size="lg">
@@ -129,37 +129,23 @@ export default function CartPage() {
       {/* Page Title */}
       <div>
         <h1 className="font-heading text-2xl sm:text-4xl font-black text-[var(--text-primary)]">
-          Review Your Toy Basket
+          Review Your Toy Cart
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
           {items.reduce((acc, i) => acc + i.quantity, 0)} item{items.length === 1 ? "" : "s"} &bull; Cash on Delivery across Bangladesh
         </p>
       </div>
 
-      {/* Free Shipping Progress Box */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-[var(--surface-elevated)] border border-[var(--border)] shadow-xs">
-        <div className="flex items-center justify-between text-xs font-semibold mb-2">
-          <div className="flex items-center gap-2 text-[var(--text-primary)]">
-            <Truck className="w-4 h-4 text-[var(--success)] shrink-0" />
-            {freeShippingRemaining > 0 ? (
-              <span>
-                Add <strong className="text-[var(--primary)]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
-                <strong className="text-[var(--success)]">FREE Nationwide Delivery</strong>!
-              </span>
-            ) : (
-              <span className="text-[var(--success)] font-bold flex items-center gap-1">
-                <Sparkles className="w-4 h-4" /> You&apos;ve unlocked FREE Delivery across Bangladesh!
-              </span>
-            )}
-          </div>
-          <span className="text-[var(--text-muted)] font-bold font-mono">{progressPercent}%</span>
-        </div>
-        <div className="w-full bg-[var(--surface)] border border-[var(--border)] h-2.5 rounded-full overflow-hidden">
-          <div
-            className="bg-[var(--success)] h-full rounded-full transition-all duration-300"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
+      {/* Trust & Delivery Strip */}
+      <div className="p-4 sm:p-5 rounded-3xl bg-[var(--surface-elevated)] border border-[var(--border)] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <span className="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-400">
+          <Truck className="w-4 h-4" />
+          <span>Cash on Delivery Available Across Bangladesh</span>
+        </span>
+        <span className="text-[11px] text-[var(--text-muted)] font-medium flex items-center gap-1">
+          <ShieldCheck className="w-3.5 h-3.5 text-[var(--primary)]" />
+          <span>Inspect Before You Accept at Doorstep</span>
+        </span>
       </div>
 
       {/* Main Two-Column Layout */}
@@ -203,22 +189,6 @@ export default function CartPage() {
                       title="Remove item"
                     >
                       <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Gift Wrap Button */}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => toggleGiftWrap(item.id)}
-                      className={`text-xs inline-flex items-center gap-1.5 px-3 py-1 rounded-xl transition-colors cursor-pointer ${
-                        item.giftWrap
-                          ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 font-bold border border-amber-400"
-                          : "text-[var(--text-muted)] bg-[var(--surface)] hover:text-[var(--text-primary)] border border-[var(--border)]"
-                      }`}
-                    >
-                      <Gift className="w-3.5 h-3.5 text-amber-500" />
-                      <span>{item.giftWrap ? `Gift Wrapped (+${formatPrice(50)})` : "Add Gift Wrap (+৳50)"}</span>
                     </button>
                   </div>
 

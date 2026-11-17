@@ -36,9 +36,10 @@ import {
 const AGE_RANGES = [
   { label: "0-12m", query: "0-12m", icon: "🍼" },
   { label: "1-2y", query: "1-2y", icon: "🧸" },
-  { label: "3-5y", query: "3-5y", icon: "🎨" },
-  { label: "6-8y", query: "6-8y", icon: "🚀" },
-  { label: "9+", query: "9+", icon: "🧩" },
+  { label: "3-4y", query: "3-4y", icon: "🎨" },
+  { label: "5-7y", query: "5-7y", icon: "🚀" },
+  { label: "8-11y", query: "8-11y", icon: "🧩" },
+  { label: "12+", query: "12+", icon: "🔬" },
 ];
 
 const DEFAULT_CATEGORIES = [
@@ -232,13 +233,6 @@ export function Header() {
             >
               <Package className="w-3.5 h-3.5 text-[var(--primary)]" />
               <span>{t("trackOrder")}</span>
-            </Link>
-
-            <Link
-              href="/pages/toy-safety"
-              className="hover:text-[var(--primary)] transition-colors font-medium"
-            >
-              {t("safetyGuarantee")}
             </Link>
 
             <div className="flex items-center gap-2 pl-3 border-l border-[var(--border)]">
@@ -632,18 +626,6 @@ export function Header() {
                 </Link>
               );
             })}
-
-            {/* Wonder Club Link */}
-            <Link
-              href="/account/rewards"
-              className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
-                pathname.includes("rewards")
-                  ? "bg-[var(--primary)] text-[var(--on-primary)] font-black shadow-sm"
-                  : "text-[var(--text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface)]"
-              }`}
-            >
-              Wonder Club
-            </Link>
           </div>
 
           {/* Shop by Age Pills on Right */}

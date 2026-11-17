@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { AdminLayout } from "@/components/admin/admin-layout";
 import { ToyProduct } from "@/types/store";
-import { getAdminProducts } from "@/server/actions/product-actions";
+import { getAdminProducts, saveProduct, deleteProduct } from "@/server/actions/product-actions";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,7 +48,7 @@ export default function AdminProductsPage() {
   const [newMinAge, setNewMinAge] = useState("36");
   const [newChoking, setNewChoking] = useState(false);
 
-  const handleCreateProduct = (e: React.FormEvent) => {
+  const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim()) {
       toast.error("Please enter toy name.");
@@ -57,55 +57,51 @@ export default function AdminProductsPage() {
 
     const priceNum = parseInt(newPrice) || 1000;
     const stockNum = parseInt(newStock) || 10;
+    const minAge = parseInt(newMinAge) || 36;
     const slug = newName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-    const created: ToyProduct = {
-      id: `kb-prod-${Date.now()}`,
-      name: newName,
-      slug,
-      brand: "Khelna Bazar Toys",
-      category: newCategory,
-      categorySlug: "building-blocks",
-      basePrice: priceNum,
-      comparePrice: Math.round(priceNum * 1.2),
-      shortDesc: "High quality engaging learning toy for children.",
-      descriptionHtml: `<p>Engaging learning toy for children.</p>`,
-      minAgeMonths: parseInt(newMinAge) || 36,
-      maxAgeMonths: 144,
-      material: "ABS Plastic",
-      batteryInfo: "None required",
-      chokingHazard: newChoking,
-      certifications: [],
-      ratingAvg: 0,
-      ratingCount: 0,
-      soldCount: 0,
-      isFeatured: true,
-      isDeal: false,
-      stock: stockNum,
-      images: [
-        "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=600&q=80",
-      ],
-      variants: [
-        {
-          id: `var-${Date.now()}`,
-          sku: `KB-${Math.floor(1000 + Math.random() * 9000)}`,
-          title: "Standard Edition",
-          price: priceNum,
-          stock: stockNum,
-        },
-      ],
-      attributes: [{ name: "Category", value: newCategory }],
-    };
+    try {
+      const res = await saveProduct({
+        name: newName,
+        slug,
+        basePrice: priceNum,
+        comparePrice: Math.round(priceNum * 1.2),
+        stock: stockNum,
+        categorySlug: newCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        minAgeMonths: minAge,
+        maxAgeMonths: 144,
+        chokingHazard: newChoking,
+        descriptionHtml: `<p>${newName} - authentic child-safe toy.</p>`,
+      });
 
-    setProducts([created, ...products]);
-    setShowAddModal(false);
-    setNewName("");
-    toast.success(`Published "${created.name}" to store catalog!`);
+      if (!res.success) {
+        toast.error(res.error || "Failed to publish product");
+        return;
+      }
+
+      toast.success(`Published "${newName}" to store catalog!`);
+      setShowAddModal(false);
+      setNewName("");
+      const updated = await getAdminProducts();
+      setProducts(updated.products);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to create product");
+    }
   };
 
-  const handleDeleteProduct = (id: string, name: string) => {
-    setProducts(products.filter((p) => p.id !== id));
-    toast.info(`Deleted ${name} from catalog.`);
+  const handleDeleteProduct = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+    try {
+      const res = await deleteProduct(id);
+      if (!res.success) {
+        toast.error(res.error || "Failed to delete product");
+        return;
+      }
+      setProducts(products.filter((p) => p.id !== id));
+      toast.info(`Deleted ${name} from catalog.`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete product");
+    }
   };
 
   const handleStockUpdate = (id: string, newQty: number) => {

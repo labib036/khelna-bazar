@@ -203,11 +203,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/pages/toy-safety" className="hover:text-[#DC012B] transition-colors">
-                  Child Safety Standards
-                </Link>
-              </li>
-              <li>
                 <Link href="/pages/about-us" className="hover:text-[#DC012B] transition-colors">
                   About Khelna Bazar
                 </Link>
@@ -225,39 +220,26 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter Box */}
+          {/* Customer Helpline & Verification */}
           <div className="space-y-4">
-            <h4 className="font-heading font-bold text-sm text-white">Join the Joy Club</h4>
+            <h4 className="font-heading font-bold text-sm text-white">Direct Order &amp; Helpline</h4>
             <p className="text-xs text-slate-400">
-              Get an instant <strong>10% OFF coupon</strong> and early access to new toy releases.
+              For order confirmations, delivery status, or toy advice, call or WhatsApp our hotline directly:
             </p>
-
-            {newsletterSuccess ? (
-              <div className="p-3 rounded-xl bg-[#E6FAF8] text-[#0E3834] text-xs font-medium border border-[#2EC4B6]">
-                🎉 Welcome! Use code <strong className="font-mono font-bold text-black">WELCOME10</strong> for 10% off
-                your first order.
+            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+              <div className="flex items-center gap-2 text-white font-bold text-sm">
+                <Phone className="w-4 h-4 text-amber-400" />
+                <a href="tel:01712039707" className="hover:text-[#DC012B] transition-colors">
+                  01712-039707
+                </a>
               </div>
-            ) : (
-              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your email"
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="w-full h-10 px-3.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-[#DC012B]"
-                  />
-                </div>
-                <Button type="submit" variant="primary" size="sm" className="w-full text-xs font-semibold h-9 gap-1.5">
-                  <span>Subscribe & Save 10%</span>
-                  <Send className="w-3.5 h-3.5" />
-                </Button>
-              </form>
-            )}
-
-            <div className="pt-2 text-[11px] text-slate-500">
-              Strictly no spam. Unsubscribe anytime in one click.
+              <p className="text-[11px] text-slate-400">
+                Payment via Cash on Delivery, bKash, or Nagad (01712-039707).
+              </p>
+            </div>
+            <div className="text-[11px] text-slate-400 flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span>Inspect product in front of the courier before accepting.</span>
             </div>
           </div>
         </div>

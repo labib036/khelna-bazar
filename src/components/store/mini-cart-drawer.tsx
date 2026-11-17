@@ -107,7 +107,7 @@ export function MiniCartDrawer() {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Your Toy Basket"
+      aria-label={locale === "bn" ? "আপনার খেলনার কার্ট" : "Your Toy Cart"}
       className="fixed inset-0 z-50 overflow-hidden"
     >
       {/* Backdrop */}
@@ -123,7 +123,7 @@ export function MiniCartDrawer() {
             <div className="flex items-center gap-2.5">
               <ShoppingBag className="w-5 h-5 text-[var(--primary)]" />
               <h2 className="text-lg font-bold font-heading text-[var(--text-primary)]">
-                Your Toy Basket ({items.reduce((acc, i) => acc + i.quantity, 0)})
+                {locale === "bn" ? "আপনার কার্ট" : "Your Toy Cart"} ({items.reduce((acc, i) => acc + i.quantity, 0)})
               </h2>
             </div>
             <button
@@ -136,30 +136,15 @@ export function MiniCartDrawer() {
             </button>
           </div>
 
-          {/* Free Shipping Progress Bar */}
-          <div className="bg-[var(--surface)] px-5 py-3 border-b border-[var(--border)]">
-            <div className="flex items-center justify-between text-xs mb-1.5 font-medium">
-              <div className="flex items-center gap-1.5 text-[var(--text-primary)]">
-                <Truck className="w-4 h-4 text-[var(--success)]" />
-                {freeShippingRemaining > 0 ? (
-                  <span>
-                    Add <strong className="text-[var(--primary)]">{formatPrice(freeShippingRemaining)}</strong> more for{" "}
-                    <strong className="text-[var(--success)]">FREE Delivery</strong>!
-                  </span>
-                ) : (
-                  <span className="text-[var(--success)] font-bold flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5" /> Congratulations! You unlocked FREE Delivery.
-                  </span>
-                )}
-              </div>
-              <span className="font-bold text-[var(--text-muted)]">{progressPercent}%</span>
-            </div>
-            <div className="w-full bg-[var(--border)] h-2 rounded-full overflow-hidden">
-              <div
-                className="bg-[var(--success)] h-full rounded-full transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
+          {/* Trust Banner / Shipping Notice */}
+          <div className="bg-[var(--surface-container-low)] px-5 py-2.5 border-b border-[var(--border)] text-xs flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold">
+              <Truck className="w-3.5 h-3.5" />
+              <span>{locale === "bn" ? "ক্যাশ অন ডেলিভারি সুবিধা" : "Cash on Delivery Available"}</span>
+            </span>
+            <span className="text-[11px] text-[var(--text-muted)] font-medium">
+              {locale === "bn" ? "পণ্য দেখে নিন" : "Inspect at delivery"}
+            </span>
           </div>
 
           {/* Cart Items List */}
@@ -234,22 +219,6 @@ export function MiniCartDrawer() {
                             </button>
                           </div>
                           <p className="text-xs text-[var(--text-muted)]">{item.title}</p>
-                        </div>
-
-                        {/* Gift Wrap Toggle */}
-                        <div className="flex items-center gap-1.5 my-1">
-                          <button
-                            type="button"
-                            onClick={() => toggleGiftWrap(item.id)}
-                            className={`text-xs inline-flex items-center gap-1 px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
-                              item.giftWrap
-                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 font-semibold border border-amber-400"
-                                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                            }`}
-                          >
-                            <Gift className="w-3 h-3" />
-                            {item.giftWrap ? `Gift Wrapped (+${formatPrice(50)})` : "Add Gift Wrap (+৳50)"}
-                          </button>
                         </div>
 
                         {/* Price and Stepper */}

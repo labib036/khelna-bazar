@@ -1,9 +1,18 @@
 "use server";
 
-import { updateStoreSettings } from "@/server/services/settings-service";
+import { updateStoreSettings, getStoreSettings } from "@/server/services/settings-service";
 import { auth } from "@/lib/auth";
 import { StoreSettings } from "@/types/store";
 import { revalidatePath } from "next/cache";
+
+export async function getSettingsAction() {
+  try {
+    const settings = await getStoreSettings();
+    return { success: true, settings };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
 
 export async function saveSettings(updates: Partial<StoreSettings>) {
   try {

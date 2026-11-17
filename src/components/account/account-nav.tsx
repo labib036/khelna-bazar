@@ -37,6 +37,12 @@ export function AccountNav() {
       badge: null,
     },
     {
+      label: "Profile & Security",
+      href: "/account/profile",
+      icon: User,
+      badge: null,
+    },
+    {
       label: "My Orders & Delivery",
       href: "/account/orders",
       icon: Package,
@@ -47,13 +53,6 @@ export function AccountNav() {
       href: "/account/addresses",
       icon: MapPin,
       badge: null,
-    },
-    {
-      label: "PlayPoints Rewards",
-      href: "/account/rewards",
-      icon: Sparkles,
-      badge: (user as any)?.loyaltyPoints ? `${(user as any).loyaltyPoints} pts` : null,
-      badgeColor: "bg-[var(--secondary-container)] text-[var(--on-secondary-container)]",
     },
     {
       label: "Wishlist Shelves",

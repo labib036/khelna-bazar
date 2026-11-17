@@ -52,9 +52,21 @@ export default function AdminInventoryPage() {
       prev.map((i) => (i.id === id ? { ...i, stock: Math.max(0, i.stock + delta) } : i))
     );
     try {
-      await updateVariantStock(id, delta);
+      const res = await updateVariantStock(id, delta);
+      if (!res.success) {
+        // Rollback optimistic update
+        setItems((prev) =>
+          prev.map((i) => (i.id === id ? { ...i, stock: Math.max(0, i.stock - delta) } : i))
+        );
+        toast.error(res.error || "Failed to update stock in database");
+        return;
+      }
       toast.success(`Inventory updated (${delta > 0 ? `+${delta}` : delta})`);
     } catch {
+      // Rollback optimistic update
+      setItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, stock: Math.max(0, i.stock - delta) } : i))
+      );
       toast.error("Failed to update stock in database");
     }
   };

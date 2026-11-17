@@ -224,18 +224,18 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               </div>
             )}
 
-            {/* Stock Progress Bar for Deals */}
-            {product.isDeal && (
+            {/* Stock Progress Bar for Deals (only if real sales exist) */}
+            {product.isDeal && product.soldCount > 0 && (
               <div className="mt-2 space-y-1">
                 <div className="flex justify-between text-[10px] text-[var(--text-muted)] font-medium">
                   <span>Deals Claimed</span>
-                  <span className="font-bold text-[var(--primary)]">{product.soldCount || 12} sold</span>
+                  <span className="font-bold text-[var(--primary)]">{product.soldCount} sold</span>
                 </div>
                 <div className="w-full h-1.5 bg-[var(--surface)] rounded-full overflow-hidden border border-[var(--border)]">
                   <div
                     className="h-full bg-gradient-to-r from-amber-500 to-[var(--primary)] rounded-full"
                     style={{
-                      width: `${Math.min(90, Math.max(15, ((product.soldCount || 12) / ((product.soldCount || 12) + product.stock)) * 100))}%`,
+                      width: `${Math.min(90, Math.max(15, (product.soldCount / (product.soldCount + product.stock)) * 100))}%`,
                     }}
                   />
                 </div>

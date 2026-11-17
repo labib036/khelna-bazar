@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { siteConfig } from "@/config/site";
+import { calculateDeliveryFee } from "@/lib/utils";
+import { validateCouponAction } from "@/server/actions/coupon-actions";
 
 export const SHIPPING_CONFIG = {
   freeShippingThreshold: siteConfig.shippingDefaults.freeShippingThreshold,
@@ -51,7 +53,7 @@ interface CartState {
   setQuantity: (id: string, quantity: number) => void;
   toggleGiftWrap: (id: string) => void;
   setGiftMessage: (id: string, message: string) => void;
-  applyCoupon: (code: string) => { success: boolean; message: string };
+  applyCoupon: (code: string) => Promise<{ success: boolean; message: string }>;
   removeCoupon: () => void;
   setDeliveryZone: (zone: "inside_dhaka" | "outside_dhaka" | "express_dhaka") => void;
   clearCart: () => void;
@@ -169,72 +171,34 @@ export const useCartStore = create<CartState>()(
         }));
       },
 
-      applyCoupon: (code) => {
-        const cleanCode = code.trim().toUpperCase();
+      applyCoupon: async (code) => {
+        const cleanCode = (code || "").trim().toUpperCase();
         const subtotal = get().getSubtotal();
 
         if (subtotal === 0) {
           return { success: false, message: "Your cart is empty." };
         }
+        if (!cleanCode) {
+          return { success: false, message: "Please enter a coupon code." };
+        }
 
-        // Standard coupons from Work Order
-        if (cleanCode === "PLAY10") {
-          if (subtotal < 1000) {
-            return { success: false, message: "PLAY10 requires a minimum order of ৳1,000." };
+        try {
+          const res = await validateCouponAction(cleanCode, subtotal, get().getShippingFee());
+          if (res.success && res.coupon) {
+            set({
+              coupon: {
+                code: res.coupon.code,
+                type: res.coupon.type as any,
+                value: res.coupon.value,
+                discountAmount: res.coupon.discountAmount,
+              },
+            });
+            return { success: true, message: res.message };
           }
-          const discount = Math.min(Math.round(subtotal * 0.1), 500);
-          set({
-            coupon: {
-              code: "PLAY10",
-              type: "PERCENTAGE",
-              value: 10,
-              discountAmount: discount,
-            },
-          });
-          return { success: true, message: `Coupon PLAY10 applied! You saved ৳${discount}.` };
+          return { success: false, message: res.message || "Invalid coupon code." };
+        } catch (err: any) {
+          return { success: false, message: err.message || "Could not validate coupon." };
         }
-
-        if (cleanCode === "FREESHIP") {
-          set({
-            coupon: {
-              code: "FREESHIP",
-              type: "FREE_SHIPPING",
-              value: 120,
-              discountAmount: get().getShippingFee(),
-            },
-          });
-          return { success: true, message: "Coupon FREESHIP applied! Delivery is free." };
-        }
-
-        if (cleanCode === "WELCOME10") {
-          const discount = Math.min(Math.round(subtotal * 0.1), 300);
-          set({
-            coupon: {
-              code: "WELCOME10",
-              type: "PERCENTAGE",
-              value: 10,
-              discountAmount: discount,
-            },
-          });
-          return { success: true, message: `Welcome discount applied! Saved ৳${discount}.` };
-        }
-
-        if (cleanCode === "EIDKID200") {
-          if (subtotal < 2500) {
-            return { success: false, message: "EIDKID200 requires minimum ৳2,500 order." };
-          }
-          set({
-            coupon: {
-              code: "EIDKID200",
-              type: "FIXED",
-              value: 200,
-              discountAmount: 200,
-            },
-          });
-          return { success: true, message: "৳200 Eid discount applied successfully!" };
-        }
-
-        return { success: false, message: "Invalid coupon code or expired." };
       },
 
       removeCoupon: () => set({ coupon: null }),
@@ -255,23 +219,12 @@ export const useCartStore = create<CartState>()(
 
       getShippingFee: () => {
         const { deliveryZone, coupon } = get();
-        const subtotal = get().getSubtotal();
-
         if (coupon?.type === "FREE_SHIPPING") return 0;
-        if (subtotal >= siteConfig.shippingDefaults.freeShippingThreshold) return 0;
-
-        if (deliveryZone === "outside_dhaka") {
-          return siteConfig.shippingDefaults.outsideDhakaRate; // ৳120
-        }
-        if (deliveryZone === "express_dhaka") {
-          return siteConfig.shippingDefaults.expressDhakaRate; // ৳150
-        }
-        return siteConfig.shippingDefaults.insideDhakaRate; // ৳60
+        return calculateDeliveryFee(deliveryZone, get().getSubtotal());
       },
 
       getGiftWrapFee: () => {
-        const wrappedCount = get().items.filter((i) => i.giftWrap).length;
-        return wrappedCount * siteConfig.shippingDefaults.giftWrapFee; // ৳50 per item
+        return 0; // Gift wrap fee hidden until approved
       },
 
       getTotal: () => {
@@ -287,8 +240,9 @@ export const useCartStore = create<CartState>()(
       },
 
       getFreeShippingRemaining: () => {
-        const subtotal = get().getSubtotal();
         const threshold = siteConfig.shippingDefaults.freeShippingThreshold;
+        if (threshold <= 0) return 0;
+        const subtotal = get().getSubtotal();
         return Math.max(0, threshold - subtotal);
       },
     }),

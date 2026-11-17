@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { getStoreSettings } from "@/server/services/settings-service";
 import { validateCoupon, incrementCouponUsage } from "@/server/services/coupon-service";
 import { adjustVariantStock } from "@/server/services/inventory-service";
-import { getOrderByNumberAndPhone, getOrderById, getOrders } from "@/server/services/order-service";
+import { getOrderByNumberAndPhone, getOrderById, getOrders, getAdminKPIs } from "@/server/services/order-service";
 import { OrderStatus, CodStatus, StoreOrder } from "@/types/store";
 import { generateOrderAccessToken, verifyOrderAccessToken } from "@/lib/order-token";
 import { normalizeIdentifier, isValidBDPhone } from "@/lib/auth-utils";
@@ -84,7 +84,9 @@ const PlaceOrderSchema = z.object({
   paymentMethod: z.enum(["CASH_ON_DELIVERY", "BKASH", "NAGAD"]).default("CASH_ON_DELIVERY"),
   senderNumber: z.string().optional(),
   trxId: z.string().optional(),
-  inspectionAcknowledged: z.boolean().default(true),
+  inspectionAcknowledged: z.boolean().refine((val) => val === true, {
+    message: "You must acknowledge that products must be inspected in front of the delivery person upon delivery.",
+  }),
   items: z
     .array(
       z.object({
@@ -144,6 +146,16 @@ export async function placeOrder(input: PlaceOrderInput) {
       }
       if (!validated.trxId || validated.trxId.trim().length < 6) {
         throw new Error(`Please enter the ${validated.paymentMethod} Transaction ID (TrxID).`);
+      }
+
+      // Check for duplicate TrxID to prevent reuse
+      const cleanTrx = validated.trxId.trim().toUpperCase();
+      const existingTrx = await db.order.findFirst({
+        where: { mfsTrxId: cleanTrx },
+        select: { orderNumber: true },
+      });
+      if (existingTrx) {
+        throw new Error(`Transaction ID "${cleanTrx}" has already been submitted for order #${existingTrx.orderNumber}. If you believe this is an error, please contact customer support on 01712-039707.`);
       }
     }
 
@@ -291,6 +303,12 @@ export async function placeOrder(input: PlaceOrderInput) {
           status: "PENDING_CONFIRMATION",
           codStatus: "UNCOLLECTED",
           paymentMethod: validated.paymentMethod as any,
+          inspectionAcknowledged: true,
+          inspectionAcknowledgedAt: new Date(),
+          mfsSenderNumber: validated.paymentMethod !== "CASH_ON_DELIVERY" ? validated.senderNumber : null,
+          mfsTrxId: validated.paymentMethod !== "CASH_ON_DELIVERY" && validated.trxId ? validated.trxId.trim().toUpperCase() : null,
+          paymentStatus: validated.paymentMethod === "CASH_ON_DELIVERY" ? "PENDING" : "AWAITING_VERIFICATION",
+          refundStatus: "NONE",
           subtotal,
           discount,
           shippingFee,
@@ -375,6 +393,18 @@ export async function updateOrderStatus(
 
     if (!order) {
       return { success: false, error: "Order not found." };
+    }
+
+    // Constraint: MFS orders (bKash/Nagad) cannot transition to SHIPPED or beyond unless payment is VERIFIED
+    if (
+      (newStatus === "SHIPPED" || newStatus === "OUT_FOR_DELIVERY" || newStatus === "DELIVERED") &&
+      order.paymentMethod !== "CASH_ON_DELIVERY" &&
+      (order as any).paymentStatus !== "VERIFIED"
+    ) {
+      return {
+        success: false,
+        error: `Cannot transition order to ${newStatus}: Manual ${order.paymentMethod} payment must be verified before shipping. Current payment status is "${(order as any).paymentStatus}".`,
+      };
     }
 
     // Cancellation: automatically restock inventory
@@ -481,5 +511,253 @@ export async function updateCodStatus(
   }
 }
 
+export async function getAdminOrdersAction(filters?: any) {
+  try {
+    const session = await auth();
+    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+      return { success: false, error: "Unauthorized: Admin or Staff privileges required.", orders: [], total: 0 };
+    }
+    const res = await getOrders(filters);
+    return { success: true, orders: res.orders, total: res.total };
+  } catch (err: any) {
+    return { success: false, error: err.message || "Failed to fetch orders.", orders: [], total: 0 };
+  }
+}
+
+export async function getAdminKPIsAction() {
+  try {
+    const session = await auth();
+    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+      return {
+        success: false,
+        error: "Unauthorized",
+        kpis: {
+          totalOrders: 0,
+          grossSales: 0,
+          reconciledCash: 0,
+          pendingCashInTransit: 0,
+          pendingOrdersCount: 0,
+        },
+      };
+    }
+    const kpis = await getAdminKPIs();
+    return { success: true, kpis };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message,
+      kpis: {
+        totalOrders: 0,
+        grossSales: 0,
+        reconciledCash: 0,
+        pendingCashInTransit: 0,
+        pendingOrdersCount: 0,
+      },
+    };
+  }
+}
+
 export const placeCodOrder = placeOrder;
+
+/**
+ * Verifies customer manual MFS payment (bKash / Nagad).
+ * Enforces ADMIN or STAFF authorization.
+ */
+export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
+  try {
+    const session = await auth();
+    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+      return { success: false, error: "Unauthorized: Admin or Staff privileges required to verify MFS payments." };
+    }
+
+    const resolvedActor = session.user.name || session.user.email || actorName;
+    const order = await db.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    await db.$transaction([
+      db.order.update({
+        where: { id: orderId },
+        data: {
+          paymentStatus: "VERIFIED",
+          paymentVerifiedAt: new Date(),
+          paymentVerifiedBy: resolvedActor,
+        },
+      }),
+      db.orderEvent.create({
+        data: {
+          orderId,
+          type: "PAYMENT_VERIFIED",
+          message: `${order.paymentMethod} payment verified by ${resolvedActor}. Order cleared for processing.`,
+          actorName: resolvedActor,
+        },
+      }),
+    ]);
+
+    revalidatePath("/admin/orders");
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to verify MFS payment." };
+  }
+}
+
+/**
+ * Rejects customer manual MFS payment with explanation.
+ * Enforces ADMIN or STAFF authorization.
+ */
+export async function rejectMfsPayment(orderId: string, reason: string, actorName = "Staff") {
+  try {
+    const session = await auth();
+    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+      return { success: false, error: "Unauthorized: Admin or Staff privileges required to reject MFS payments." };
+    }
+
+    const resolvedActor = session.user.name || session.user.email || actorName;
+    const order = await db.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    await db.$transaction([
+      db.order.update({
+        where: { id: orderId },
+        data: {
+          paymentStatus: "REJECTED",
+          paymentRejectReason: reason,
+        },
+      }),
+      db.orderEvent.create({
+        data: {
+          orderId,
+          type: "PAYMENT_REJECTED",
+          message: `Payment rejected by ${resolvedActor}. Reason: ${reason}`,
+          actorName: resolvedActor,
+        },
+      }),
+    ]);
+
+    revalidatePath("/admin/orders");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to reject MFS payment." };
+  }
+}
+
+/**
+ * Records refusal at delivery due to defect reported in front of delivery person.
+ * Updates order to RETURNED and restocks inventory.
+ * Enforces ADMIN or STAFF authorization.
+ */
+export async function recordDefectiveRefusal(orderId: string, notes: string, actorName = "Staff") {
+  try {
+    const session = await auth();
+    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+      return { success: false, error: "Unauthorized: Admin or Staff privileges required." };
+    }
+
+    const resolvedActor = session.user.name || session.user.email || actorName;
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
+    if (!order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    await db.$transaction(async (tx) => {
+      // Restock inventory
+      for (const item of order.items) {
+        if (item.variantId) {
+          await adjustVariantStock(
+            {
+              variantId: item.variantId,
+              delta: item.quantity,
+              reason: "DAMAGE",
+              actorName: resolvedActor,
+              orderId: order.id,
+            },
+            tx
+          );
+        }
+      }
+
+      await tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: "RETURNED",
+          adminNotes: [order.adminNotes, `Defect reported at delivery: ${notes}`].filter(Boolean).join(" | "),
+        },
+      });
+
+      await tx.orderEvent.create({
+        data: {
+          orderId,
+          type: "RETURN_DEFECTIVE",
+          message: `Package refused at delivery due to reported defect: ${notes}. Verified by ${resolvedActor}.`,
+          actorName: resolvedActor,
+        },
+      });
+    });
+
+    revalidatePath("/admin/orders");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to record defective refusal." };
+  }
+}
+
+/**
+ * Records financial refund to customer (e.g. for MFS prepaid order returned at delivery).
+ * Enforces ADMIN-only authorization.
+ */
+export async function recordRefund(
+  orderId: string,
+  amount: number,
+  method: string,
+  reference?: string,
+  actorName = "Accounts"
+) {
+  try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return { success: false, error: "Unauthorized: Admin privileges required to record refunds." };
+    }
+
+    const resolvedActor = session.user.name || session.user.email || actorName;
+    const order = await db.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    await db.$transaction([
+      db.order.update({
+        where: { id: orderId },
+        data: {
+          refundStatus: "REFUNDED",
+          refundAmount: amount,
+          refundMethod: method,
+          refundReference: reference || null,
+          refundDate: new Date(),
+        },
+      }),
+      db.orderEvent.create({
+        data: {
+          orderId,
+          type: "REFUND_ISSUED",
+          message: `Refund of ৳${amount} issued via ${method}${reference ? ` (Ref: ${reference})` : ""} by ${resolvedActor}.`,
+          actorName: resolvedActor,
+        },
+      }),
+    ]);
+
+    revalidatePath("/admin/orders");
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to record refund." };
+  }
+}
+
 

@@ -82,9 +82,9 @@ export function AdminCouponsClient({ initialCoupons }: AdminCouponsClientProps) 
   const handleToggle = (id: string) => {
     startTransition(async () => {
       const res = await toggleCouponActive(id);
-      if (res.success) {
+      if (res.success && res.coupon) {
         setCoupons((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, active: res.active! } : c))
+          prev.map((c) => (c.id === id ? { ...c, active: res.coupon.active } : c))
         );
         toast.success("Coupon status toggled.");
       } else {

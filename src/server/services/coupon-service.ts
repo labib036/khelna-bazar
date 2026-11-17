@@ -63,7 +63,7 @@ export async function validateCoupon(
       if (coupon.maxDiscount && discount > coupon.maxDiscount) {
         discount = coupon.maxDiscount;
       }
-    } else if (coupon.type === "FIXED") {
+    } else if (coupon.type === "FIXED" || (coupon.type as any) === "FIXED_AMOUNT") {
       discount = Math.min(coupon.value, subtotal);
     } else if (coupon.type === "FREE_SHIPPING") {
       discount = shippingFee;

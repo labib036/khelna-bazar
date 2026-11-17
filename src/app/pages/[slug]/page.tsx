@@ -40,14 +40,14 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
     html: `
       <h2>Delivery Across Bangladesh</h2>
       <p>We provide doorstep delivery with Cash on Delivery options.</p>
-      <h3>Delivery Rates</h3>
+      <h3>Delivery Options &amp; Coverage</h3>
       <ul>
-        <li><strong>Inside Dhaka City:</strong> ৳60 standard delivery fee (24–48 hours).</li>
-        <li><strong>Outside Dhaka:</strong> ৳120 delivery fee (2–4 business days).</li>
-        <li><strong>FREE DELIVERY:</strong> Orders of ৳1,500 or more receive free delivery!</li>
+        <li><strong>Coverage:</strong> Cash on Delivery available across all 64 districts in Bangladesh. bKash and Nagad mobile payments also accepted.</li>
+        <li><strong>Delivery Zones:</strong> Inside Dhaka (Dhaka Metro) and Outside Dhaka (All Bangladesh).</li>
+        <li><strong>Fees &amp; Timelines:</strong> Delivery fee and delivery timeline are displayed transparently at checkout based on your delivery address and order details.</li>
       </ul>
-      <h3>Inspection At Doorstep</h3>
-      <p>When the delivery rider arrives, please open the package and inspect the item before accepting and paying.</p>
+      <h3>Mandatory Doorstep Inspection</h3>
+      <p>When the delivery rider arrives, please open the package and inspect the item in front of the delivery person before accepting and paying. Once inspected and accepted, items are non-refundable.</p>
     `,
   },
   "returns-policy": {

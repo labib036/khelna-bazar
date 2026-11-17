@@ -43,7 +43,7 @@ export default function TrackOrderPage() {
       }
 
       toast.success("Order located!");
-      router.push(`/order/${order.orderNumber}`);
+      router.push(`/order/${order.orderNumber}?phone=${encodeURIComponent(cleanPhone)}`);
     } catch {
       toast.error("Failed to search for order. Please try again.");
       setIsSearching(false);

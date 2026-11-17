@@ -29,12 +29,10 @@ export default function ForgotPasswordPage() {
     }
 
     setIsLoading(true);
-    // Simulate reset request
     setTimeout(() => {
       setIsLoading(false);
       setSubmitted(true);
-      toast.success("Password reset instructions sent.");
-    }, 800);
+    }, 400);
   };
 
   return (
@@ -65,28 +63,45 @@ export default function ForgotPasswordPage() {
           <div className="space-y-1">
             <h1 className="text-lg font-black text-[var(--text-primary)]">Reset Your Password</h1>
             <p className="text-xs text-[var(--text-muted)]">
-              Enter your registered mobile phone number or email to receive a password reset verification code.
+              Enter your registered mobile phone number or email to receive password reset assistance.
             </p>
           </div>
         </div>
 
         {submitted ? (
           <div className="text-center space-y-4 py-4">
-            <div className="w-12 h-12 rounded-full bg-[var(--success)]/10 text-[var(--success)] flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center mx-auto">
+              <Phone className="w-6 h-6" />
             </div>
-            <div className="space-y-1">
-              <h2 className="text-sm font-bold text-[var(--text-primary)]">Check Your SMS / Inbox</h2>
+            <div className="space-y-2">
+              <h2 className="text-sm font-bold text-[var(--text-primary)]">Instant Helpline Support</h2>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                If an account exists for <span className="font-semibold text-[var(--text-primary)]">{identifier}</span>, we have sent a 6-digit OTP verification code valid for 30 minutes.
+                Automated SMS OTP is currently being configured with the telco gateway. For account <span className="font-semibold text-[var(--text-primary)]">{identifier}</span>, please call or WhatsApp our staff directly for immediate password reset assistance:
               </p>
+              <div className="p-3.5 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)] space-y-2">
+                <a
+                  href="https://wa.me/8801712039707?text=Hi%20Khelna%20Bazar,%20I%20need%20to%20reset%20my%20password."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full h-10 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <span>Chat on WhatsApp (01712-039707)</span>
+                </a>
+                <a
+                  href="tel:01712039707"
+                  className="w-full h-10 px-4 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-container-high)] border border-[var(--border)] text-[var(--text-primary)] font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[var(--primary)]" />
+                  <span>Call Hotline: 01712-039707</span>
+                </a>
+              </div>
             </div>
             <Button
               onClick={() => setSubmitted(false)}
               variant="outline"
-              className="text-xs h-9"
+              className="text-xs h-9 cursor-pointer"
             >
-              Try another number
+              Try another phone or email
             </Button>
           </div>
         ) : (

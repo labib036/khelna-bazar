@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ToyProduct } from "@/types/store";
 import { formatPrice, calculateDiscountPercentage } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
 import { useCartStore } from "@/lib/cart-store";
 import { useWishlistStore } from "@/lib/wishlist-store";
 import { useCompareStore } from "@/lib/compare-store";
@@ -14,7 +15,6 @@ import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { ProductCard } from "@/components/store/product-card";
 import { Dialog } from "@/components/ui/dialog";
 import { SafetyPanel } from "@/components/store/safety-panel";
-import { RadarSkillChart } from "@/components/store/radar-skill-chart";
 import {
   Star,
   ShieldCheck,
@@ -57,7 +57,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
   const [quantity, setQuantity] = useState(1);
   const [giftWrap, setGiftWrap] = useState(false);
   const [giftMessage, setGiftMessage] = useState("");
-  const [activeTab, setActiveTab] = useState<"features" | "box" | "radar" | "specs" | "reviews">("features");
+  const [activeTab, setActiveTab] = useState<"features" | "box" | "specs" | "reviews">("features");
   const [selectedDistrict, setSelectedDistrict] = useState("Dhaka");
   const [isRotating, setIsRotating] = useState(false);
 
@@ -66,7 +66,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
     product.variants?.[0] || {
       id: "var-default",
       sku: "SKU-DEFAULT",
-      title: "Standard Edition",
+      title: product.name,
       price: product.basePrice,
       comparePrice: product.comparePrice,
       stock: product.stock,
@@ -442,29 +442,6 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
             )}
           </div>
 
-          {/* Gift Wrap Add-on */}
-          <div className="p-3.5 rounded-3xl border border-dashed border-[var(--secondary-container)] bg-[var(--secondary-container)]/10 space-y-2">
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[var(--text-primary)]">
-              <input
-                type="checkbox"
-                checked={giftWrap}
-                onChange={(e) => setGiftWrap(e.target.checked)}
-                className="w-4 h-4 rounded text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer"
-              />
-              <Gift className="w-4 h-4 text-[var(--secondary)]" />
-              <span>Add Premium Gift Wrapping &amp; Birthday Ribbon (+৳50)</span>
-            </label>
-            {giftWrap && (
-              <input
-                type="text"
-                placeholder="Write custom gift card message..."
-                value={giftMessage}
-                onChange={(e) => setGiftMessage(e.target.value)}
-                className="w-full text-xs h-9 px-3 rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-              />
-            )}
-          </div>
-
           {/* Primary 3D Action Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <Button
@@ -476,7 +453,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               className="font-black text-sm h-12 shadow-[0_4px_0_#93000E] active:translate-y-[2px] active:shadow-[0_2px_0_#93000E]"
             >
               <ShoppingBag className="w-4 h-4 mr-2" />
-              <span>{isOutOfStock ? "Out of Stock" : "Add to Bag"}</span>
+              <span>{isOutOfStock ? "Out of Stock" : "Add to Cart"}</span>
             </Button>
             <Button
               type="button"
@@ -550,14 +527,16 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-[var(--text-primary)] font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  {selectedDistrict === "Dhaka" ? "Magic Express (Dhaka Metro):" : "Nationwide 64 Districts:"}
+                  {selectedDistrict === "Dhaka" ? "Inside Dhaka:" : "Outside Dhaka (All Bangladesh):"}
                 </span>
                 <span className="font-bold text-emerald-700 dark:text-emerald-400">
-                  {selectedDistrict === "Dhaka" ? "Today by 6:30 PM (Free over ৳1,500)" : "2–3 Days (৳90 via Courier)"}
+                  {selectedDistrict === "Dhaka"
+                    ? formatPrice(siteConfig.shippingDefaults.insideDhakaRate)
+                    : formatPrice(siteConfig.shippingDefaults.outsideDhakaRate)}
                 </span>
               </div>
-              <p className="text-[10px] text-[var(--text-muted)]">
-                ডেলিভারির সময় দেখে নিয়ে গ্রহণ করুন। ডেলিভারির সময় ত্রুটি ধরা পড়লে রিফান্ড।
+              <p className="text-[11px] text-[var(--text-muted)] pt-1">
+                ডেলিভারি গ্রহণের পূর্বে ডেলিভারি কর্মীর সামনে পণ্য দেখে নিন। ডেলিভারির সময় ত্রুটি ধরা পড়লে সাথে সাথে ফেরত ও রিফান্ড।
               </p>
             </div>
           </div>
@@ -599,17 +578,6 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </button>
           <button
             type="button"
-            onClick={() => setActiveTab("radar")}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "radar"
-                ? "bg-[var(--primary)] text-[var(--on-primary)] shadow-xs"
-                : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            Developmental Radar &amp; Skills
-          </button>
-          <button
-            type="button"
             onClick={() => setActiveTab("specs")}
             className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all whitespace-nowrap cursor-pointer ${
               activeTab === "specs"
@@ -628,7 +596,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Parent Reviews ({product.ratingCount || 128})
+            Parent Reviews ({product.ratingCount || 0})
           </button>
         </div>
 
@@ -733,14 +701,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
         )}
 
-        {/* Tab 3: Developmental Radar */}
-        {activeTab === "radar" && (
-          <div className="pt-6">
-            <RadarSkillChart />
-          </div>
-        )}
-
-        {/* Tab 4: Tech Specs */}
+        {/* Tab 3: Tech Specs */}
         {activeTab === "specs" && (
           <div className="pt-6">
             <div className="max-w-2xl divide-y divide-[var(--border)] text-xs rounded-3xl bg-[var(--surface-container-low)] p-6 border border-[var(--border)]">
