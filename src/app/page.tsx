@@ -30,9 +30,9 @@ export default async function HomePage() {
   const ageCategories = [
     { label: "0 – 12 Months", sub: "Sensory & Soft", query: "0-12m", emoji: "🍼" },
     { label: "1 – 2 Years", sub: "Toddler Active", query: "1-2y", emoji: "🧸" },
-    { label: "3 – 5 Years", sub: "Creative & Play", query: "3-4y", emoji: "🎨" },
-    { label: "6 – 8 Years", sub: "STEM & Discovery", query: "5-7y", emoji: "🚀" },
-    { label: "9 – 11 Years", sub: "Brain & Puzzles", query: "8-11y", emoji: "🧩" },
+    { label: "3 – 4 Years", sub: "Creative & Play", query: "3-4y", emoji: "🎨" },
+    { label: "5 – 7 Years", sub: "STEM & Discovery", query: "5-7y", emoji: "🚀" },
+    { label: "8 – 11 Years", sub: "Brain & Puzzles", query: "8-11y", emoji: "🧩" },
     { label: "12+ Years", sub: "Robotics & Tech", query: "12+", emoji: "🔬" },
   ];
 
