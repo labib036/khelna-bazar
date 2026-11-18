@@ -69,7 +69,8 @@ export function Header() {
   const sessionResult = useSession();
   const session = sessionResult?.data;
   const user = session?.user;
-  const isStaffOrAdmin = user?.role === "ADMIN" || user?.role === "STAFF";
+  const isStaffOrAdmin =
+    user?.role === "ADMIN" || user?.role === "STAFF" || user?.role === "SUPER_ADMIN";
 
   const { toggleCart, getItemCount, getSubtotal } = useCartStore();
   const wishlistCount = useWishlistStore((state) => state.getCount());
@@ -499,37 +500,39 @@ export function Header() {
                         </span>
                       </div>
 
-                      {isStaffOrAdmin && (
+                      {isStaffOrAdmin ? (
                         <Link
-                          href="/admin"
+                          href="/admin/dashboard"
                           onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center justify-between px-3 py-2 rounded-xl text-purple-600 dark:text-purple-400 font-bold hover:bg-purple-500/10"
                         >
                           <div className="flex items-center gap-2">
                             <ShieldCheck className="w-4 h-4" />
-                            <span>Admin Console</span>
+                            <span>Management Console</span>
                           </div>
                           <ExternalLink className="w-3 h-3" />
                         </Link>
+                      ) : (
+                        <>
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-[var(--text-primary)] hover:bg-[var(--surface-container-low)] font-medium"
+                          >
+                            <User className="w-4 h-4" />
+                            <span>My Dashboard</span>
+                          </Link>
+
+                          <Link
+                            href="/dashboard/orders"
+                            onClick={() => setIsUserMenuOpen(false)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-[var(--text-primary)] hover:bg-[var(--surface-container-low)] font-medium"
+                          >
+                            <Package className="w-4 h-4" />
+                            <span>My Orders</span>
+                          </Link>
+                        </>
                       )}
-
-                      <Link
-                        href="/account"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-[var(--text-primary)] hover:bg-[var(--surface-container-low)] font-medium"
-                      >
-                        <User className="w-4 h-4" />
-                        <span>My Account</span>
-                      </Link>
-
-                      <Link
-                        href="/account/orders"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-[var(--text-primary)] hover:bg-[var(--surface-container-low)] font-medium"
-                      >
-                        <Package className="w-4 h-4" />
-                        <span>Order History</span>
-                      </Link>
 
                       <button
                         onClick={async () => {

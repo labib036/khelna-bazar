@@ -132,7 +132,7 @@ export default function CartPage() {
           Review Your Toy Cart
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
-          {items.reduce((acc, i) => acc + i.quantity, 0)} item{items.length === 1 ? "" : "s"} &bull; Cash on Delivery across Bangladesh
+          {items.reduce((acc, i) => acc + i.quantity, 0)} item{items.length === 1 ? "" : "s"} &bull; Cash on Delivery &amp; MFS
         </p>
       </div>
 
@@ -140,7 +140,7 @@ export default function CartPage() {
       <div className="p-4 sm:p-5 rounded-3xl bg-[var(--surface-elevated)] border border-[var(--border)] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
         <span className="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-400">
           <Truck className="w-4 h-4" />
-          <span>Cash on Delivery Available Across Bangladesh</span>
+          <span>Cash on Delivery &amp; MFS Available</span>
         </span>
         <span className="text-[11px] text-[var(--text-muted)] font-medium flex items-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-[var(--primary)]" />
@@ -363,7 +363,7 @@ export default function CartPage() {
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-3.5 h-3.5 text-[var(--primary)]" />
-                <span>100% Genuine, tested, and child-safe toys</span>
+                <span>Inspect before you accept &bull; Support: 01712-039707</span>
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { updateStoreSettings, getStoreSettings } from "@/server/services/settings-service";
 import { auth } from "@/lib/auth";
+import { isAdminRole } from "@/lib/authorization-guards";
 import { StoreSettings } from "@/types/store";
 import { revalidatePath } from "next/cache";
 
@@ -17,7 +18,7 @@ export async function getSettingsAction() {
 export async function saveSettings(updates: Partial<StoreSettings>) {
   try {
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to update store settings." };
     }
 

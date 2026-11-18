@@ -5,15 +5,26 @@ This guide explains how the owner and staff operate the daily business of **KHEL
 ---
 
 ## 1. How to Access the Admin Console
-1. Navigate to your website URL: `https://your-site.vercel.app/admin` (or `http://localhost:3000/admin` locally).
-2. If not logged in, you will be redirected to the sign-in page.
-3. Sign in with your owner administrator account provisioned via `npm run admin:create`:
-   * **Email**: Your provisioned administrator email
-   * **Password**: Your secure administrator password
+1. Navigate to your website URL: `https://khelnabazar.com.bd/admin/dashboard` (or `http://localhost:3000/admin/dashboard` locally; visiting `/admin` automatically forwards here).
+2. If not logged in, you will be redirected to the sign-in page with a secure return callback.
+3. Sign in with your internal staff, admin, or super-admin account:
+   * **Super Admin**: Full root access, user provisioning, role assignments, audit logs.
+   * **Admin**: Catalog, stock, coupon codes, and store settings.
+   * **Staff**: Orders fulfillment, courier tracking, and payment verification.
 
 ---
 
-## 2. Managing Orders & Cash on Delivery (COD) Workflow
+## 2. Operational Roles & Permissions
+
+| Role | Permitted Areas | Key Responsibilities |
+|---|---|---|
+| **`STAFF`** | `/admin/dashboard`, `/admin/orders` | Customer order confirmation calls, courier dispatch, tracking numbers, MFS verification. |
+| **`ADMIN`** | All staff areas + `/admin/products`, `/admin/inventory`, `/admin/coupons`, `/admin/settings` | Product catalog CRUD, warehouse stock restocking, discounts, delivery charges. |
+| **`SUPER_ADMIN`** | All admin areas + `/admin/staff`, `/admin/audit-logs` | Staff hiring/provisioning, role elevation/demotion, immutable security audit review. |
+
+---
+
+## 3. Managing Orders, Payments & COD Workflow
 
 Because KHELNA BAZAR is strictly Cash on Delivery, your fulfillment workflow looks like this:
 
@@ -87,3 +98,25 @@ Because KHELNA BAZAR is strictly Cash on Delivery, your fulfillment workflow loo
    * **Free Shipping Threshold**: Default `৳2,000` (Any order over ৳2,000 automatically receives free delivery).
    * **Gift Wrapping Fee**: Default `৳50` per item.
 3. Click **Save All Settings**.
+
+---
+
+## 7. Staff & Role Management (Super Admin Only)
+
+1. In the sidebar, navigate to **Staff & Roles** (`/admin/staff`).
+2. Click **Add Staff Member** to provision a new team member:
+   * Enter their full name, work email, phone number, and temporary password.
+   * Select their initial role: `STAFF`, `ADMIN`, or `SUPER_ADMIN`.
+3. To promote or modify an existing staff member's permissions, use the dropdown in the **Role Management** column.
+4. *Safety Guard*: Super Admins cannot demote their own account, preventing accidental lockouts.
+
+---
+
+## 8. Security & System Audit Logs (Super Admin Only)
+
+1. In the sidebar, navigate to **Security Audit Logs** (`/admin/audit-logs`).
+2. Search or filter through immutable event logs for:
+   * Staff provisioning (`STAFF_PROVISIONED`)
+   * Role changes (`STAFF_ROLE_CHANGE`)
+   * Product and coupon deletions
+3. Click **View Diff** on any entry to see side-by-side JSON snapshots of state before and after the modification.

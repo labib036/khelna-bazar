@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { AdminLayout } from "@/components/admin/admin-layout";
 import { ToyProduct } from "@/types/store";
 import { getAdminProducts, saveProduct, deleteProduct } from "@/server/actions/product-actions";
 import { formatPrice } from "@/lib/utils";
@@ -117,8 +116,7 @@ export default function AdminProductsPage() {
   );
 
   return (
-    <AdminLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
@@ -358,6 +356,5 @@ export default function AdminProductsPage() {
           </div>
         )}
       </div>
-    </AdminLayout>
   );
 }

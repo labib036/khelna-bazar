@@ -6,7 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusPill } from "@/components/ui/status-pill";
 import { StoreOrder, OrderStatus } from "@/types/store";
-import { updateOrderStatus, updateCodStatus } from "@/server/actions/order-actions";
+import {
+  updateOrderStatus,
+  updateCodStatus,
+  verifyMfsPayment,
+  rejectMfsPayment,
+  recordDefectiveRefusal,
+  recordRefund,
+} from "@/server/actions/order-actions";
 import {
   Search,
   CheckCircle2,
@@ -22,6 +29,9 @@ import {
   Table as TableIcon,
   PhoneCall,
   Package,
+  RotateCcw,
+  AlertCircle,
+  Copy,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -39,7 +49,7 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
 
   // Modal editing states
   const [trackingInput, setTrackingInput] = useState("");
-  const [carrierInput, setCarrierInput] = useState("Steadfast Courier");
+  const [carrierInput, setCarrierInput] = useState("");
   const [printMode, setPrintMode] = useState<"invoice" | "packing" | null>(null);
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId) || null;
@@ -75,16 +85,92 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
   };
 
   // Manual MFS Payment Verification
-  const handleVerifyPayment = (orderId: string, orderNumber: string) => {
+  const handleVerifyMfsPayment = (orderId: string, orderNumber: string) => {
     startTransition(async () => {
-      const res = await updateOrderStatus(orderId, "CONFIRMED", "Payment Verification Staff");
+      const res = await verifyMfsPayment(orderId, "Payment Verification Staff");
       if (res.success) {
         setOrders((prev) =>
-          prev.map((o) => (o.id === orderId ? { ...o, status: "CONFIRMED" } : o))
+          prev.map((o) =>
+            o.id === orderId
+              ? { ...o, paymentStatus: "VERIFIED", status: o.status === "PENDING_CONFIRMATION" ? "CONFIRMED" : o.status }
+              : o
+          )
         );
         toast.success(`Payment verified and confirmed for ${orderNumber}!`);
       } else {
         toast.error(res.error || "Failed to verify payment");
+      }
+    });
+  };
+
+  // Reject MFS Payment
+  const handleRejectMfsPayment = (orderId: string, orderNumber: string) => {
+    const reason = window.prompt("Enter rejection reason for this MFS payment (e.g. TrxID not found on statement):");
+    if (!reason || !reason.trim()) return;
+
+    startTransition(async () => {
+      const res = await rejectMfsPayment(orderId, reason.trim(), "Payment Verification Staff");
+      if (res.success) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? { ...o, paymentStatus: "REJECTED", paymentRejectReason: reason.trim() }
+              : o
+          )
+        );
+        toast.error(`Payment for ${orderNumber} marked REJECTED.`);
+      } else {
+        toast.error(res.error || "Failed to reject payment");
+      }
+    });
+  };
+
+  // Record Defective Refusal at Delivery (Courier Inspection)
+  const handleRecordDefectiveRefusal = (orderId: string, orderNumber: string) => {
+    const notes = window.prompt("Enter defect details reported in front of delivery person (e.g. Broken battery box on inspection):");
+    if (!notes || !notes.trim()) return;
+
+    startTransition(async () => {
+      const res = await recordDefectiveRefusal(orderId, notes.trim(), "Fulfillment Hub");
+      if (res.success) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? { ...o, status: "RETURNED" }
+              : o
+          )
+        );
+        toast.success(`Order ${orderNumber} marked as RETURNED due to reported defect. Warehouse inventory restocked.`);
+      } else {
+        toast.error(res.error || "Failed to record refusal");
+      }
+    });
+  };
+
+  // Record Financial Refund
+  const handleRecordRefund = (orderId: string, orderNumber: string, defaultAmount: number, method: string) => {
+    const ref = window.prompt(`Enter refund transaction reference / TrxID for ${method} (Refund amount: ৳${defaultAmount}):`);
+    if (ref === null) return;
+
+    startTransition(async () => {
+      const res = await recordRefund(orderId, defaultAmount, method, ref.trim() || undefined, "Accounts");
+      if (res.success) {
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId
+              ? {
+                  ...o,
+                  refundStatus: "REFUNDED",
+                  refundAmount: defaultAmount,
+                  refundMethod: method,
+                  refundReference: ref.trim() || null,
+                }
+              : o
+          )
+        );
+        toast.success(`Refund of ৳${defaultAmount} recorded for ${orderNumber}!`);
+      } else {
+        toast.error(res.error || "Failed to record refund");
       }
     });
   };
@@ -506,29 +592,125 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
               </div>
             ) : (
               <>
+                {/* Mandatory Inspection Status */}
+                <div
+                  className={`p-3 rounded-2xl border text-xs flex items-center justify-between ${
+                    selectedOrder.inspectionAcknowledged
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400"
+                      : "bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 font-bold">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>
+                      {selectedOrder.inspectionAcknowledged
+                        ? "Mandatory Delivery Inspection: Acknowledged by Customer"
+                        : "Mandatory Delivery Inspection: Not Recorded"}
+                    </span>
+                  </div>
+                  {selectedOrder.inspectionAcknowledgedAt && (
+                    <span className="text-[10px] opacity-75">
+                      {new Date(selectedOrder.inspectionAcknowledgedAt).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+
                 {/* Manual MFS Payment Verification Banner */}
                 {selectedOrder.paymentMethod !== "CASH_ON_DELIVERY" && (
-                  <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/20 space-y-2">
-                    <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-xs">
-                      <ShieldAlert className="w-4 h-4" />
-                      <span>{selectedOrder.paymentMethod} Payment Verification Required</span>
-                    </div>
-                    <p className="text-xs text-[var(--text-muted)]">
-                      Customer sent manual payment. Check order transaction record or statement.
-                    </p>
-                    <div className="flex gap-2 pt-1">
-                      <Button
-                        type="button"
-                        disabled={isPending}
-                        onClick={() => handleVerifyPayment(selectedOrder.id, selectedOrder.orderNumber)}
-                        variant="primary"
-                        size="sm"
-                        className="bg-purple-600 hover:bg-purple-700 text-xs font-bold gap-1"
+                  <div className="p-4 rounded-2xl bg-purple-500/10 border border-purple-500/20 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-xs">
+                        <ShieldAlert className="w-4 h-4" />
+                        <span>{selectedOrder.paymentMethod} Manual Payment Verification</span>
+                      </div>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                          selectedOrder.paymentStatus === "VERIFIED"
+                            ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                            : selectedOrder.paymentStatus === "REJECTED"
+                            ? "bg-rose-500/20 text-rose-600 dark:text-rose-400"
+                            : "bg-amber-500/20 text-amber-600 dark:text-amber-400"
+                        }`}
                       >
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>Verify &amp; Confirm Order</span>
-                      </Button>
+                        {selectedOrder.paymentStatus || "AWAITING_VERIFICATION"}
+                      </span>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs bg-[var(--surface)] p-3 rounded-xl border border-[var(--border)]">
+                      <div>
+                        <span className="text-[var(--text-muted)] block text-[10px]">Sender Number</span>
+                        <span className="font-mono font-bold text-[var(--text-primary)]">
+                          {selectedOrder.mfsSenderNumber || selectedOrder.paymentDetails?.senderPhone || "Not provided"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[var(--text-muted)] block text-[10px]">Transaction ID (TrxID)</span>
+                        <span className="font-mono font-bold text-primary flex items-center gap-1">
+                          {selectedOrder.mfsTrxId || selectedOrder.paymentDetails?.trxId || "Not provided"}
+                          {(selectedOrder.mfsTrxId || selectedOrder.paymentDetails?.trxId) && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  selectedOrder.mfsTrxId || selectedOrder.paymentDetails?.trxId || ""
+                                );
+                                toast.success("Copied TrxID to clipboard");
+                              }}
+                              className="text-[var(--text-muted)] hover:text-primary cursor-pointer"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </button>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    {selectedOrder.paymentStatus === "VERIFIED" ? (
+                      <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>
+                          Payment verified{selectedOrder.paymentVerifiedBy ? ` by ${selectedOrder.paymentVerifiedBy}` : ""}.
+                          Cleared for courier dispatch.
+                        </span>
+                      </div>
+                    ) : selectedOrder.paymentStatus === "REJECTED" ? (
+                      <div className="text-xs text-rose-600 dark:text-rose-400 font-bold space-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>Payment Rejected</span>
+                        </div>
+                        {selectedOrder.paymentRejectReason && (
+                          <p className="text-[11px] font-normal text-[var(--text-muted)]">
+                            Reason: {selectedOrder.paymentRejectReason}
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex gap-2 pt-1">
+                        <Button
+                          type="button"
+                          disabled={isPending}
+                          onClick={() => handleVerifyMfsPayment(selectedOrder.id, selectedOrder.orderNumber)}
+                          variant="primary"
+                          size="sm"
+                          className="bg-purple-600 hover:bg-purple-700 text-xs font-bold gap-1"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>Verify Payment</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          disabled={isPending}
+                          onClick={() => handleRejectMfsPayment(selectedOrder.id, selectedOrder.orderNumber)}
+                          variant="outline"
+                          size="sm"
+                          className="text-xs font-bold text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                        >
+                          <Ban className="w-3.5 h-3.5" />
+                          <span>Reject (Invalid TrxID)</span>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -611,10 +793,12 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
                       onChange={(e) => setCarrierInput(e.target.value)}
                       className="h-10 px-3 rounded-2xl border border-[var(--border)] text-xs bg-[var(--surface-elevated)] text-[var(--text-primary)]"
                     >
+                      <option value="">Select Courier Partner</option>
                       <option value="Steadfast Courier">Steadfast Courier</option>
                       <option value="Pathao Logistics">Pathao Logistics</option>
                       <option value="RedX Delivery">RedX Delivery</option>
                       <option value="Paperfly">Paperfly</option>
+                      <option value="Sundarban Courier">Sundarban Courier</option>
                       <option value="SA Paribahan">SA Paribahan</option>
                     </select>
                     <Input
@@ -670,6 +854,79 @@ export function AdminOrdersClient({ initialOrders }: AdminOrdersClientProps) {
                     </div>
                   )}
                 </div>
+
+                {/* Defective at Delivery Refusal & Restock (Courier Inspection) */}
+                {(selectedOrder.status === "SHIPPED" ||
+                  selectedOrder.status === "OUT_FOR_DELIVERY" ||
+                  selectedOrder.status === "DELIVERED") && (
+                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-2">
+                    <h4 className="font-bold text-xs text-amber-700 dark:text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
+                      <RotateCcw className="w-4 h-4" /> Defective Refusal at Delivery
+                    </h4>
+                    <p className="text-xs text-[var(--text-muted)]">
+                      Customer inspected parcel in front of courier and reported a manufacturing defect or damage:
+                    </p>
+                    <Button
+                      type="button"
+                      disabled={isPending}
+                      onClick={() => handleRecordDefectiveRefusal(selectedOrder.id, selectedOrder.orderNumber)}
+                      variant="outline"
+                      size="sm"
+                      className="text-xs font-bold border-amber-400 text-amber-700 hover:bg-amber-100 dark:hover:bg-amber-950/30"
+                    >
+                      Record Defective Refusal &amp; Restock
+                    </Button>
+                  </div>
+                )}
+
+                {/* Refund Recording (Part 5.2) */}
+                {(selectedOrder.status === "RETURNED" || selectedOrder.status === "CANCELLED") && (
+                  <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 space-y-2">
+                    <h4 className="font-bold text-xs text-blue-700 dark:text-blue-400 flex items-center gap-1.5 uppercase tracking-wide">
+                      <DollarSign className="w-4 h-4" /> Customer Refund Management
+                    </h4>
+                    {selectedOrder.refundStatus === "REFUNDED" ? (
+                      <div className="text-xs text-blue-700 dark:text-blue-300 font-bold space-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>
+                            Refund Completed: {formatPrice(selectedOrder.refundAmount || selectedOrder.total)} via{" "}
+                            {selectedOrder.refundMethod || "MFS"}
+                          </span>
+                        </div>
+                        {selectedOrder.refundReference && (
+                          <p className="text-[11px] font-mono text-[var(--text-muted)]">
+                            Ref/TrxID: {selectedOrder.refundReference}
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <p className="text-xs text-[var(--text-muted)]">
+                          Return or cancellation recorded. Process customer refund:
+                        </p>
+                        <Button
+                          type="button"
+                          disabled={isPending}
+                          onClick={() =>
+                            handleRecordRefund(
+                              selectedOrder.id,
+                              selectedOrder.orderNumber,
+                              selectedOrder.total,
+                              selectedOrder.paymentMethod
+                            )
+                          }
+                          variant="primary"
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-xs font-bold gap-1"
+                        >
+                          <DollarSign className="w-3.5 h-3.5" />
+                          <span>Record Refund ({formatPrice(selectedOrder.total)})</span>
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Order Event Timeline */}
                 {selectedOrder.events && selectedOrder.events.length > 0 && (

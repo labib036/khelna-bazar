@@ -1,87 +1,78 @@
-# Project Progress Record: KHELNA BAZAR
+# Khelna Bazar (খেলনা বাজার) — Project Progress Tracker
 
-Status: **COMPLETED & FULLY VERIFIED**
-Version: 1.0.0
-Framework: Next.js 15 (App Router) + React 19 + TypeScript (Strict) + Tailwind CSS + Prisma + PostgreSQL (Neon)
-
----
-
-## 1. Requirement Coverage Matrix
-
-| Milestone | Scope / Feature | Status | Notes |
-| :--- | :--- | :---: | :--- |
-| **Phase 0: Foundation** | Next.js 15, React 19, TypeScript, Tailwind, Tokens, Prisma schema, DB singleton, Site config | **Passed** | Built with design tokens (`--brand`, `--sun`, `--coral`, `--mint`, `--grape`), dark mode support. |
-| **Phase 1: Catalog** | 60+ Realistic products, 13 categories, 12 brands, Seed script, Home page, PLP filters, PDP gallery/specs, Instant search | **Passed** | Full catalog with child safety specs, ASTM F963 & CE badges, choking hazard warnings, age ranges. |
-| **Phase 2: Cart & COD Checkout** | Guest & user cart, Stepper, Free shipping progress, Coupons, Shipping calculation, Single-page COD checkout, Order confirmation, Invoices | **Passed** | **STRICT Cash on Delivery (COD) ONLY**. No Stripe or online gateways. Dhaka ৳60 / Outside Dhaka ৳120 / Free over ৳2,000. |
-| **Phase 3: Auth & Customer Account** | Register, Login, Roles, Customer Dashboard, Orders timeline, Addresses, Wishlist, Reviews, Rewards | **Passed** | 1-Click demo logins for Owner (Admin), Staff, and Customer. PlayPoints loyalty club, saved address cards. |
-| **Phase 4: Admin Dashboard** | KPI overview, Product management, Categories, Orders & COD collection tracking, Inventory, Coupons, Settings | **Passed** | Full COD reconciliation workflow: mark when courier collects cash, track amounts, manage stock & products without code. |
-| **Phase 5: Delight & Performance** | Gift finder quiz, Toy comparison, Safety notices, Age badges, Confetti, PWA support, Skeletons | **Passed** | 4-step interactive Gift Finder, side-by-side toy comparison, confetti celebrations on order success. |
-| **Phase 6: QA & Launch Guides** | Unit tests (Vitest), README, Beginner guide, Vercel & Neon setup guides, GitHub push instructions | **Passed** | All 8 Vitest unit tests passed. Production `npm run build` passed with zero errors. All beginner guides created. |
+**Repository:** `khelna-bazar-main`  
+**Active Branch:** `stitch-ui-launch`  
+**Latest Milestone:** Three Separate Panels & Route Isolation Refactor Completed  
+**Last Updated:** November 18, 2026
 
 ---
 
-## 2. Test & Build Verification Results
+## 🎯 Project Overview & Status Summary
 
-* **Vitest Unit Tests**:
-  ```
-  ✓ tests/unit/order-logic.test.ts (8 tests)
-  Test Files: 1 passed (1)
-  Tests: 8 passed (8)
-  ```
-* **Next.js Production Build (`npm run build`)**:
-  ```
-  ✓ Generating static pages (25/25)
-  ✓ Compiled successfully
-  ✓ Zero TypeScript errors
-  ✓ Zero ESLint errors
-  First load JS: 101 kB shared (Home page 127 kB total, well below 170 kB budget)
-  ```
+| Pillar | Specification | Status | Evidence / Verification |
+|---|---|:---:|---|
+| **E-Commerce Platform** | Next.js 16 (Turbopack), React 19, TypeScript | ✅ Complete | Clean `npm run build` (41 routes) |
+| **Database & ORM** | PostgreSQL (Neon serverless) + Prisma ORM | ✅ Complete | Prisma v6.19.3 schema with 25+ models & Enums |
+| **Payment Model** | Strictly COD + Manual MFS (bKash/Nagad) | ✅ Complete | Dual-state COD & payment reconciliation engine |
+| **Sensory Brand UI** | Google Stitch Design Tokens, Baloo 2 + Plus Jakarta | ✅ Complete | Complete component suite with trust badges |
+| **Panel Isolation** | Decoupled Storefront, Customer Dashboard, Admin Console | ✅ Complete | Dedicated layouts, separate shells, zero chrome bleed |
+| **Security & Auth** | NextAuth v5 + Multi-layer role guards + Zero IDOR | ✅ Complete | 90 / 90 automated tests passing |
 
 ---
 
-## 3. Verified Storefront & Admin Routes
+## 📅 Chronological Milestones
 
-* Storefront:
-  - `/` (Home: Hero, Shop by Age, Flash Deals, Categories, Best Sellers, Budget Picks, Reviews)
-  - `/c/[...slug]` (Category listing with sticky age, price, brand filters, and sorting)
-  - `/p/[slug]` (Product detail with image gallery, buy box, safety certifications, specs, reviews)
-  - `/search` (Instant search with voice search integration)
-  - `/cart` (Basket review with free delivery progress bar and coupon application)
-  - `/checkout` (Single-page Cash on Delivery checkout with Bangladesh address fields)
-  - `/order/[id]` (Order confirmation with confetti, COD reminder, and courier timeline)
-  - `/gift-finder` (Interactive 4-step gift quiz)
-  - `/compare` (Side-by-side comparison of up to 4 toys)
-  - `/wishlist` (Saved favorites with 1-click basket transfer)
-  - `/deals` (Today's flash deals)
-  - `/new-arrivals` (New toy releases)
-  - `/track-order` (Public order tracking by phone / order ID)
-  - `/pages/[slug]` (CMS: About Us, Toy Safety, Shipping Policy, Returns Policy, Privacy, Terms)
-* Authentication:
-  - `/login` (Email + password with 1-click Admin, Staff, and Customer demo buttons)
-  - `/register` (Parent/adult 18+ verification checkbox and 100 welcome bonus points)
-* Customer Dashboard:
-  - `/account` (Overview with recent orders and loyalty tier)
-  - `/account/orders` (Order tracking & invoices)
-  - `/account/addresses` (Saved home/office addresses)
-  - `/account/rewards` (PlayPoints balance and referral link)
-* Admin Dashboard:
-  - `/admin` (Live gross sales, cash in transit, orders status breakdown)
-  - `/admin/orders` (Order fulfillment and COD cash collection reconciliation)
-  - `/admin/products` (Product catalog and quick price/stock editor)
-  - `/admin/inventory` (SKU stock levels and quick restock buttons)
-  - `/admin/coupons` (Coupon promo code manager)
-  - `/admin/settings` (Store info, delivery charges, and logo customization)
+### Milestone 1: Foundation & E-Commerce Infrastructure
+- [x] Initialized Next.js App Router project with TypeScript strict mode.
+- [x] Configured PostgreSQL database schema with Prisma (Products, Variants, Categories, Brands, Orders, OrderEvents, Coupons, Addresses, Users, AuditLogs).
+- [x] Implemented Zustand client state for cart, wishlist, and toy comparison with local storage persistence.
+- [x] Built responsive shopping cart drawer with live free delivery meter (৳1,500 threshold).
+- [x] Created single-page Cash on Delivery checkout with mandatory doorstep inspection consent.
+
+### Milestone 2: COD & MFS Operational Engine
+- [x] Developed dual-lifecycle order engine separating fulfillment status (`PENDING_CONFIRMATION` → `CONFIRMED` → `PACKED` → `SHIPPED` → `DELIVERED`) from cash reconciliation (`UNCOLLECTED` → `COLLECTED` → `DISCREPANCY`).
+- [x] Built manual MFS payment verification workflow (bKash/Nagad transaction ID & sender phone audit).
+- [x] Created doorstep parcel refusal handler with automated defective inventory tagging.
+- [x] Built customer order tracking lookup (`/track-order`) with dual-factor protection (`orderNumber` + `phone`).
+
+### Milestone 3: Google Stitch Sensory UI & Child Safety
+- [x] Integrated Bangladeshi cultural nuances and typography (Baloo 2 Bengali script).
+- [x] Added child safety certification badges (ASTM F963, CE, non-toxic BPA-free marks).
+- [x] Implemented 6 standard age brackets (0–12m, 1–2y, 3–4y, 5–7y, 8–11y, 12+).
+- [x] Built interactive 4-step Gift Finder quiz with budget & age filtering.
+- [x] Created side-by-side toy comparison tray and matrix.
+
+### Milestone 4: Three Separate Panels & Route Isolation Refactor
+- [x] **Root Layout Decontamination**: Stripped storefront chrome (`AnnouncementBar`, `Header`, `Footer`, `MiniCartDrawer`, `MobileBottomNav`) out of `src/app/layout.tsx`.
+- [x] **Storefront Route Group `(store)`**: Relocated all public catalog and marketing routes inside `src/app/(store)/` wrapped by `(store)/layout.tsx` (`data-testid="storefront-shell"`).
+- [x] **Customer Dashboard Panel B (`/dashboard/*`)**:
+  - Built dedicated customer shell (`data-testid="customer-dashboard-shell"`, `data-testid="customer-sidebar"`).
+  - Implemented `/dashboard` overview, `/dashboard/orders`, `/dashboard/orders/[orderId]`, `/dashboard/addresses`, `/dashboard/profile`, and `/dashboard/rewards`.
+  - Added compatibility 307 redirects for all legacy `/account/*` URLs.
+  - Enforced strict database-level scoping (`where: { userId: session.user.id }`) eliminating all IDOR risks.
+- [x] **Admin Management Console Panel C (`/admin/*`)**:
+  - Unified admin shell (`src/app/admin/layout.tsx`) with role-aware sidebar.
+  - Relocated canonical admin home to `/admin/dashboard` (with `/admin` redirect).
+  - Added `SUPER_ADMIN` role to Prisma schema and regenerated Prisma client.
+  - Built Super Admin Staff Management (`/admin/staff`) with user provisioning and role assignment.
+  - Built Super Admin Security Audit Logs (`/admin/audit-logs`) with state diff viewers.
+  - Centralized server authorization guards (`requireCustomer`, `requireStaff`, `requireAdmin`, `requireSuperAdmin`).
+- [x] **Focused Authentication Panel D (`(auth)`)**:
+  - Implemented distraction-free centered card layout for `/login`, `/register`, and `/forgot-password`.
+- [x] **Automated Testing & Build Validation**:
+  - 10 unit test files, 90 tests passing (100% pass rate).
+  - Next.js production build (`npm run build`) compiles cleanly across all 41 routes.
+- [x] **Comprehensive Documentation**:
+  - Published 8 audit and test reports (`PANEL_ARCHITECTURE_AUDIT.md`, `PANEL_ROUTE_MAP.md`, `ROLE_PERMISSION_MATRIX.md`, `PANEL_MIGRATION_REPORT.md`, `PANEL_ISOLATION_TEST_REPORT.md`, `PANEL_UI_QA_REPORT.md`, `PANEL_LINK_AUDIT.md`, `PANEL_SECURITY_REVIEW.md`).
+  - Updated `README.md`, `ADMIN_GUIDE.md`, and `SECURITY.md`.
 
 ---
 
-## 4. Documentation Manifest
+## 📊 Verification Test Results
 
-1. [README.md](./README.md) - Complete project overview, architecture, commands, and credentials.
-2. [BEGINNER_GUIDE.md](./BEGINNER_GUIDE.md) - Step-by-step walkthrough from absolute zero knowledge.
-3. [SETUP_GUIDE.md](./SETUP_GUIDE.md) - Exact local setup steps.
-4. [GITHUB_GUIDE.md](./GITHUB_GUIDE.md) - Pushing to GitHub safely without leaking secrets.
-5. [VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md) - Deploying to Vercel free tier.
-6. [DATABASE_GUIDE.md](./DATABASE_GUIDE.md) - Creating a free Neon PostgreSQL database.
-7. [ADMIN_GUIDE.md](./ADMIN_GUIDE.md) - How the store owner manages orders, products, and COD cash.
-8. [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Common beginner errors and exact fixes.
-9. [DECISIONS.md](./DECISIONS.md) - Architectural decisions, COD-only implementation, and Bangladesh defaults.
+```
+Test Files: 10 passed (10)
+Tests:      90 passed (90)
+TypeScript: 0 errors (npx tsc --noEmit)
+Next Build: Exit Code 0 (Production Build Successful)
+```

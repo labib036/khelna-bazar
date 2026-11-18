@@ -85,26 +85,26 @@ export function StitchHero() {
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-fixed)] shadow-sm font-extrabold text-xs">
               <Truck className="w-3.5 h-3.5 text-[var(--on-secondary-fixed)]" />
-              <span className="uppercase tracking-wider">Cash on Delivery Across 64 Districts</span>
+              <span className="uppercase tracking-wider">Cash on Delivery &amp; MFS Available</span>
             </div>
 
             <div className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--surface-container-high)] text-[var(--primary)] font-bold text-xs border border-[var(--primary)]/15 shadow-2xs">
-              <Zap className="w-3.5 h-3.5" />
-              <span>Same-Day Dispatch • Free Over ৳1500</span>
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Inspect Before You Accept &bull; Hotline: 01712-039707</span>
             </div>
           </div>
 
           {/* Main Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight leading-[1.1] text-[var(--text-primary)]">
-            Where Childhood Wonders{" "}
+            Find a little more{" "}
             <span className="text-[var(--primary)] inline-flex items-center gap-2">
-              Come Alive <span className="inline-block text-2xl sm:text-4xl animate-bounce">🚀</span>
+              joy in play <span className="inline-block text-2xl sm:text-4xl animate-bounce">🚀</span>
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base text-[var(--text-muted)] max-w-xl leading-relaxed">
-            Carefully tested, sensory-rich play essentials and artisan toymaking from Bangladesh and around the world. Designed to nurture curious young minds with complete safety.
+            Explore toys for play, learning and thoughtful gifting. Check your package in front of the delivery person with reliable Cash on Delivery.
           </p>
 
           {/* Dual Playful CTAs */}
@@ -113,21 +113,17 @@ export function StitchHero() {
               href="/c/all"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-bold text-sm shadow-[0_4px_0_#93000E] active:translate-y-[2px] active:shadow-[0_2px_0_#93000E] hover:bg-[var(--primary-hover)] transition-all cursor-pointer"
             >
-              <span>Explore Best Sellers</span>
+              <span>Explore Toys</span>
               <Sparkles className="w-4 h-4 text-[var(--secondary-container)]" />
             </Link>
 
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.getElementById("gift-wizard-banner");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }}
+            <Link
+              href="/gift-finder"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--surface)] text-[var(--text-primary)] hover:bg-[var(--surface-container-low)] font-bold text-sm shadow-xs border border-[var(--border)] active:translate-y-[1px] transition-all cursor-pointer"
             >
               <Gift className="w-4 h-4 text-[var(--secondary)]" />
-              <span>Try 4-Step Gift Finder</span>
-            </button>
+              <span>Gift Finder</span>
+            </Link>
           </div>
 
           {/* Authentic Store Trust Snippet */}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AdminLayout } from "@/components/admin/admin-layout";
 import { siteConfig } from "@/config/site";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -56,8 +55,7 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <AdminLayout>
-      <form onSubmit={handleSave} className="space-y-8 max-w-4xl">
+    <form onSubmit={handleSave} className="space-y-8 max-w-4xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8E2DE] dark:border-[#2E303E]">
           <div>
             <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white flex items-center gap-2.5">
@@ -146,6 +144,5 @@ export default function AdminSettingsPage() {
           </div>
         </div>
       </form>
-    </AdminLayout>
   );
 }

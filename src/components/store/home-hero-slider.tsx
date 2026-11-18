@@ -20,7 +20,7 @@ const SLIDES: HeroSlide[] = [
     badge: "Bangladesh's Trusted Toy Marketplace",
     title: "Where Pure Joy & Curiosity Begin!",
     subtitle:
-      "Certified safe toys, building blocks, STEM robotics kits, and snuggly plushies. Pay via Cash on Delivery nationwide.",
+      "Building blocks, STEM robotics kits, and engaging learning toys. Reliable Cash on Delivery with doorstep inspection.",
     ctaText: "Shop Building Sets",
     ctaLink: "/c/building-blocks",
     bgGradient: "linear-gradient(135deg, #7C2D12 0%, #C2410C 35%, #EA580C 70%, #D97706 100%)",

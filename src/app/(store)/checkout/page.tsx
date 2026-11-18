@@ -356,6 +356,9 @@ export default function CheckoutPage() {
                       <User className="w-4 h-4 absolute left-3.5 top-3 text-[var(--text-muted)]" />
                       <input
                         type="text"
+                        name="fullName"
+                        id="fullName"
+                        data-testid="checkout-fullname"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder={isBn ? "যেমন: মারিয়াম খান" : "e.g. Mariam Khan"}
@@ -380,6 +383,9 @@ export default function CheckoutPage() {
                       </span>
                       <input
                         type="tel"
+                        name="phone"
+                        id="phone"
+                        data-testid="checkout-phone"
                         value={phone.startsWith("+880") ? phone.replace("+880", "").trim() : phone}
                         onChange={(e) => setPhone(e.target.value.replace(/[^\d]/g, ""))}
                         placeholder="1712039707"
@@ -824,6 +830,9 @@ export default function CheckoutPage() {
                 <label className="flex items-start gap-3 pt-3 border-t border-[var(--border)] cursor-pointer select-none">
                   <input
                     type="checkbox"
+                    id="inspectionConsent"
+                    name="inspectionConsent"
+                    data-testid="checkout-inspection-consent"
                     checked={inspectAcknowledged}
                     onChange={(e) => setInspectAcknowledged(e.target.checked)}
                     className="mt-0.5 w-4 h-4 rounded text-[var(--primary)] focus:ring-[var(--primary)] cursor-pointer shrink-0"

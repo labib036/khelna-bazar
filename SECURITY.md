@@ -14,18 +14,29 @@ This document describes the security model, authentication architecture, and har
 
 ---
 
-## 2. Multi-Layer Authorization & Edge Route Protection
+## 2. Multi-Layer Authorization & Panel Route Protection
 
-Khelna Bazar implements **defense-in-depth authorization**:
+Khelna Bazar implements **defense-in-depth authorization across three separate panels**:
 
-1. **Edge Middleware Guard (`src/middleware.ts`)**:
-   * Intercepts all requests matching `/admin/*` and `/account/*`.
-   * Unauthenticated requests are immediately redirected to `/login` with a secure callback URL.
-   * Non-admin roles attempting to access `/admin/*` receive `403 Forbidden` at the edge before any page renders.
+1. **Panel Layout Isolation**:
+   * Public Storefront (`src/app/(store)/layout.tsx`) isolates shopping chrome from administrative and customer dashboards.
+   * Customer Dashboard (`src/app/dashboard/layout.tsx`) mounts personal profile navigation and is flagged with `noindex, nofollow`.
+   * Management Console (`src/app/admin/layout.tsx`) isolates internal operations and requires staff authentication.
 
-2. **Server Action & API Authorization**:
-   * Every administrative mutation action in `src/server/actions/*` verifies the caller's server session and asserts `session.user.role === "ADMIN" | "STAFF"`.
+2. **Edge Middleware Guard (`src/middleware.ts`)**:
+   * Intercepts all requests matching `/admin/*` and `/dashboard/*`.
+   * Unauthenticated requests are immediately redirected to `/login` with an open-redirect-protected callback URL.
+   * Normal customers attempting to access `/admin/*` are redirected to `/dashboard`.
+   * Staff/Admin accounts are restricted from Super Admin routes (`/admin/staff`, `/admin/audit-logs`).
+   * Legacy `/account/*` URLs are redirected seamlessly to `/dashboard/*`.
+
+3. **Server Authorization Guards (`src/lib/authorization-guards.ts`)**:
+   * Centralized helpers (`requireCustomer`, `requireStaff`, `requireAdmin`, `requireSuperAdmin`) verify caller role server-side.
    * Client-side role claims are completely ignored; permissions are evaluated strictly on the server against the database.
+
+4. **Database-Level Ownership Scoping (Zero IDOR)**:
+   * Every customer order, address, and profile query enforces `where: { userId: session.user.id }`.
+   * Cross-account data tampering and IDOR vulnerabilities are prevented at the database driver level.
 
 ---
 

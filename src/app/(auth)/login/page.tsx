@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -57,13 +57,17 @@ function LoginForm() {
 
       toast.success("Welcome back to Khelna Bazar!");
 
+      const session = await getSession();
+      const isPrivileged = session?.user?.role && session.user.role !== "CUSTOMER";
+
       if (safeRedirect) {
         router.push(safeRedirect);
-        router.refresh();
+      } else if (isPrivileged) {
+        router.push("/admin/dashboard");
       } else {
-        router.push("/account");
-        router.refresh();
+        router.push("/dashboard");
       }
+      router.refresh();
     } catch {
       const errTxt = "An unexpected connection error occurred during sign in.";
       setErrorMessage(errTxt);

@@ -159,7 +159,7 @@ export function AdminProductsClient({
             Toy Product Catalog ({products.length})
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-0.5">
-            PostgreSQL-persisted inventory, child-safety certifications, and multi-image catalog management.
+            PostgreSQL-persisted inventory, age appropriateness indicators, and multi-image catalog management.
           </p>
         </div>
 

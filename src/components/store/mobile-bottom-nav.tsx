@@ -19,7 +19,7 @@ export function MobileBottomNav() {
     { label: "Home", href: "/", icon: Home },
     { label: "Categories", href: "/c/all", icon: Layers },
     { label: "Search", href: "/search", icon: Search },
-    { label: "Account", href: "/account", icon: User },
+    { label: "Account", href: "/dashboard", icon: User },
   ];
 
   return (

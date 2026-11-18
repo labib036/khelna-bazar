@@ -112,7 +112,7 @@ export default function TrackOrderPage() {
 
         <div className="mt-6 pt-5 border-t border-[var(--border)] flex items-center justify-center gap-2 text-xs text-[var(--text-muted)]">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Encrypted real-time courier integration with Steadfast &amp; Pathao</span>
+          <span>Direct order event tracking &bull; Support: 01712-039707</span>
         </div>
       </div>
     </div>

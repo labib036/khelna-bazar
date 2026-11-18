@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
 import { revalidatePath } from "next/cache";
 import { validateCoupon } from "@/server/services/coupon-service";
 import { CouponType } from "@prisma/client";
@@ -48,7 +49,7 @@ export async function createCoupon(input: {
     if (!session?.user) {
       return { success: false, error: "Unauthorized: You must be logged in." };
     }
-    if (session.user.role !== "ADMIN") {
+    if (!isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
     }
 
@@ -97,7 +98,7 @@ export async function toggleCouponActive(id: string) {
     if (!session?.user) {
       return { success: false, error: "Unauthorized: You must be logged in." };
     }
-    if (session.user.role !== "ADMIN") {
+    if (!isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
     }
 
@@ -124,7 +125,7 @@ export async function deleteCoupon(id: string) {
     if (!session?.user) {
       return { success: false, error: "Unauthorized: You must be logged in." };
     }
-    if (session.user.role !== "ADMIN") {
+    if (!isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
     }
 
@@ -140,7 +141,7 @@ export async function deleteCoupon(id: string) {
 export async function getAdminCoupons() {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Staff or Admin privileges required." };
     }
 

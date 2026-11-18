@@ -9,9 +9,13 @@
 **KHELNA BAZAR** is a production-ready, full-stack online toy store built specifically for parents, gift-buyers, and toy enthusiasts in Bangladesh. It combines the rigorous information architecture and conversion speed of major global retailers with a warm, playful, and child-safe visual identity.
 
 ### 🎯 Key Highlights
-* **Strictly Cash on Delivery (COD)**: Zero hassle with payment gateway keys or card security risks. Customers place orders with 1 tap and pay cash upon doorstep parcel inspection.
+* **Three Isolated Panels with Dedicated Layouts**:
+  * **Panel A (Public Storefront)**: Marketing hero, catalog flyout, deals, reviews, and 1-tap COD/MFS checkout wrapped in `src/app/(store)/layout.tsx`.
+  * **Panel B (Customer Dashboard)**: Dedicated personal account center at `/dashboard/*` with parcel tracking, order history, address book, and zero IDOR vulnerabilities.
+  * **Panel C (Management Console)**: Unified administration center at `/admin/*` (canonical `/admin/dashboard`) with hierarchical role access (`STAFF`, `ADMIN`, `SUPER_ADMIN`).
+  * **Panel D (Focused Auth Experience)**: Distraction-free authentication cards at `/(auth)/*`.
+* **Strictly Cash on Delivery (COD) & Manual MFS**: Zero gateway hassle; customers pay cash upon doorstep inspection or pay via verified bKash/Nagad transactions.
 * **Dual-State COD Lifecycle**: Separate tracking for order fulfillment (`Pending Confirmation` → `Confirmed` → `Packed` → `Shipped` → `Delivered`) and cash reconciliation (`Uncollected` → `Collected` → `Discrepancy`).
-* **Complete Admin Panel**: The store owner can manage catalog products, live stock, prices, customer orders, courier dispatch, coupons, and delivery charges without ever writing code.
 * **Child Safety Focus**: ASTM F963 & CE safety certifications, mandatory choking hazard badges, age recommendations (0–12m, 1–2y, 3–4y, 5–7y, 8–11y, 12+), and non-toxic material transparency.
 * **Instant Delight Features**: Interactive 4-step Gift Finder quiz, side-by-side toy feature comparison, persistent wishlist, optimistic basket drawer with free delivery progress bar, and confetti order celebrations.
 
@@ -37,99 +41,45 @@
 ```
 khelna-bazar/
 ├── prisma/
-│   ├── schema.prisma        # Complete PostgreSQL database schema (25+ models)
-│   └── seed.ts              # Seeder with 60+ realistic toys, brands, coupons & demo users
-├── public/
-│   └── images/
-│       └── logo-placeholder.svg  # Central vector logo asset
+│   ├── schema.prisma        # Complete PostgreSQL database schema (25+ models, Role enum)
+│   └── seed-essential.ts    # Seed script with essential store data
 ├── src/
 │   ├── app/
-│   │   ├── (auth)/          # Login & registration routes
-│   │   ├── (store)/         # Storefront routes
-│   │   │   ├── c/[...slug]/ # Category listing & smart filter sidebar
+│   │   ├── (auth)/          # Focused login, register, forgot-password layout
+│   │   ├── (store)/         # Public Storefront Panel A (with Announcement, Header, Footer)
+│   │   │   ├── c/[...slug]/ # Category listing & filter sidebar
 │   │   │   ├── p/[slug]/    # Product detail page (gallery, buy box, safety tabs)
 │   │   │   ├── search/      # Instant autocomplete & search results
 │   │   │   ├── cart/        # Full cart review with free delivery meter
 │   │   │   ├── checkout/    # Single-page Cash on Delivery checkout
-│   │   │   ├── order/[id]/  # Order confirmation & live courier timeline
-│   │   │   ├── gift-finder/ # Interactive 4-step toy quiz
-│   │   │   ├── compare/     # Side-by-side toy specs comparison
-│   │   │   └── wishlist/    # Saved favorites with 1-click cart transfer
-│   │   ├── account/         # Customer Dashboard (orders, addresses, rewards)
-│   │   ├── admin/           # Owner Admin Console (KPIs, catalog, orders, COD cash)
-│   │   ├── layout.tsx       # Root layout with header, footer, cart drawer
-│   │   └── page.tsx         # Home page with hero, deals, age tiles, best sellers
+│   │   │   └── ...
+│   │   ├── dashboard/       # Customer Dashboard Panel B (layout, orders, addresses, profile)
+│   │   ├── admin/           # Management Console Panel C (layout, dashboard, orders, staff, audit)
+│   │   ├── account/         # Compatibility redirects to /dashboard/*
+│   │   └── layout.tsx       # Minimal root layout (fonts, providers, toaster)
 │   ├── components/
-│   │   ├── admin/           # Admin layout & management tools
-│   │   ├── store/           # Header, footer, product cards, mini-cart drawer
-│   │   └── ui/              # Reusable buttons, badges, inputs
-│   ├── config/
-│   │   └── site.ts          # Central configuration for Logo, Site Name, Delivery Zones & BDT
+│   │   ├── admin/           # Admin shell, tables, charts, staff & audit log clients
+│   │   ├── customer/        # Customer dashboard shell, sidebar, mobile drawer
+│   │   └── store/           # Storefront header, footer, cards, mini-cart drawer
 │   ├── lib/
-│   │   ├── db.ts            # Prisma client singleton
-│   │   ├── cart-store.ts    # Zustand cart state with localStorage persistence
-│   │   ├── wishlist-store.ts# Zustand wishlist state
-│   │   ├── compare-store.ts # Zustand toy comparison state
-│   │   └── utils.ts         # Bangladeshi Taka (৳) formatting, delivery calculators
-│   └── server/
-│       ├── actions/         # Server Actions (placeCodOrder, etc.)
-│       ├── services/        # Product & category query services
-│       └── mock-data.ts     # Rich offline mock catalog
+│   │   ├── authorization-guards.ts # Centralized server authorization guards
+│   │   └── auth.ts          # NextAuth v5 configuration & session types
 ```
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 📚 Documentation & Architecture Specifications
 
-### 1. Prerequisites
-* **Node.js** v20+ or v22+ installed on your computer.
-* **Git** installed.
-
-### 2. Installation
-Open your terminal (Command Prompt, PowerShell, or macOS Terminal) and run:
-```bash
-# 1. Clone or open the project folder
-cd "c:\Techspire Labs\Khelna Bazar By Labib"
-
-# 2. Install dependencies
-npm install
-
-# 3. Copy environment configuration
-cp .env.example .env
-
-# 4. Generate Prisma Client
-npx prisma generate
-
-# 5. Start the development server
-npm run dev
-```
-
-Open your browser and navigate to: **`http://localhost:3000`**  
-The website will start immediately with the complete interactive storefront!
-
----
-
-## 🔐 Administrator Account Provisioning
-
-No default or demo accounts exist. To create your first store administrator account, run:
-
-```bash
-npm run admin:create
-```
-
-Follow the CLI prompts to specify your administrator email and phone number. A cryptographically secure one-time password will be generated.
-
----
-
-## 📚 Documentation & Guides
-
-Comprehensive guides for deploying, securing, and operating Khelna Bazar:
-* 🛡️ [**ADMIN_GUIDE.md**](./ADMIN_GUIDE.md) - How the store owner manages orders, products, and fulfillment.
-* ⚙️ [**SETUP_GUIDE.md**](./SETUP_GUIDE.md) - Local development environment setup instructions.
-* 🗄️ [**DATABASE_GUIDE.md**](./DATABASE_GUIDE.md) - PostgreSQL configuration and seeding.
-* 🔒 [**SECURITY.md**](./SECURITY.md) - Production security architecture, role authorization, and secrets.
-* 🚀 [**LAUNCH_CHECKLIST.md**](./LAUNCH_CHECKLIST.md) - Pre-flight verification checklist before public launch.
-* 🎨 [**DESIGN_SYSTEM.md**](./DESIGN_SYSTEM.md) - Google Stitch design system specifications.
+* 🏛️ [**PANEL_ARCHITECTURE_AUDIT.md**](./PANEL_ARCHITECTURE_AUDIT.md) - Panel decoupling audit and root cause analysis.
+* 🗺️ [**PANEL_ROUTE_MAP.md**](./PANEL_ROUTE_MAP.md) - Complete canonical route tables and compatibility redirects.
+* 🛡️ [**ROLE_PERMISSION_MATRIX.md**](./ROLE_PERMISSION_MATRIX.md) - Capability matrix across GUEST, CUSTOMER, STAFF, ADMIN, SUPER_ADMIN.
+* 📦 [**PANEL_MIGRATION_REPORT.md**](./PANEL_MIGRATION_REPORT.md) - Step-by-step file migration and architectural refactor details.
+* 🧪 [**PANEL_ISOLATION_TEST_REPORT.md**](./PANEL_ISOLATION_TEST_REPORT.md) - Automated isolation, IDOR, and role guard test report.
+* 📱 [**PANEL_UI_QA_REPORT.md**](./PANEL_UI_QA_REPORT.md) - Responsive UI/UX inspection across mobile, tablet, and desktop.
+* 🔗 [**PANEL_LINK_AUDIT.md**](./PANEL_LINK_AUDIT.md) - Comprehensive link destination audit (0 broken links).
+* 🔒 [**PANEL_SECURITY_REVIEW.md**](./PANEL_SECURITY_REVIEW.md) - Multi-layer defense-in-depth, open redirect and IDOR defense.
+* 📖 [**ADMIN_GUIDE.md**](./ADMIN_GUIDE.md) - Operational guide for store staff, managers, and super-admins.
+* 🔐 [**SECURITY.md**](./SECURITY.md) - Production security policies and role controls.
 
 ---
 

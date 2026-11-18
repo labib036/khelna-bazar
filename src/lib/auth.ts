@@ -22,7 +22,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      role: "CUSTOMER" | "STAFF" | "ADMIN";
+      role: "CUSTOMER" | "STAFF" | "ADMIN" | "SUPER_ADMIN";
       phone?: string | null;
     } & DefaultSession["user"];
   }
@@ -100,7 +100,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user && token) {
         session.user.id = token.id as string;
-        session.user.role = (token.role as "CUSTOMER" | "STAFF" | "ADMIN") || "CUSTOMER";
+        session.user.role = (token.role as "CUSTOMER" | "STAFF" | "ADMIN" | "SUPER_ADMIN") || "CUSTOMER";
         session.user.phone = token.phone as string | null | undefined;
       }
       return session;

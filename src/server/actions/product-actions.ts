@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getProducts } from "@/server/services/product-service";
@@ -43,7 +44,7 @@ function slugify(text: string): string {
 export async function saveProduct(input: ProductInput) {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required to save catalog products." };
     }
 
@@ -178,7 +179,7 @@ export async function saveProduct(input: ProductInput) {
 export async function deleteProduct(productId: string) {
   try {
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to delete catalog products." };
     }
 
@@ -201,7 +202,7 @@ export async function deleteProduct(productId: string) {
 export async function getAdminProducts(): Promise<{ products: ToyProduct[]; error?: string }> {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { products: [], error: "Unauthorized: Admin or Staff privileges required." };
     }
     const { products } = await getProducts({ limit: 100 });
@@ -237,7 +238,7 @@ export async function getGiftRecommendations(params: {
 export async function updateVariantStock(variantId: string, delta: number) {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required." };
     }
     const variant = await db.productVariant.findUnique({ where: { id: variantId } });

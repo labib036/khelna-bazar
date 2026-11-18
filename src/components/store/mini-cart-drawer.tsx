@@ -41,13 +41,11 @@ export function MiniCartDrawer() {
     getShippingFee,
     getGiftWrapFee,
     getTotal,
-    getFreeShippingRemaining,
     undoRemove,
   } = useCartStore();
 
   const [couponInput, setCouponInput] = useState("");
   const [couponMessage, setCouponMessage] = useState<{ text: string; isError: boolean } | null>(null);
-  const [hasCelebratedFreeShipping, setHasCelebratedFreeShipping] = useState(false);
 
   // Reference counted safe scroll lock
   useLockBodyScroll(isOpen);
@@ -67,31 +65,6 @@ export function MiniCartDrawer() {
   const shippingFee = getShippingFee();
   const giftWrapFee = getGiftWrapFee();
   const total = getTotal();
-  const freeShippingRemaining = getFreeShippingRemaining();
-  const threshold = SHIPPING_CONFIG.freeShippingThreshold;
-  const progressPercent = Math.min(100, Math.max(0, Math.round(((threshold - freeShippingRemaining) / threshold) * 100)));
-
-  // Free shipping celebration trigger
-  useEffect(() => {
-    if (freeShippingRemaining === 0 && !hasCelebratedFreeShipping && items.length > 0) {
-      setHasCelebratedFreeShipping(true);
-      try {
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (!prefersReducedMotion) {
-          confetti({
-            particleCount: 40,
-            spread: 60,
-            origin: { y: 0.25, x: 0.8 },
-            colors: ["#D71921", "#FCB812", "#1E5BFF", "#059669"],
-          });
-        }
-      } catch {
-        // Confetti unsupported
-      }
-    } else if (freeShippingRemaining > 0 && hasCelebratedFreeShipping) {
-      setHasCelebratedFreeShipping(false);
-    }
-  }, [freeShippingRemaining, hasCelebratedFreeShipping, items.length]);
 
   const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,12 +127,12 @@ export function MiniCartDrawer() {
                 <EmptyCartIllustration className="w-36 h-36" />
                 <div className="space-y-1">
                   <h3 className="font-heading text-lg font-bold text-[var(--text-primary)]">
-                    {locale === "bn" ? "আপনার ঝুড়িটি এখনো খালি!" : "Your basket is feeling lonely!"}
+                    {locale === "bn" ? "আপনার কার্ট খালি" : "Your Cart is Empty"}
                   </h3>
                   <p className="text-xs text-[var(--text-muted)] mt-1 max-w-xs">
                     {locale === "bn"
-                      ? "আমাদের নিরাপদ খেলনা, রোবটিক্স কিট এবং কাঠের খেলনাগুলো দেখুন।"
-                      : "Explore our certified safe toys, STEM robotics, and wooden blocks to fill it with joy."}
+                      ? "খেলনা দেখুন এবং পছন্দের পণ্য কার্টে যোগ করুন।"
+                      : "Explore our toys and add something you like."}
                   </p>
                 </div>
                 <Button onClick={closeCart} variant="primary" size="md" className="rounded-xl">

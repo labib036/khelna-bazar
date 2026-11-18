@@ -63,7 +63,9 @@ export function AdminDashboardClient({
   const unverifiedPayments = orders.filter(
     (o) =>
       o.paymentMethod !== "CASH_ON_DELIVERY" &&
-      (o.status === "PENDING_CONFIRMATION" || o.status === "CONFIRMED")
+      o.paymentStatus !== "VERIFIED" &&
+      o.paymentStatus !== "REJECTED" &&
+      o.status !== "CANCELLED"
   );
 
   const handleQuickConfirm = (orderId: string, orderNumber: string) => {

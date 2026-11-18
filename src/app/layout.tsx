@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
-import { AnnouncementBar } from "@/components/store/announcement-bar";
-import { Header } from "@/components/store/header";
-import { Footer } from "@/components/store/footer";
-import { MiniCartDrawer } from "@/components/store/mini-cart-drawer";
-import { MobileBottomNav } from "@/components/store/mobile-bottom-nav";
 import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
 
@@ -69,14 +64,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#FAF8F6] dark:bg-[#121318] text-[#18191F] dark:text-[#F3F6FF] antialiased selection:bg-[#DC012B] selection:text-white pb-16 md:pb-0">
+      <body className="min-h-screen bg-[#FAF8F6] dark:bg-[#121318] text-[#18191F] dark:text-[#F3F6FF] antialiased selection:bg-[#DC012B] selection:text-white">
         <Providers>
-          <AnnouncementBar />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <MiniCartDrawer />
-          <MobileBottomNav />
+          {children}
           <Toaster position="top-center" richColors closeButton />
         </Providers>
       </body>

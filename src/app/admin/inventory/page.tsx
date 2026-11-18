@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AdminLayout } from "@/components/admin/admin-layout";
 import { getAdminProducts, updateVariantStock } from "@/server/actions/product-actions";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -78,8 +77,7 @@ export default function AdminInventoryPage() {
   );
 
   return (
-    <AdminLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h1 className="font-heading text-2xl sm:text-3xl font-black text-[#18191F] dark:text-white">
             Warehouse Inventory &amp; Stock Levels
@@ -191,6 +189,5 @@ export default function AdminInventoryPage() {
           </table>
         </div>
       </div>
-    </AdminLayout>
   );
 }

@@ -30,8 +30,12 @@ next-env.d.ts
 .DS_Store
 *.zip
 .env.test
+.test-data/
 Thumbs.db
 AGENTS.md
 
 design-reference/
+design-handoff/
+design-md/
+.agents/
 

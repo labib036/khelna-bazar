@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
 import { getStoreSettings } from "@/server/services/settings-service";
 import { validateCoupon, incrementCouponUsage } from "@/server/services/coupon-service";
 import { adjustVariantStock } from "@/server/services/inventory-service";
@@ -34,7 +35,7 @@ export async function fetchOrderDetails(orderId: string, tokenOrPhone?: string) 
   const session = await auth();
 
   // 1. Privileged users: Admin or Staff can inspect any order
-  if (session?.user && (session.user.role === "ADMIN" || session.user.role === "STAFF")) {
+  if (session?.user && isStaffRole(session.user.role)) {
     return order;
   }
 
@@ -70,38 +71,8 @@ export async function getCustomerOrders(): Promise<StoreOrder[]> {
   return orders;
 }
 
-const PlaceOrderSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  phone: z
-    .string()
-    .regex(/^(\+?88)?01[3-9]\d{8}$/, "Must be a valid Bangladeshi mobile number (01[3-9]XXXXXXXX)"),
-  email: z.string().email().optional().or(z.literal("")),
-  division: z.string().min(2, "Please select your district / division"),
-  cityArea: z.string().min(2, "Please enter your area or thana"),
-  fullAddress: z.string().min(5, "Please enter your complete street address"),
-  deliveryNotes: z.string().optional(),
-  deliveryZone: z.enum(["inside_dhaka", "outside_dhaka", "express_dhaka"]),
-  paymentMethod: z.enum(["CASH_ON_DELIVERY", "BKASH", "NAGAD"]).default("CASH_ON_DELIVERY"),
-  senderNumber: z.string().optional(),
-  trxId: z.string().optional(),
-  inspectionAcknowledged: z.boolean().refine((val) => val === true, {
-    message: "You must acknowledge that products must be inspected in front of the delivery person upon delivery.",
-  }),
-  items: z
-    .array(
-      z.object({
-        variantId: z.string().min(1, "Variant ID required"),
-        quantity: z.number().int().min(1, "Quantity must be at least 1"),
-        giftWrap: z.boolean().default(false),
-      })
-    )
-    .min(1, "Your cart cannot be empty"),
-  couponCode: z.string().optional(),
-  idempotencyKey: z.string().optional(),
-  userId: z.string().optional(),
-});
-
-export type PlaceOrderInput = z.infer<typeof PlaceOrderSchema>;
+import { PlaceOrderSchema, type PlaceOrderInput } from "@/lib/order-schema";
+export type { PlaceOrderInput };
 
 /**
  * Generates collision-resistant server-side order sequence: KB-YYMM-XXXXXX
@@ -380,7 +351,7 @@ export async function updateOrderStatus(
 ) {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required to update order status." };
     }
 
@@ -476,7 +447,7 @@ export async function updateCodStatus(
 ) {
   try {
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required for COD financial reconciliation." };
     }
 
@@ -514,7 +485,7 @@ export async function updateCodStatus(
 export async function getAdminOrdersAction(filters?: any) {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required.", orders: [], total: 0 };
     }
     const res = await getOrders(filters);
@@ -527,7 +498,7 @@ export async function getAdminOrdersAction(filters?: any) {
 export async function getAdminKPIsAction() {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return {
         success: false,
         error: "Unauthorized",
@@ -557,7 +528,9 @@ export async function getAdminKPIsAction() {
   }
 }
 
-export const placeCodOrder = placeOrder;
+export async function placeCodOrder(input: Parameters<typeof placeOrder>[0]) {
+  return placeOrder(input);
+}
 
 /**
  * Verifies customer manual MFS payment (bKash / Nagad).
@@ -566,7 +539,7 @@ export const placeCodOrder = placeOrder;
 export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required to verify MFS payments." };
     }
 
@@ -610,7 +583,7 @@ export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
 export async function rejectMfsPayment(orderId: string, reason: string, actorName = "Staff") {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required to reject MFS payments." };
     }
 
@@ -653,7 +626,7 @@ export async function rejectMfsPayment(orderId: string, reason: string, actorNam
 export async function recordDefectiveRefusal(orderId: string, notes: string, actorName = "Staff") {
   try {
     const session = await auth();
-    if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "STAFF")) {
+    if (!session?.user || !isStaffRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin or Staff privileges required." };
     }
 
@@ -721,7 +694,7 @@ export async function recordRefund(
 ) {
   try {
     const session = await auth();
-    if (!session?.user || session.user.role !== "ADMIN") {
+    if (!session?.user || !isAdminRole(session.user.role)) {
       return { success: false, error: "Unauthorized: Admin privileges required to record refunds." };
     }
 

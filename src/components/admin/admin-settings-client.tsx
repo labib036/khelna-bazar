@@ -19,7 +19,7 @@ export function AdminSettingsClient({ initialSettings }: AdminSettingsClientProp
   const [supportEmail, setSupportEmail] = useState(initialSettings.supportEmail || siteConfig.contact.email);
   const [address, setAddress] = useState(initialSettings.address || siteConfig.contact.address);
   const [announcement, setAnnouncement] = useState(
-    initialSettings.announcementText || "Free Cash on Delivery nationwide on orders over ৳1,500!"
+    initialSettings.announcementText || "Cash on Delivery • bKash • Nagad | Hotline & WhatsApp: 01712-039707"
   );
 
   // Delivery settings
@@ -123,7 +123,7 @@ export function AdminSettingsClient({ initialSettings }: AdminSettingsClientProp
             <Input
               value={announcement}
               onChange={(e) => setAnnouncement(e.target.value)}
-              placeholder="e.g. Free Cash on Delivery nationwide on orders over ৳1,500!"
+              placeholder="e.g. Cash on Delivery • bKash • Nagad | Hotline & WhatsApp: 01712-039707"
             />
           </div>
         </div>

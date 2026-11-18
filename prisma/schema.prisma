@@ -19,6 +19,7 @@ enum Role {
   CUSTOMER
   STAFF
   ADMIN
+  SUPER_ADMIN
 }
 
 model User {

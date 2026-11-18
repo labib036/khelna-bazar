@@ -1,0 +1,65 @@
+[
+  {
+    "element": "Gift Finder 4-Step Wizard",
+    "panel": "Storefront",
+    "action": "Select Recipient -> Age -> Interest -> Budget -> Show Handpicked Toys",
+    "expected": "Show filtered gift recommendations with Start Over option",
+    "actual": "Completed wizard flow",
+    "status": "PASS",
+    "durationMs": 2563
+  },
+  {
+    "element": "Mini-Cart Drawer Open/Close",
+    "panel": "Storefront",
+    "action": "Click Cart icon -> Check drawer render -> Close drawer",
+    "expected": "Drawer slides open showing order summary and closes cleanly",
+    "actual": "Drawer opened and closed without layout disruption",
+    "status": "PASS",
+    "durationMs": 191
+  },
+  {
+    "element": "Search Input & Autocomplete",
+    "panel": "Storefront",
+    "action": "Type 'Space' into header search box",
+    "expected": "Debounced live suggestions dropdown or query handling",
+    "actual": "Query parsed and search state updated smoothly",
+    "status": "PASS",
+    "durationMs": 725
+  },
+  {
+    "element": "Delivery Zone Selector (Dhaka vs Outside)",
+    "panel": "Storefront",
+    "action": "Select 'Outside Dhaka' shipping rate",
+    "expected": "Recalculates delivery fee to ৳120",
+    "actual": "Shipping fee updated accurately according to store policy",
+    "status": "PASS",
+    "durationMs": 433
+  },
+  {
+    "element": "Doorstep Inspection Consent Checkbox",
+    "panel": "Storefront",
+    "action": "Check required doorstep inspection acknowledgement",
+    "expected": "Toggle state reflects consent, satisfies order submission validation",
+    "actual": "Checkbox checked, validation passes",
+    "status": "PASS",
+    "durationMs": 130
+  },
+  {
+    "element": "Admin Order Filter & Status Controls",
+    "panel": "Admin",
+    "action": "Search order by prefix 'KB-QA' in order table",
+    "expected": "Table filters live records without page reloads",
+    "actual": "Order table filtered instantly",
+    "status": "PASS",
+    "durationMs": 1229
+  },
+  {
+    "element": "Staff Order Verification View",
+    "panel": "Staff",
+    "action": "Navigate to /admin/orders and inspect order management grid",
+    "expected": "Render orders table with status action dropdowns",
+    "actual": "Orders management mounted: Order Fulfillment & Cash on Delivery",
+    "status": "PASS",
+    "durationMs": 825
+  }
+]

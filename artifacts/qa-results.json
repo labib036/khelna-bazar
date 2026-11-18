@@ -1,0 +1,307 @@
+{
+  "results": [
+    {
+      "id": "SF-001",
+      "name": "Homepage Load & Shell Verification",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/",
+      "status": "PASS",
+      "durationMs": 470
+    },
+    {
+      "id": "SF-002",
+      "name": "Category Listing View",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/c/stem-robotics",
+      "status": "PASS",
+      "durationMs": 389
+    },
+    {
+      "id": "SF-003",
+      "name": "Product Detail Page",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/p/space-explorer-rocket-launch-facility",
+      "status": "PASS",
+      "durationMs": 228
+    },
+    {
+      "id": "SF-004",
+      "name": "Cart Review & Free Delivery Bar",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/cart",
+      "status": "PASS",
+      "durationMs": 923
+    },
+    {
+      "id": "SF-005",
+      "name": "Checkout Form & COD Inspection Consent",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/checkout",
+      "status": "PASS",
+      "durationMs": 187
+    },
+    {
+      "id": "SF-006",
+      "name": "Public Track Order Lookup (Dual Factor)",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/track-order",
+      "status": "PASS",
+      "durationMs": 1676
+    },
+    {
+      "id": "SF-007",
+      "name": "CMS Policy Page (/pages/returns-policy)",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/pages/returns-policy",
+      "status": "PASS",
+      "durationMs": 91
+    },
+    {
+      "id": "SF-008",
+      "name": "Storefront Mobile Responsive Viewport (375px)",
+      "panel": "Storefront",
+      "persona": "Guest",
+      "route": "/",
+      "status": "PASS",
+      "durationMs": 175
+    },
+    {
+      "id": "CUST-001",
+      "name": "Customer A Login & Isolated Dashboard Shell",
+      "panel": "Customer",
+      "persona": "Customer A",
+      "route": "/dashboard",
+      "status": "PASS",
+      "durationMs": 897
+    },
+    {
+      "id": "CUST-002",
+      "name": "Customer A Order List & Detail Scoping",
+      "panel": "Customer",
+      "persona": "Customer A",
+      "route": "/dashboard/orders/cmwl8hldg000aolb0xy88zf1x",
+      "status": "PASS",
+      "durationMs": 314
+    },
+    {
+      "id": "CUST-003",
+      "name": "Customer Addresses, Profile & Rewards Views",
+      "panel": "Customer",
+      "persona": "Customer A",
+      "route": "/dashboard/addresses",
+      "status": "PASS",
+      "durationMs": 76
+    },
+    {
+      "id": "SEC-001",
+      "name": "Zero IDOR Protection: Cross-Customer Order Isolation",
+      "panel": "Customer",
+      "persona": "Customer B",
+      "route": "/dashboard/orders/cmwl8hldg000aolb0xy88zf1x",
+      "status": "PASS",
+      "durationMs": 1108
+    },
+    {
+      "id": "STAFF-001",
+      "name": "Staff Operational Access & Privilege Boundaries",
+      "panel": "Staff",
+      "persona": "Staff",
+      "route": "/admin/orders",
+      "status": "PASS",
+      "durationMs": 2059
+    },
+    {
+      "id": "ADMIN-001",
+      "name": "Admin Operations & Super Admin Boundary Guard",
+      "panel": "Admin",
+      "persona": "Admin",
+      "route": "/admin/dashboard",
+      "status": "PASS",
+      "durationMs": 2301
+    },
+    {
+      "id": "SUPER-001",
+      "name": "Super Admin Staff Provisioning & Audit Log Inspection",
+      "panel": "Super Admin",
+      "persona": "Super Admin",
+      "route": "/admin/staff",
+      "status": "PASS",
+      "durationMs": 2094
+    }
+  ],
+  "consoleErrors": [
+    {
+      "url": "http://localhost:3000/track-order",
+      "text": "Uncaught Exception: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    },
+    {
+      "url": "http://localhost:3000/pages/returns-policy",
+      "text": "Uncaught Exception: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    },
+    {
+      "url": "http://localhost:3000/",
+      "text": "Uncaught Exception: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    }
+  ],
+  "failedRequests": [
+    {
+      "url": "http://localhost:3000/c/all?age=1-2y&_rsc=tXyZJ52UQVBCVsD3",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=3-4y&_rsc=tXyZJ52UQVBCVsD3",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=5-7y&_rsc=tXyZJ52UQVBCVsD3",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=8-11y&_rsc=tXyZJ52UQVBCVsD3",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=0-12m&_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=1-2y&_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=3-4y&_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=5-7y&_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=1-2y&_rsc=7t6lXWKhwMZi91v-",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=3-4y&_rsc=7t6lXWKhwMZi91v-",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=5-7y&_rsc=7t6lXWKhwMZi91v-",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?age=8-11y&_rsc=7t6lXWKhwMZi91v-",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?_rsc=r_rvrX66yC04LCWN",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/building-blocks?_rsc=r_rvrX66yC04LCWN",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/api/auth/session",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/baby-toddler?_rsc=r_rvrX66yC04LCWN",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?sort=deals&_rsc=r_rvrX66yC04LCWN",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/wishlist?_rsc=r_rvrX66yC04LCWN",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/orders/cmwl8hldg000aolb0xy88zf1x?_rsc=hZHbZgupmk38S9G-",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/dashboard",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/2v0zzhphd3w0w.js",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=DRRNH34_TOXg37Uq",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=P1qeTwrxUbDIk5oG",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=LWcpc6NJZmryPvjQ",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1594787318286-3d835c1d207f%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1596461404969-9ae70f2830c1%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1581092160607-ee22621dd758%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/settings?_rsc=r_BZZrAuJgm6tgMG",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/dashboard?_rsc=5ZWrLv--zChKS6q6",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/orders?_rsc=u39SP-6DcCKlaNxg",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=Yo697U6QSXvNPCQI",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=P1qeTwrxUbDIk5oG",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=LWcpc6NJZmryPvjQ",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/staff?_rsc=cduDTPtv0UIYlG9Y",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/audit-logs?_rsc=cduDTPtv0UIYlG9Y",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/inventory?_rsc=Gv4uY088-Lwa5wvz",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/0q3_kw_3ptixf.js",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/admin/coupons?_rsc=jb7JtnBipss8XAyp",
+      "failure": "net::ERR_ABORTED"
+    }
+  ]
+}

@@ -34,8 +34,10 @@ import {
   ChevronRight,
   Layers,
   Cpu,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n";
 
 interface ProductDetailViewProps {
   product: ToyProduct;
@@ -44,6 +46,8 @@ interface ProductDetailViewProps {
 
 export function ProductDetailView({ product, relatedProducts }: ProductDetailViewProps) {
   const router = useRouter();
+  const { t, locale } = useLanguage();
+  const isBn = locale === "bn";
 
   const { addItem, openCart, toggleGiftWrap: storeToggleGiftWrap } = useCartStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
@@ -287,29 +291,29 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           <div className="grid grid-cols-3 gap-2 sm:gap-3 p-4 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-4 h-4" />
+                <ShieldCheck className="w-4 h-4 text-[var(--primary)]" />
               </div>
               <div>
-                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">100% Recyclable</p>
-                <p className="text-[10px] text-[var(--text-muted)]">Food-grade ABS resin</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">Inspect At Delivery</p>
+                <p className="text-[10px] text-[var(--text-muted)]">Check before you accept</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-[var(--secondary-container)]/20 text-[var(--secondary)] flex items-center justify-center shrink-0">
-                <Sparkles className="w-4 h-4" />
+                <Truck className="w-4 h-4 text-[var(--secondary)]" />
               </div>
               <div>
-                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">Drop-Tested 1.8m</p>
-                <p className="text-[10px] text-[var(--text-muted)]">Toddler-proof build</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">Cash on Delivery</p>
+                <p className="text-[10px] text-[var(--text-muted)]">Pay upon inspection</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0">
-                <Sparkles className="w-4 h-4" />
+                <Phone className="w-4 h-4 text-[var(--accent)]" />
               </div>
               <div>
-                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">Screen-Free Play</p>
-                <p className="text-[10px] text-[var(--text-muted)]">Active floor discovery</p>
+                <p className="text-xs font-bold text-[var(--text-primary)] leading-tight">Order Support</p>
+                <p className="text-[10px] text-[var(--text-muted)]">01712-039707</p>
               </div>
             </div>
           </div>
@@ -326,7 +330,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               <span className="text-[11px] font-bold text-[var(--secondary)]">Toy Boutique</span>
             </div>
             <span className="flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1 rounded-full font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" /> Dispatch in 24h
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" /> Authentic Toy
             </span>
           </div>
 
@@ -740,51 +744,45 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
         {/* Tab 5: Reviews */}
         {activeTab === "reviews" && (
           <div id="reviews-section" className="pt-6 space-y-6 max-w-3xl">
-            <div className="p-6 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-4xl font-black text-[var(--text-primary)]">
-                    {(product.ratingAvg || 4.9).toFixed(1)}
-                  </span>
-                  <div>
-                    <div className="flex text-amber-500">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
+            {product.ratingCount > 0 ? (
+              <div className="p-6 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-4xl font-black text-[var(--text-primary)]">
+                      {product.ratingAvg.toFixed(1)}
+                    </span>
+                    <div>
+                      <div className="flex text-amber-500">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`w-4 h-4 ${i < Math.round(product.ratingAvg) ? "fill-current" : "opacity-30"}`} />
+                        ))}
+                      </div>
+                      <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                        Based on {product.ratingCount} verified {product.ratingCount === 1 ? "purchase" : "purchases"}
+                      </p>
                     </div>
-                    <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                      Based on {product.ratingCount || 128} verified purchases
-                    </p>
                   </div>
                 </div>
+                <Button variant="pill-primary" size="sm" onClick={() => toast.info(isBn ? "ডেলিভারি সম্পন্ন হওয়ার পর রিভিউ দেওয়া যাবে।" : "Review form will open after order delivery verification.")}>
+                  Write a Review
+                </Button>
               </div>
-              <Button variant="pill-primary" size="sm" onClick={() => toast.info("Review form will open after order delivery verification.")}>
-                Write a Review
-              </Button>
-            </div>
-
-            {/* Parent Testimonial Card */}
-            <div className="p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-bold text-xs flex items-center justify-center">
-                    SN
-                  </div>
-                  <div>
-                    <span className="font-bold text-xs text-[var(--text-primary)] block">Syeda Nasreen (Uttara, Dhaka)</span>
-                    <span className="text-[10px] text-[var(--text-muted)]">Verified Buyer &bull; Mom of 5-year-old</span>
-                  </div>
-                </div>
-                <div className="flex text-amber-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                  ))}
-                </div>
+            ) : (
+              <div className="p-8 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] text-center space-y-3">
+                <Star className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto" />
+                <p className="font-heading font-black text-base text-[var(--text-primary)]">
+                  {t("product.noReviews") || "No reviews yet"}
+                </p>
+                <p className="text-xs text-[var(--text-muted)] max-w-md mx-auto">
+                  {isBn
+                    ? "এই পণ্যে এখনও কোনো গ্রাহক মতামত দেননি। ডেলিভারি সম্পন্ন হওয়ার পর গ্রাহকরা রিভিউ লিখতে পারেন।"
+                    : "No reviews have been submitted for this toy yet. Verified purchasers can submit reviews after delivery."}
+                </p>
+                <Button variant="outline" size="sm" onClick={() => toast.info(isBn ? "ডেলিভারি সম্পন্ন হওয়ার পর রিভিউ দেওয়া যাবে।" : "Review form opens after verified order delivery.")}>
+                  {isBn ? "মতামত লিখুন" : "Write First Review"}
+                </Button>
               </div>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                &ldquo;Arrived within 24 hours via RedX courier in Uttara. The build quality is exceptional—no sharp edges, completely odorless plastic, and my daughter hasn&apos;t put it down since Friday. Truly worth every Taka!&rdquo;
-              </p>
-            </div>
+            )}
           </div>
         )}
       </section>

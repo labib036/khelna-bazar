@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AdminLayout } from "@/components/admin/admin-layout";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -188,8 +187,7 @@ export default function AdminOrdersPage() {
   });
 
   return (
-    <AdminLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -594,6 +592,5 @@ export default function AdminOrdersPage() {
           </div>
         )}
       </div>
-    </AdminLayout>
   );
 }

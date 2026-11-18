@@ -50,13 +50,13 @@ export function MarketingDashboard() {
                   Enjoy free nationwide Cash on Delivery on orders over ৳2,000! Inspect your parcel before paying.
                 </p>
                 <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <Link href={user.role === "ADMIN" ? "/admin" : "/account"}>
+                  <Link href={user.role === "ADMIN" || user.role === "STAFF" || user.role === "SUPER_ADMIN" ? "/admin" : "/dashboard"}>
                     <Button
                       variant="primary"
                       size="md"
                       className="bg-[#DC012B] hover:bg-[#B80023] text-white font-bold text-xs shadow-sm"
                     >
-                      <span>{user.role === "ADMIN" ? "Open Admin Console" : "Go to My Dashboard"}</span>
+                      <span>{user.role === "ADMIN" || user.role === "STAFF" || user.role === "SUPER_ADMIN" ? "Open Admin Console" : "Go to My Dashboard"}</span>
                       <ArrowRight className="w-3.5 h-3.5 ml-1" />
                     </Button>
                   </Link>

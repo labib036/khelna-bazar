@@ -31,6 +31,14 @@ async function main() {
     process.exit(1);
   }
 
+  const roleInput = (process.env.ADMIN_ROLE || process.argv[6] || "").toUpperCase();
+  let role: Role = Role.SUPER_ADMIN;
+  if (roleInput === "STAFF") {
+    role = Role.STAFF;
+  } else if (roleInput === "ADMIN") {
+    role = Role.ADMIN;
+  }
+
   const password = providedPassword || generateSecurePassword();
   const passwordHash = await bcrypt.hash(password, 12);
 
@@ -40,7 +48,7 @@ async function main() {
       name,
       phone,
       passwordHash,
-      role: Role.ADMIN,
+      role,
       emailVerified: new Date(),
     },
     create: {
@@ -48,7 +56,7 @@ async function main() {
       name,
       phone,
       passwordHash,
-      role: Role.ADMIN,
+      role,
       emailVerified: new Date(),
       loyaltyPoints: 1000,
       tier: "GOLD",
