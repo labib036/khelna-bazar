@@ -85,11 +85,13 @@ model Address {
 model Category {
   id             String     @id @default(cuid())
   name           String
+  nameBn         String?
   slug           String     @unique
   parentId       String?
   image          String?
   banner         String?
   description    String?
+  descriptionBn  String?
   sortOrder      Int        @default(0)
   isFeatured     Boolean    @default(false)
   seoTitle       String?
@@ -348,6 +350,7 @@ model Order {
   // Statuses
   status             OrderFulfillmentStatus @default(PENDING_CONFIRMATION)
   codStatus          CodCollectionStatus    @default(UNCOLLECTED)
+  deliveryFeeStatus  String?
   paymentMethod      PaymentMethod          @default(CASH_ON_DELIVERY)
   
   // Inspection Acknowledgement (Mandatory Policy Compliance)
@@ -614,7 +617,9 @@ model Page {
   id             String    @id @default(cuid())
   slug           String    @unique // e.g. "about", "terms", "toy-safety", "shipping"
   title          String
+  titleBn        String?
   contentHtml    String
+  contentHtmlBn  String?
   published      Boolean   @default(true)
   seoTitle       String?
   seoDescription String?
@@ -649,4 +654,16 @@ model AuditLog {
 
   @@index([entityType, entityId])
   @@index([createdAt])
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  fileName  String   @unique
+  mimeType  String
+  base64    String   @db.Text
+  size      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([fileName])
 }

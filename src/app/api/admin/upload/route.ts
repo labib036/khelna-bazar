@@ -91,21 +91,49 @@ export async function POST(req: NextRequest) {
 
     let publicUrl = "";
 
-    // Upload to Vercel Blob if token configured, otherwise fallback to public/uploads
+    // 1. Try Vercel Blob if token configured
     if (process.env.BLOB_READ_WRITE_TOKEN) {
-      const blob = await put(`products/${randomName}`, buffer, {
-        access: "public",
-        contentType: detectedType,
-      });
-      publicUrl = blob.url;
-    } else {
-      // Local development disk storage fallback
-      const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+      try {
+        const blob = await put(`products/${randomName}`, buffer, {
+          access: "public",
+          contentType: detectedType,
+        });
+        publicUrl = blob.url;
+      } catch (blobError) {
+        console.warn("Vercel Blob upload failed, falling back to database storage:", blobError);
       }
-      const localFilePath = path.join(uploadDir, randomName);
-      fs.writeFileSync(localFilePath, buffer);
+    }
+
+    // 2. Fallback to resilient Database MediaAsset storage + optional local disk cache
+    if (!publicUrl) {
+      // Always persist image payload to database so serverless Vercel can serve it
+      await db.mediaAsset.upsert({
+        where: { fileName: randomName },
+        create: {
+          fileName: randomName,
+          mimeType: detectedType,
+          base64: buffer.toString("base64"),
+          size: file.size,
+        },
+        update: {
+          mimeType: detectedType,
+          base64: buffer.toString("base64"),
+          size: file.size,
+        },
+      });
+
+      // Best-effort local filesystem write (for local development, safe against read-only Vercel serverless)
+      try {
+        const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        const localFilePath = path.join(uploadDir, randomName);
+        fs.writeFileSync(localFilePath, buffer);
+      } catch {
+        // Read-only serverless environment (e.g. AWS Lambda / Vercel /var/task), safe to ignore since DB holds asset
+      }
+
       publicUrl = `/uploads/products/${randomName}`;
     }
 
