@@ -435,10 +435,8 @@ export function Header() {
 
           {/* Action Icons (Wishlist, Stitch 3D Push Cart, User) */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Mobile Theme Toggle */}
-            <div className="md:hidden">
-              <ThemeToggle />
-            </div>
+            {/* Theme Dual-Pill Switcher (Visible on desktop & mobile) */}
+            <ThemeToggle />
 
             {/* Wishlist Pill */}
             <Link

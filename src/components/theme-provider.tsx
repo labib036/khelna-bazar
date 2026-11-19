@@ -15,28 +15,70 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
-
-  // Initialize from localStorage or fallback to system
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const stored = localStorage.getItem("kb_theme") as Theme | null;
-      if (stored === "light" || stored === "dark" || stored === "system") {
-        setThemeState(stored);
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("kb_theme") as Theme | null;
+        if (stored === "light" || stored === "dark" || stored === "system") {
+          return stored;
+        }
+        const dataTheme = document.documentElement.getAttribute("data-theme") as Theme | null;
+        if (dataTheme === "light" || dataTheme === "dark") {
+          return dataTheme;
+        }
+      } catch {
+        // Storage access restricted
       }
-    } catch {
-      // Storage access may be restricted
     }
-  }, []);
+    return "system";
+  });
 
-  // Update HTML class and resolvedTheme whenever theme changes or system changes
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("kb_theme");
+        if (stored === "light" || stored === "dark") return stored;
+        if (
+          document.documentElement.classList.contains("dark") ||
+          document.documentElement.getAttribute("data-theme") === "dark"
+        ) {
+          return "dark";
+        }
+        if (
+          document.documentElement.classList.contains("light") ||
+          document.documentElement.getAttribute("data-theme") === "light"
+        ) {
+          return "light";
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      } catch {
+        // Window access restricted
+      }
+    }
+    return "light";
+  });
+
+  const applyThemeToDOM = (target: "light" | "dark") => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    if (target === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+      root.setAttribute("data-theme", "dark");
+      root.style.colorScheme = "dark";
+    } else {
+      root.classList.remove("dark");
+      root.classList.add("light");
+      root.setAttribute("data-theme", "light");
+      root.style.colorScheme = "light";
+    }
+  };
+
+  // Sync with OS preference & state changes
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const applyTheme = () => {
+    const resolveAndApply = () => {
       const isSystemDark = mediaQuery.matches;
       let target: "light" | "dark" = "light";
 
@@ -45,32 +87,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       } else if (theme === "light") {
         target = "light";
       } else {
-        // System mode: follows browser / OS theme
         target = isSystemDark ? "dark" : "light";
       }
 
       setResolvedTheme(target);
-
-      const root = document.documentElement;
-      if (target === "dark") {
-        root.classList.add("dark");
-        root.classList.remove("light");
-        root.setAttribute("data-theme", "dark");
-        root.style.colorScheme = "dark";
-      } else {
-        root.classList.remove("dark");
-        root.classList.add("light");
-        root.setAttribute("data-theme", "light");
-        root.style.colorScheme = "light";
-      }
+      applyThemeToDOM(target);
     };
 
-    applyTheme();
+    resolveAndApply();
 
-    // Listen for OS/Browser dark mode changes in real-time
     const listener = () => {
       if (theme === "system") {
-        applyTheme();
+        resolveAndApply();
       }
     };
 
@@ -85,14 +113,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // localStorage may fail in private mode
     }
+
+    // Immediately apply to DOM for zero-latency tactile feedback
+    if (typeof window !== "undefined") {
+      let target: "light" | "dark" = "light";
+      if (newTheme === "dark") {
+        target = "dark";
+      } else if (newTheme === "light") {
+        target = "light";
+      } else {
+        target = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      setResolvedTheme(target);
+      applyThemeToDOM(target);
+    }
   };
 
   const toggleTheme = () => {
-    if (resolvedTheme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
+    const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
   };
 
   return (
