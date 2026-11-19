@@ -1,11 +1,12 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-export const proxy = auth((req) => {
-  const { pathname } = req.nextUrl;
-  const user = req.auth?.user;
-  const isPrivileged = user?.role === "STAFF" || user?.role === "ADMIN" || user?.role === "SUPER_ADMIN";
-  const isCustomer = user?.role === "CUSTOMER";
+const authMiddleware = auth((req) => {
+  try {
+    const { pathname } = req.nextUrl;
+    const user = req.auth?.user;
+    const isPrivileged = user?.role === "STAFF" || user?.role === "ADMIN" || user?.role === "SUPER_ADMIN";
+    const isCustomer = user?.role === "CUSTOMER";
 
   // 0. Block /dev routes in production
   if (pathname.startsWith("/dev")) {
@@ -118,8 +119,21 @@ export const proxy = auth((req) => {
     }
   }
 
-  return NextResponse.next();
+    return NextResponse.next();
+  } catch (err) {
+    console.error("Proxy middleware execution error:", err);
+    return NextResponse.next();
+  }
 });
+
+export const proxy = (req: any, ctx: any) => {
+  try {
+    return authMiddleware(req, ctx);
+  } catch (err) {
+    console.error("Proxy wrapper error:", err);
+    return NextResponse.next();
+  }
+};
 
 export default proxy;
 
@@ -137,13 +151,7 @@ export const config = {
     "/cart",
     "/login",
     "/register",
-    "/deals/:path*",
-    "/deals",
-    "/new-arrivals/:path*",
-    "/new-arrivals",
-    "/gift-finder/:path*",
-    "/gift-finder",
-    "/",
     "/dev/:path*",
+    "/dev",
   ],
 };

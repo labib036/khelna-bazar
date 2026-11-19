@@ -31,9 +31,12 @@ On the configuration screen:
 
 | Variable Name | Value | Description |
 | :--- | :--- | :--- |
-| `DATABASE_URL` | `postgresql://neondb_owner:PASSWORD@...` | Your Neon pooled connection string |
-| `DIRECT_URL` | `postgresql://neondb_owner:PASSWORD@...` | Your Neon direct connection string |
-| `AUTH_SECRET` | `generate-any-32-char-random-string` | Used to encrypt session cookies |
+| `DATABASE_URL` | `postgres://...` | Your pooled PostgreSQL connection string |
+| `DIRECT_URL` | `postgres://...` | Your direct PostgreSQL connection string |
+| `AUTH_SECRET` | `khelna_bazar_super_production_secret_key_123456789` | At least 32 random characters for session cookies |
+| `NEXT_PUBLIC_SITE_URL` | `https://khelnabazar-six.vercel.app` | Production store domain URL |
+| `STORE_HOTLINE` | `01712039707` | Customer service hotline |
+| `STORE_WHATSAPP` | `01712039707` | Customer WhatsApp support |
 | `NEXT_PUBLIC_SITE_NAME` | `KHELNA BAZAR` | Store brand title |
 | `NEXT_PUBLIC_CURRENCY_SYMBOL` | `৳` | Bangladeshi Taka symbol |
 

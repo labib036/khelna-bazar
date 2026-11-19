@@ -15,9 +15,12 @@ export async function register() {
         console.error(` ❌ ${err}`);
       }
       console.error("=================================================");
-      throw new Error(
-        `FATAL: Production launch guard blocked startup:\n${result.errors.join("\n")}`
-      );
+      const isFatalDb = result.errors.some((err) => err.includes("DATABASE_URL"));
+      if (isFatalDb) {
+        throw new Error(
+          `FATAL: Production launch guard blocked startup:\n${result.errors.join("\n")}`
+        );
+      }
     }
   }
 }

@@ -2,7 +2,13 @@ export const siteConfig = {
   name: "Khelna Bazar",
   nameBn: "খেলনা বাজার",
   description: "Explore toys for play, learning and thoughtful gifting in Bangladesh. Cash on Delivery and verified mobile payments.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000"),
   ogImage: "/images/khelna-bazar-logo.png",
   
   // LOGO CONFIGURATION POINT:

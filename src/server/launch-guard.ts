@@ -30,7 +30,7 @@ export function validateProductionConfig(isProduction = process.env.NODE_ENV ===
   }
 
   // 2. Authentication Secret
-  const authSecret = process.env.AUTH_SECRET;
+  const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
   if (!authSecret) {
     errors.push("CRITICAL: AUTH_SECRET is not defined. Run `openssl rand -base64 32` to generate a secure key.");
   } else if (authSecret.length < 32) {
@@ -40,7 +40,7 @@ export function validateProductionConfig(isProduction = process.env.NODE_ENV ===
   }
 
   // 2b. Order Token Secret
-  const orderSecret = process.env.ORDER_TOKEN_SECRET || process.env.AUTH_SECRET;
+  const orderSecret = process.env.ORDER_TOKEN_SECRET || authSecret;
   if (!orderSecret) {
     errors.push("CRITICAL: ORDER_TOKEN_SECRET is not defined.");
   } else if (orderSecret.length < 32) {
@@ -48,11 +48,25 @@ export function validateProductionConfig(isProduction = process.env.NODE_ENV ===
   }
 
   // 3. Site URL
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!siteUrl) {
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+      siteUrl = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+      process.env.NEXT_PUBLIC_SITE_URL = siteUrl;
+    } else if (process.env.VERCEL_URL) {
+      siteUrl = `https://${process.env.VERCEL_URL}`;
+      process.env.NEXT_PUBLIC_SITE_URL = siteUrl;
+    }
+  }
+
   if (!siteUrl) {
     errors.push("CRITICAL: NEXT_PUBLIC_SITE_URL is not set.");
   } else if (siteUrl.includes("localhost") || siteUrl.includes("127.0.0.1")) {
-    errors.push("CRITICAL: NEXT_PUBLIC_SITE_URL is set to localhost in production mode.");
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL) {
+      process.env.NEXT_PUBLIC_SITE_URL = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL}`;
+    } else {
+      errors.push("CRITICAL: NEXT_PUBLIC_SITE_URL is set to localhost in production mode.");
+    }
   }
 
   // 4. Sample Seed Flag
