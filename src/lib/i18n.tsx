@@ -60,6 +60,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("kb_lang", newLocale);
       if (typeof document !== "undefined") {
         document.documentElement.lang = newLocale;
+        document.cookie = `kb_lang=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
       }
     } catch {
       // Storage unavailable
@@ -85,7 +86,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useLanguage() {
-  return useContext(LanguageContext);
+  const ctx = useContext(LanguageContext);
+  return {
+    ...ctx,
+    language: ctx.locale,
+  };
 }
 
 export function LanguageToggle({ className = "" }: { className?: string }) {

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%" fill="none">
+  <rect width="400" height="400" fill="#FAF8F6"/>
+  <rect width="400" height="400" fill="url(#grid)" opacity="0.3"/>
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#E2E8F0"/>
+    </pattern>
+  </defs>
+  <!-- Toy Building Blocks Graphic -->
+  <g transform="translate(100, 100)">
+    <!-- Base Red Block -->
+    <rect x="30" y="100" width="60" height="60" rx="12" fill="#DC012B"/>
+    <circle cx="45" cy="92" r="8" fill="#DC012B"/>
+    <circle cx="75" cy="92" r="8" fill="#DC012B"/>
+    <!-- Yellow Block -->
+    <rect x="110" y="100" width="60" height="60" rx="12" fill="#FCB812"/>
+    <circle cx="125" cy="92" r="8" fill="#FCB812"/>
+    <circle cx="155" cy="92" r="8" fill="#FCB812"/>
+    <!-- Teal Block On Top -->
+    <rect x="70" y="30" width="60" height="60" rx="12" fill="#0D9488"/>
+    <circle cx="85" cy="22" r="8" fill="#0D9488"/>
+    <circle cx="115" cy="22" r="8" fill="#0D9488"/>
+  </g>
+  <text x="200" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#64748B">
+    KHELNA BAZAR TOY
+  </text>
+  <text x="200" y="322" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="500" fill="#94A3B8">
+    Photo Coming Soon
+  </text>
+</svg>

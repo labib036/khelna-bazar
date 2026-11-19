@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { useLockBodyScroll } from "@/lib/use-lock-body-scroll";
+import { useAccessibleModal } from "@/lib/modal-stack";
 import { X } from "lucide-react";
 
 export interface DrawerProps {
@@ -13,6 +15,7 @@ export interface DrawerProps {
   children: React.ReactNode;
   position?: "right" | "bottom" | "left";
   className?: string;
+  initialFocusRef?: React.RefObject<HTMLElement | null>;
 }
 
 export function Drawer({
@@ -23,20 +26,23 @@ export function Drawer({
   children,
   position = "right",
   className,
+  initialFocusRef,
 }: DrawerProps) {
   useLockBodyScroll(isOpen);
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+    setMounted(true);
+  }, []);
 
-  if (!isOpen) return null;
+  const { titleId, descriptionId, containerRef, zIndex } = useAccessibleModal({
+    isOpen,
+    onClose,
+    initialFocusRef,
+    baseZIndex: 50,
+  });
+
+  if (!isOpen || !mounted) return null;
 
   const positionStyles = {
     right:
@@ -47,8 +53,15 @@ export function Drawer({
       "fixed left-0 right-0 bottom-0 w-full max-h-[85vh] rounded-t-3xl animate-in slide-in-from-bottom duration-300",
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex" role="dialog" aria-modal="true">
+  const content = (
+    <div
+      className="fixed inset-0 flex"
+      style={{ zIndex }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={description ? descriptionId : undefined}
+    >
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-[var(--overlay)] backdrop-blur-xs transition-opacity animate-in fade-in duration-200 cursor-pointer"
@@ -58,8 +71,10 @@ export function Drawer({
 
       {/* Drawer Container */}
       <div
+        ref={containerRef}
+        tabIndex={-1}
         className={cn(
-          "relative z-10 flex flex-col bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] shadow-2xl overflow-hidden",
+          "relative z-10 flex flex-col bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] shadow-2xl overflow-hidden outline-none",
           positionStyles[position],
           className
         )}
@@ -74,12 +89,17 @@ export function Drawer({
           <div className="flex items-center justify-between p-5 border-b border-[var(--border)] shrink-0">
             <div className="space-y-0.5">
               {title && (
-                <h3 className="text-lg font-bold font-heading text-[var(--text-primary)]">
+                <h3
+                  id={titleId}
+                  className="text-lg font-bold font-heading text-[var(--text-primary)]"
+                >
                   {title}
                 </h3>
               )}
               {description && (
-                <p className="text-xs text-[var(--text-muted)]">{description}</p>
+                <p id={descriptionId} className="text-xs text-[var(--text-muted)]">
+                  {description}
+                </p>
               )}
             </div>
             <button
@@ -98,4 +118,6 @@ export function Drawer({
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(content, document.body) : null;
 }

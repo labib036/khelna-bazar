@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { ToyProduct } from "@/types/store";
 import { ProductCard } from "@/components/store/product-card";
 import { useMounted } from "@/lib/use-mounted";
+import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -28,20 +29,20 @@ interface ProductListingProps {
 }
 
 const AGE_FILTERS = [
-  { label: "0 – 12 Months", value: "0-12m" },
-  { label: "1 – 2 Years", value: "1-2y" },
-  { label: "3 – 4 Years", value: "3-4y" },
-  { label: "5 – 7 Years", value: "5-7y" },
-  { label: "8 – 11 Years", value: "8-11y" },
-  { label: "12+ Years", value: "12+" },
+  { label: "0 – 12 Months", labelBn: "০ – ১২ মাস", value: "0-12m" },
+  { label: "1 – 2 Years", labelBn: "১ – ২ বছর", value: "1-2y" },
+  { label: "3 – 4 Years", labelBn: "৩ – ৪ বছর", value: "3-4y" },
+  { label: "5 – 7 Years", labelBn: "৫ – ৭ বছর", value: "5-7y" },
+  { label: "8 – 11 Years", labelBn: "৮ – ১১ বছর", value: "8-11y" },
+  { label: "12+ Years", labelBn: "১২+ বছর", value: "12+" },
 ];
 
 const PRICE_PRESETS = [
-  { label: "All Prices", min: undefined, max: undefined },
-  { label: "Under ৳1,000", min: 0, max: 1000 },
-  { label: "৳1,000 – ৳2,000", min: 1000, max: 2000 },
-  { label: "৳2,000 – ৳3,500", min: 2000, max: 3500 },
-  { label: "Above ৳3,500", min: 3500, max: undefined },
+  { label: "All Prices", labelBn: "সকল মূল্য", min: undefined, max: undefined },
+  { label: "Under ৳1,000", labelBn: "১,০০০ টাকার নিচে", min: 0, max: 1000 },
+  { label: "৳1,000 – ৳2,000", labelBn: "১,০০০ – ২,০০০ টাকা", min: 1000, max: 2000 },
+  { label: "৳2,000 – ৳3,500", labelBn: "২,০০০ – ৩,৫০০ টাকা", min: 2000, max: 3500 },
+  { label: "Above ৳3,500", labelBn: "৩,৫০০ টাকার উপরে", min: 3500, max: undefined },
 ];
 
 function ProductListingContent({
@@ -53,6 +54,8 @@ function ProductListingContent({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const mounted = useMounted();
+  const { t, locale } = useLanguage();
+  const isBn = locale === "bn";
 
   // Initialize filters from URL params
   const [selectedAge, setSelectedAge] = useState<string | null>(searchParams.get("age"));
@@ -161,11 +164,11 @@ function ProductListingContent({
       {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] mb-4">
         <Link href="/" className="hover:text-[var(--primary)] transition-colors">
-          Home
+          {isBn ? "হোম" : "Home"}
         </Link>
         <ChevronRight className="w-3.5 h-3.5" />
         <Link href="/c/all" className="hover:text-[var(--primary)] transition-colors">
-          Toys
+          {isBn ? "খেলনা" : "Toys"}
         </Link>
         <ChevronRight className="w-3.5 h-3.5" />
         <span className="font-bold text-[var(--text-primary)] truncate max-w-xs">{title}</span>
@@ -181,7 +184,9 @@ function ProductListingContent({
             <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 max-w-2xl">{description}</p>
           )}
           <span className="text-xs font-semibold text-[var(--text-muted)] mt-2 block">
-            Showing {filteredProducts.length} toy{filteredProducts.length === 1 ? "" : "s"}
+            {isBn
+              ? `${filteredProducts.length}টি খেলনা দেখানো হচ্ছে`
+              : `Showing ${filteredProducts.length} toy${filteredProducts.length === 1 ? "" : "s"}`}
           </span>
         </div>
 
@@ -193,7 +198,11 @@ function ProductListingContent({
             className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-2xl bg-[var(--surface-elevated)] border border-[var(--border)] text-xs font-bold text-[var(--text-primary)] shadow-xs cursor-pointer"
           >
             <Filter className="w-4 h-4 text-primary" />
-            <span>Filters ({hasActiveFilters ? "Active" : "0"})</span>
+            <span>
+              {isBn
+                ? `ফিল্টার (${hasActiveFilters ? "সক্রিয়" : "০"})`
+                : `Filters (${hasActiveFilters ? "Active" : "0"})`}
+            </span>
           </button>
 
           {/* Grid Density Toggle (Desktop) */}
@@ -221,16 +230,18 @@ function ProductListingContent({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[var(--text-muted)] hidden sm:inline">Sort:</span>
+            <span className="text-xs font-semibold text-[var(--text-muted)] hidden sm:inline">
+              {isBn ? "সাজান:" : "Sort:"}
+            </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="h-10 px-3 rounded-2xl bg-[var(--surface-elevated)] border border-[var(--border)] text-xs font-bold text-[var(--text-primary)] focus:outline-none focus:border-primary"
             >
-              <option value="bestselling">Best Selling</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="rating">Top Customer Rated</option>
+              <option value="bestselling">{isBn ? "সর্বাধিক বিক্রিত" : "Best Selling"}</option>
+              <option value="price-asc">{isBn ? "দাম: কম থেকে বেশি" : "Price: Low to High"}</option>
+              <option value="price-desc">{isBn ? "দাম: বেশি থেকে কম" : "Price: High to Low"}</option>
+              <option value="rating">{isBn ? "গ্রাহক রেটিং" : "Top Customer Rated"}</option>
             </select>
           </div>
         </div>
@@ -239,10 +250,12 @@ function ProductListingContent({
       {/* Active Filter Chips */}
       {hasActiveFilters && (
         <div className="flex items-center flex-wrap gap-2 py-4">
-          <span className="text-xs text-[var(--text-muted)] font-semibold mr-1">Active:</span>
+          <span className="text-xs text-[var(--text-muted)] font-semibold mr-1">
+            {isBn ? "সক্রিয়:" : "Active:"}
+          </span>
           {selectedAge && (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-500/10 text-primary text-xs font-bold border border-rose-500/20">
-              Age: {selectedAge}
+              {isBn ? "বয়স:" : "Age:"} {selectedAge}
               <button type="button" onClick={() => setSelectedAge(null)} className="cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -250,7 +263,7 @@ function ProductListingContent({
           )}
           {selectedPricePreset !== 0 && (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 text-xs font-bold border border-amber-500/20">
-              {PRICE_PRESETS[selectedPricePreset].label}
+              {isBn ? PRICE_PRESETS[selectedPricePreset].labelBn : PRICE_PRESETS[selectedPricePreset].label}
               <button type="button" onClick={() => setSelectedPricePreset(0)} className="cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -258,7 +271,7 @@ function ProductListingContent({
           )}
           {selectedBrand && (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-bold border border-purple-500/20">
-              Brand: {selectedBrand}
+              {isBn ? "ব্র্যান্ড:" : "Brand:"} {selectedBrand}
               <button type="button" onClick={() => setSelectedBrand(null)} className="cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -266,7 +279,7 @@ function ProductListingContent({
           )}
           {inStockOnly && (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
-              In Stock Only
+              {isBn ? "স্টকে আছে" : "In Stock Only"}
               <button type="button" onClick={() => setInStockOnly(false)} className="cursor-pointer">
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -277,7 +290,7 @@ function ProductListingContent({
             onClick={clearAllFilters}
             className="text-xs text-[var(--danger)] hover:underline font-bold ml-2 cursor-pointer"
           >
-            Clear All
+            {isBn ? "সব মুছুন" : "Clear All"}
           </button>
         </div>
       )}
@@ -288,7 +301,7 @@ function ProductListingContent({
         <aside className="hidden lg:block space-y-6 self-start sticky top-24 bg-[var(--surface-container-low)] p-6 rounded-3xl border border-[var(--border)] shadow-xs">
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <span className="font-heading font-black text-sm text-[var(--text-primary)] flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-primary" /> Filters
+              <SlidersHorizontal className="w-4 h-4 text-primary" /> {isBn ? "ফিল্টার" : "Filters"}
             </span>
             {hasActiveFilters && (
               <button
@@ -296,7 +309,7 @@ function ProductListingContent({
                 onClick={clearAllFilters}
                 className="text-xs text-[var(--danger)] hover:underline font-bold cursor-pointer"
               >
-                Reset
+                {isBn ? "রিসেট" : "Reset"}
               </button>
             )}
           </div>
@@ -304,7 +317,7 @@ function ProductListingContent({
           {/* Age Filter */}
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] block">
-              Recommended Age
+              {isBn ? "প্রস্তাবিত বয়স" : "Recommended Age"}
             </span>
             <div className="space-y-1">
               {AGE_FILTERS.map((age) => (
@@ -318,7 +331,7 @@ function ProductListingContent({
                       : "text-[var(--text-muted)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  <span>{age.label}</span>
+                  <span>{isBn ? age.labelBn : age.label}</span>
                   {selectedAge === age.value && <Check className="w-3.5 h-3.5" />}
                 </button>
               ))}
@@ -328,7 +341,7 @@ function ProductListingContent({
           {/* Price Range Presets */}
           <div className="space-y-2 pt-2 border-t border-[var(--border)]">
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] block">
-              Price (BDT ৳)
+              {isBn ? "মূল্য (টাকা ৳)" : "Price (BDT ৳)"}
             </span>
             <div className="space-y-1">
               {PRICE_PRESETS.map((preset, idx) => (
@@ -342,7 +355,7 @@ function ProductListingContent({
                       : "text-[var(--text-muted)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  <span>{preset.label}</span>
+                  <span>{isBn ? preset.labelBn : preset.label}</span>
                   {selectedPricePreset === idx && <Check className="w-3.5 h-3.5" />}
                 </button>
               ))}
@@ -353,7 +366,7 @@ function ProductListingContent({
           {availableBrands.length > 0 && (
             <div className="space-y-2 pt-2 border-t border-[var(--border)]">
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] block">
-                Brand
+                {isBn ? "ব্র্যান্ড" : "Brand"}
               </span>
               <div className="max-h-40 overflow-y-auto space-y-1 pr-1">
                 {availableBrands.map((b) => (
@@ -384,7 +397,7 @@ function ProductListingContent({
                 onChange={(e) => setInStockOnly(e.target.checked)}
                 className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer"
               />
-              <span>In Stock Only</span>
+              <span>{isBn ? "কেবলমাত্র স্টকে আছে" : "In Stock Only"}</span>
             </label>
           </div>
         </aside>
@@ -394,11 +407,15 @@ function ProductListingContent({
           {filteredProducts.length === 0 ? (
             <EmptyState
               illustration={<NoResultsIllustration className="w-36 h-36" />}
-              title="No Matching Toys Found"
-              description="We couldn't find any toys matching your current filter criteria. Try clearing some filters or searching for different categories."
+              title={isBn ? "পছন্দের কোনো খেলনা পাওয়া যায়নি" : "No Matching Toys Found"}
+              description={
+                isBn
+                  ? "আপনার বর্তমান ফিল্টারের সাথে মিলে এমন কোনো খেলনা পাওয়া যায়নি। ফিল্টার সরিয়ে আবার চেষ্টা করুন।"
+                  : "We couldn't find any toys matching your current filter criteria. Try clearing some filters or searching for different categories."
+              }
               action={
                 <Button onClick={clearAllFilters} variant="primary" size="md">
-                  Clear All Filters
+                  {isBn ? "সব ফিল্টার মুছুন" : "Clear All Filters"}
                 </Button>
               }
             />
@@ -416,14 +433,14 @@ function ProductListingContent({
       <Drawer
         isOpen={isMobileFilterOpen}
         onClose={() => setIsMobileFilterOpen(false)}
-        title="Filter Toys"
+        title={isBn ? "ফিল্টার করুন" : "Filter Toys"}
         position="bottom"
       >
         <div className="space-y-6 py-2">
           {/* Age */}
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-              Age Range
+              {isBn ? "প্রস্তাবিত বয়স" : "Age Range"}
             </span>
             <div className="grid grid-cols-2 gap-2">
               {AGE_FILTERS.map((age) => (
@@ -437,7 +454,7 @@ function ProductListingContent({
                       : "border-[var(--border)] text-[var(--text-muted)]"
                   }`}
                 >
-                  {age.label}
+                  {isBn ? age.labelBn : age.label}
                 </button>
               ))}
             </div>
@@ -446,7 +463,7 @@ function ProductListingContent({
           {/* Price Presets */}
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-              Price Presets
+              {isBn ? "মূল্য (টাকা ৳)" : "Price Presets"}
             </span>
             <div className="space-y-1.5">
               {PRICE_PRESETS.map((preset, idx) => (
@@ -460,7 +477,7 @@ function ProductListingContent({
                       : "border-[var(--border)] text-[var(--text-muted)]"
                   }`}
                 >
-                  {preset.label}
+                  {isBn ? preset.labelBn : preset.label}
                 </button>
               ))}
             </div>
@@ -475,7 +492,7 @@ function ProductListingContent({
                 onChange={(e) => setInStockOnly(e.target.checked)}
                 className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer"
               />
-              <span>In Stock Only</span>
+              <span>{isBn ? "কেবলমাত্র স্টকে আছে" : "In Stock Only"}</span>
             </label>
           </div>
 
@@ -489,7 +506,7 @@ function ProductListingContent({
               variant="outline"
               className="flex-1 text-xs"
             >
-              Reset
+              {isBn ? "রিসেট" : "Reset"}
             </Button>
             <Button
               type="button"
@@ -497,7 +514,7 @@ function ProductListingContent({
               variant="primary"
               className="flex-1 text-xs"
             >
-              Apply Filters
+              {isBn ? "ফিল্টার প্রয়োগ" : "Apply Filters"}
             </Button>
           </div>
         </div>

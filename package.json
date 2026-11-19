@@ -6,17 +6,17 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "tsc --noEmit",
+    "lint": "eslint src/ && tsc --noEmit",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:seed": "tsx prisma/seed-essential.ts",
     "db:seed:essential": "tsx prisma/seed-essential.ts",
-    "db:seed:sample": "tsx prisma/seed-sample.ts",
     "admin:create": "tsx scripts/create-admin.ts",
     "test": "vitest run"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "@vercel/blob": "^2.9.0",
     "bcryptjs": "^3.0.2",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.16",
+    "@next/eslint-plugin-next": "^16.4.6",
     "@tailwindcss/postcss": "^4.0.9",
     "@types/bcryptjs": "^2.4.6",
     "@types/canvas-confetti": "^1.9.0",
@@ -41,6 +42,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "embedded-postgres": "^18.6.0-beta.19",
+    "eslint": "^10.15.0",
     "pg-gateway": "^0.3.0-beta.4",
     "playwright": "^1.65.1",
     "postcss": "^8.5.3",
@@ -48,6 +50,7 @@
     "tailwindcss": "^4.0.9",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",
+    "typescript-eslint": "^8.73.0",
     "vitest": "^3.0.7"
   }
 }

@@ -1,18 +1,17 @@
 "use server";
 
 import { adjustVariantStock } from "@/server/services/inventory-service";
-import { auth } from "@/lib/auth";
-import { isStaffRole } from "@/lib/authorization-guards";
+import { assertPermission } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 
 export async function restockSku(variantId: string, delta: number, actorName = "Admin Staff") {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required to adjust warehouse inventory." };
+    const perm = await assertPermission("inventory.adjust");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
 
     const result = await adjustVariantStock({
       variantId,

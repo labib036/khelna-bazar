@@ -10,7 +10,9 @@ import { useMounted } from "@/lib/use-mounted";
 import { formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
 import { siteConfig } from "@/config/site";
-import { placeOrder } from "@/server/actions/order-actions";
+import { placeOrder, getDeliveryQuoteAction } from "@/server/actions/order-actions";
+import { getPublicSettingsAction } from "@/server/actions/settings-actions";
+import type { PublicStoreSettings } from "@/types/store";
 import { Button } from "@/components/ui/button";
 import {
   Truck,
@@ -26,6 +28,7 @@ import {
   Headphones,
   CheckCircle,
   Copy,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -84,15 +87,65 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [couponCodeInput, setCouponCodeInput] = useState("");
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [publicSettings, setPublicSettings] = useState<PublicStoreSettings | null>(null);
+  const [serverDeliveryFee, setServerDeliveryFee] = useState<number | null>(null);
+  const [isDeliveryConfigured, setIsDeliveryConfigured] = useState<boolean>(true);
+  const [deliveryQuoteLoading, setDeliveryQuoteLoading] = useState<boolean>(true);
 
-  // Auto-fill from user profile
+  // Strict Panel Isolation Guard: Redirect privileged users away from customer checkout
   useEffect(() => {
-    if (user) {
+    if (user?.role && user.role !== "CUSTOMER") {
+      router.replace("/");
+    }
+  }, [user, router]);
+
+  // Auto-fill from user profile (ONLY for retail customer accounts)
+  useEffect(() => {
+    if (user && user.role === "CUSTOMER") {
       if (user.name) setFullName((prev) => prev || user.name || "");
       if (user.phone) setPhone((prev) => prev || user.phone || "");
       if (user.email) setEmail((prev) => prev || user.email || "");
     }
   }, [user]);
+
+  // Load public store settings (delivery rates, public hotline)
+  useEffect(() => {
+    let active = true;
+    getPublicSettingsAction().then((res) => {
+      if (active && res.success && res.settings) {
+        setPublicSettings(res.settings);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const subtotal = getSubtotal();
+  const discount = getDiscount();
+
+  // Authoritative server quote calculation based on zone and subtotal
+  useEffect(() => {
+    let active = true;
+    setDeliveryQuoteLoading(true);
+    getDeliveryQuoteAction({
+      deliveryZone,
+      subtotal,
+    }).then((res) => {
+      if (!active) return;
+      setDeliveryQuoteLoading(false);
+      if (res.success && res.quote) {
+        setIsDeliveryConfigured(res.quote.isConfigured);
+        setServerDeliveryFee(res.quote.deliveryFee);
+      } else {
+        setIsDeliveryConfigured(false);
+        setServerDeliveryFee(null);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [deliveryZone, subtotal]);
 
   if (!mounted) {
     return (
@@ -102,10 +155,10 @@ export default function CheckoutPage() {
     );
   }
 
-  const subtotal = getSubtotal();
-  const discount = getDiscount();
-  const shippingFee = getShippingFee();
-  const total = getTotal();
+  const effectiveShippingFee = serverDeliveryFee;
+  const effectiveTotal = effectiveShippingFee !== null
+    ? Math.max(0, subtotal - discount + effectiveShippingFee)
+    : Math.max(0, subtotal - discount);
 
   const handleDeliveryZoneChange = (zone: "inside_dhaka" | "outside_dhaka") => {
     setDeliveryZone(zone);
@@ -185,6 +238,15 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!isDeliveryConfigured || effectiveShippingFee === null) {
+      toast.error(
+        isBn
+          ? "নির্বাচিত এলাকার ডেলিভারি চার্জ নির্ধারিত না থাকায় সরাসরি অর্ডার নেওয়া যাচ্ছে না। অনুগ্রহ করে 01712-039707 নম্বরে যোগাযোগ করুন।"
+          : "Delivery fee is not yet configured for this zone. Please contact support via Call or WhatsApp at 01712-039707."
+      );
+      return;
+    }
+
     if (!validateForm()) {
       toast.error(isBn ? "অনুগ্রহ করে প্রয়োজনীয় তথ্য সঠিকভাবে দিন।" : "Please fill in all required delivery details.");
       return;
@@ -207,6 +269,8 @@ export default function CheckoutPage() {
         senderNumber: paymentMethod !== "CASH_ON_DELIVERY" ? mfsSenderNumber.trim() : undefined,
         trxId: paymentMethod !== "CASH_ON_DELIVERY" ? mfsTrxId.trim().toUpperCase() : undefined,
         inspectionAcknowledged: inspectAcknowledged,
+        expectedShippingFee: effectiveShippingFee,
+        expectedTotal: effectiveTotal,
         items: items.map((i) => ({
           variantId: i.variantId,
           quantity: i.quantity,
@@ -235,6 +299,40 @@ export default function CheckoutPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (mounted && user?.role && user.role !== "CUSTOMER") {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center p-6 bg-[var(--surface)]">
+        <div className="max-w-md w-full bg-[var(--surface-container-low)] p-8 rounded-4xl border border-[var(--border)] shadow-xl text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center">
+            <ShieldCheck className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-heading font-black text-[var(--text-primary)]">
+            Management Account Detected
+          </h2>
+          <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+            You are signed in as <strong>{user.name || user.email}</strong> with an administrative role (<strong>{user.role}</strong>). Administrators and staff members cannot place retail customer orders.
+          </p>
+          <div className="flex flex-col gap-2.5 pt-2">
+            <Button
+              onClick={() => router.push("/")}
+              variant="pill-primary"
+              className="w-full font-bold"
+            >
+              Return to Storefront
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/login")}
+              className="w-full rounded-full text-xs font-bold"
+            >
+              Switch Account
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-[var(--surface)] min-h-screen py-6 space-y-6">
@@ -541,7 +639,9 @@ export default function CheckoutPage() {
                         </span>
                       </div>
                       <span className="text-xs font-black text-[var(--primary)]">
-                        {formatPrice(siteConfig.shippingDefaults.insideDhakaRate)}
+                        {publicSettings?.insideDhakaRate !== null && publicSettings?.insideDhakaRate !== undefined
+                          ? formatPrice(publicSettings.insideDhakaRate)
+                          : isBn ? "অসংজ্ঞায়িত" : "To be confirmed"}
                       </span>
                     </div>
                     <p className="text-[11px] text-[var(--text-muted)]">
@@ -568,18 +668,36 @@ export default function CheckoutPage() {
                           {deliveryZone === "outside_dhaka" && <Check className="w-3.5 h-3.5" />}
                         </div>
                         <span className="font-black text-xs text-[var(--text-primary)]">
-                          {isBn ? "ঢাকার বাইরে (সমগ্র বাংলাদেশ)" : "Outside Dhaka (All Bangladesh)"}
+                          {isBn ? "ঢাকার বাইরে" : "Outside Dhaka"}
                         </span>
                       </div>
                       <span className="text-xs font-black text-[var(--text-primary)]">
-                        {formatPrice(siteConfig.shippingDefaults.outsideDhakaRate)}
+                        {publicSettings?.outsideDhakaRate !== null && publicSettings?.outsideDhakaRate !== undefined
+                          ? formatPrice(publicSettings.outsideDhakaRate)
+                          : isBn ? "অসংজ্ঞায়িত" : "To be confirmed"}
                       </span>
                     </div>
                     <p className="text-[11px] text-[var(--text-muted)]">
-                      {isBn ? "বাংলাদেশের যেকোনো জেলায় ডেলিভারি" : "Doorstep courier across all districts in Bangladesh"}
+                      {isBn ? "কুরিয়ার সার্ভিসের মাধ্যমে ডেলিভারি" : "Doorstep courier delivery outside Dhaka"}
                     </p>
                   </label>
                 </div>
+
+                {(!isDeliveryConfigured || effectiveShippingFee === null) && (
+                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-3 mt-3">
+                    <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-bold">
+                        {isBn ? "ডেলিভারি চার্জ নির্ধারণের অপেক্ষায়" : "Delivery Rate To Be Confirmed"}
+                      </p>
+                      <p className="leading-relaxed">
+                        {isBn
+                          ? "নির্বাচিত এলাকার জন্য সরাসরি ডেলিভারি চার্জ সক্রিয় নেই। অর্ডার সম্পন্ন করতে এবং ডেলিভারি ফি জানতে অনুগ্রহ করে কল বা WhatsApp করুন: 01712-039707"
+                          : "Delivery fee is not yet configured for this zone. Please contact support via Call or WhatsApp at 01712-039707 to confirm delivery rate and order."}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* STEP 3: Payment Method */}
@@ -659,8 +777,8 @@ export default function CheckoutPage() {
                           </span>
                           <span className="text-[11px] text-[var(--text-muted)] font-medium">
                             {isBn
-                              ? "বিকাশে সেন্ড মানি করুন 01712-039707 নম্বরে"
-                              : "Send Money to 01712-039707 • Verified by staff"}
+                              ? "বিকাশে পেমেন্ট পাঠান 01712-039707 নম্বরে"
+                              : "Send payment to 01712-039707 • Verified by staff"}
                           </span>
                         </div>
                       </div>
@@ -674,7 +792,7 @@ export default function CheckoutPage() {
                         <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
                           <div>
                             <span className="text-[10px] text-[var(--text-muted)] block uppercase font-bold">
-                              {isBn ? "বিকাশ নম্বর (Send Money)" : "bKash Number (Send Money)"}
+                              {isBn ? "বিকাশ নম্বর" : "bKash Number"}
                             </span>
                             <span className="font-mono font-black text-sm text-[var(--text-primary)] tracking-wider">
                               01712-039707
@@ -695,8 +813,8 @@ export default function CheckoutPage() {
                         </div>
                         <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
                           {isBn
-                            ? `মোট ${formatPrice(total)} টাকা বিকাশ 01712-039707 নম্বরে সেন্ড মানি করে নিচের বক্সে আপনার বিকাশ নম্বর ও TrxID লিখুন:`
-                            : `Send ${formatPrice(total)} via Send Money to 01712-039707, then enter your sender number and Transaction ID (TrxID) below:`}
+                            ? `মোট ${effectiveShippingFee !== null ? formatPrice(effectiveTotal) : formatPrice(subtotal - discount) + " (+ ডেলিভারি ফি)"} টাকা বিকাশ 01712-039707 নম্বরে পাঠিয়ে নিচের বক্সে আপনার বিকাশ নম্বর ও TrxID লিখুন:`
+                            : `Send ${effectiveShippingFee !== null ? formatPrice(effectiveTotal) : formatPrice(subtotal - discount) + " (+ delivery fee)"} to 01712-039707, then enter your sender number and Transaction ID (TrxID) below:`}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <input
@@ -744,8 +862,8 @@ export default function CheckoutPage() {
                           </span>
                           <span className="text-[11px] text-[var(--text-muted)] font-medium">
                             {isBn
-                              ? "নগদে সেন্ড মানি করুন 01712-039707 নম্বরে"
-                              : "Send Money to 01712-039707 • Verified by staff"}
+                              ? "নগদে পেমেন্ট পাঠান 01712-039707 নম্বরে"
+                              : "Send payment to 01712-039707 • Verified by staff"}
                           </span>
                         </div>
                       </div>
@@ -759,7 +877,7 @@ export default function CheckoutPage() {
                         <div className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
                           <div>
                             <span className="text-[10px] text-[var(--text-muted)] block uppercase font-bold">
-                              {isBn ? "নগদ নম্বর (Send Money)" : "Nagad Number (Send Money)"}
+                              {isBn ? "নগদ নম্বর" : "Nagad Number"}
                             </span>
                             <span className="font-mono font-black text-sm text-[var(--text-primary)] tracking-wider">
                               01712-039707
@@ -780,8 +898,8 @@ export default function CheckoutPage() {
                         </div>
                         <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
                           {isBn
-                            ? `মোট ${formatPrice(total)} টাকা নগদ 01712-039707 নম্বরে সেন্ড মানি করে নিচের বক্সে আপনার নগদ নম্বর ও TrxID লিখুন:`
-                            : `Send ${formatPrice(total)} via Send Money to 01712-039707, then enter your sender number and Transaction ID (TrxID) below:`}
+                            ? `মোট ${effectiveShippingFee !== null ? formatPrice(effectiveTotal) : formatPrice(subtotal - discount) + " (+ ডেলিভারি ফি)"} টাকা নগদ 01712-039707 নম্বরে পাঠিয়ে নিচের বক্সে আপনার নগদ নম্বর ও TrxID লিখুন:`
+                            : `Send ${effectiveShippingFee !== null ? formatPrice(effectiveTotal) : formatPrice(subtotal - discount) + " (+ delivery fee)"} to 01712-039707, then enter your sender number and Transaction ID (TrxID) below:`}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <input
@@ -851,7 +969,7 @@ export default function CheckoutPage() {
               {/* Submit CTA */}
               <Button
                 type="submit"
-                disabled={isSubmitting || items.length === 0 || !inspectAcknowledged}
+                disabled={isSubmitting || items.length === 0 || !inspectAcknowledged || !isDeliveryConfigured || effectiveShippingFee === null}
                 variant="pill-primary"
                 size="lg"
                 className="w-full h-14 font-black text-base shadow-[0_4px_0_#93000E] active:translate-y-[2px] active:shadow-[0_2px_0_#93000E] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -867,6 +985,13 @@ export default function CheckoutPage() {
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </Button>
+              {(!isDeliveryConfigured || effectiveShippingFee === null) && (
+                <p className="text-center text-xs text-amber-700 dark:text-amber-400 font-bold pt-2">
+                  {isBn
+                    ? "অর্ডার সম্পন্ন করতে কল বা WhatsApp করুন 01712-039707 নম্বরে"
+                    : "Please call or WhatsApp 01712-039707 to complete this order."}
+                </p>
+              )}
             </form>
           </div>
 
@@ -973,7 +1098,11 @@ export default function CheckoutPage() {
                       ? `ডেলিভারি (${deliveryZone === "inside_dhaka" ? "ঢাকা মেট্রো" : "ঢাকার বাইরে"})`
                       : `Delivery (${deliveryZone === "inside_dhaka" ? "Inside Dhaka" : "Outside Dhaka"})`}
                   </span>
-                  <span className="font-bold text-[var(--text-primary)]">{formatPrice(shippingFee)}</span>
+                  <span className="font-bold text-[var(--text-primary)]">
+                    {effectiveShippingFee !== null
+                      ? formatPrice(effectiveShippingFee)
+                      : isBn ? "নিশ্চিত করা হবে" : "To be confirmed"}
+                  </span>
                 </div>
 
                 <div className="pt-3 border-t border-[var(--border)] flex justify-between items-baseline">
@@ -982,13 +1111,20 @@ export default function CheckoutPage() {
                       {isBn ? "সর্বমোট প্রদেয়" : "Total Payable"}
                     </span>
                     <span className="text-[10px] text-[var(--text-muted)]">
-                      {isBn ? "ভ্যাট সহ" : "Inclusive of all taxes"}
+                      {effectiveShippingFee === null
+                        ? isBn ? "ডেলিভারি চার্জ নিশ্চিত করা হবে" : "Delivery fee to be confirmed"
+                        : isBn ? "প্রদেয় সর্বমোট মূল্য" : "Final Payable Amount"}
                     </span>
                   </div>
                   <div className="text-right">
                     <span className="font-heading font-black text-3xl sm:text-4xl text-[var(--primary)] block leading-none">
-                      {formatPrice(total)}
+                      {formatPrice(effectiveTotal)}
                     </span>
+                    {effectiveShippingFee === null && (
+                      <span className="text-[10px] text-amber-700 dark:text-amber-400 font-bold block mt-1">
+                        {isBn ? "+ ডেলিভারি চার্জ" : "+ Delivery fee TBD"}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

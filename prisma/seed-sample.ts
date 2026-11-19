@@ -54,7 +54,7 @@ async function main() {
       basePrice: 1850,
       comparePrice: 2200,
       shortDesc: "5-in-1 sensory wooden bead maze, shape sorter, spinning gears, and clock.",
-      descriptionHtml: "<p>Smooth non-toxic water-based paint, FSC certified natural beechwood.</p>",
+      descriptionHtml: "<p>Smooth non-toxic water-based finish, natural solid wood construction.</p>",
       stock: 18,
       sku: "KB-WOD-CUB-01",
       images: ["https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=80"],

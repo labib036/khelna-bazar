@@ -126,7 +126,7 @@ export async function updateUserProfile(input: { name: string; phone: string; em
       return { success: false, error: "This mobile phone number is already registered to another account." };
     }
 
-    let cleanEmail = input.email ? input.email.trim().toLowerCase() : undefined;
+    const cleanEmail = input.email ? input.email.trim().toLowerCase() : undefined;
     if (cleanEmail && !isValidEmail(cleanEmail)) {
       return { success: false, error: "Invalid email address format." };
     }

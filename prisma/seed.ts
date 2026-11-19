@@ -4,6 +4,12 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "🛑 [SEED GUARD] Destructive development seed cannot run in production mode! Use `npm run db:seed:essential` instead."
+    );
+  }
+
   console.log("🌱 Starting KHELNA BAZAR comprehensive seed process...");
 
   // 1. CLEANUP (Idempotent seed)

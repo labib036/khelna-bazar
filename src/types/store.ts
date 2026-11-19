@@ -118,7 +118,7 @@ export interface StoreOrder {
   orderNumber: string;
   userId?: string | null;
   customerName: string;
-  customerEmail: string;
+  customerEmail?: string | null;
   customerPhone: string;
   status: OrderStatus;
   codStatus: CodStatus;
@@ -210,11 +210,12 @@ export interface StoreSettings {
   tradeLicense?: string;
   binNumber?: string;
   tinNumber?: string;
-  insideDhakaRate: number;
-  outsideDhakaRate: number;
-  expressDhakaRate: number;
-  freeShippingThreshold: number;
-  giftWrapFee: number;
+  insideDhakaRate: number | null;
+  outsideDhakaRate: number | null;
+  expressDhakaRate: number | null;
+  freeShippingThreshold: number | null;
+  giftWrapFee: number | null;
+  shippingConfigured: boolean;
   announcementText: string;
   announcementActive: boolean;
   enableCod: boolean;
@@ -227,6 +228,26 @@ export interface StoreSettings {
   instagramUrl?: string;
   youtubeUrl?: string;
   tiktokUrl?: string;
+}
+
+export interface PublicStoreSettings {
+  storeName: string;
+  legalName: string;
+  hotline: string;
+  insideDhakaRate: number | null;
+  outsideDhakaRate: number | null;
+  expressDhakaRate: number | null;
+  freeShippingThreshold: number | null;
+  giftWrapFee: number | null;
+  shippingConfigured: boolean;
+  announcementText: string;
+  announcementActive: boolean;
+  enableCod: boolean;
+  enableBkash: boolean;
+  enableNagad: boolean;
+  bkashMerchantNumber?: string;
+  nagadMerchantNumber?: string;
+  maintenanceMode: boolean;
 }
 
 export interface StockMovementEntry {

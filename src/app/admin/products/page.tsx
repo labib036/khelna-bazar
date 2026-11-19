@@ -68,9 +68,9 @@ export default function AdminProductsPage() {
         stock: stockNum,
         categorySlug: newCategory.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
         minAgeMonths: minAge,
-        maxAgeMonths: 144,
+        maxAgeMonths: undefined,
         chokingHazard: newChoking,
-        descriptionHtml: `<p>${newName} - authentic child-safe toy.</p>`,
+        descriptionHtml: `<p>${newName}</p>`,
       });
 
       if (!res.success) {

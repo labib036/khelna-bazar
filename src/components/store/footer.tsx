@@ -108,16 +108,24 @@ export function Footer() {
             </p>
 
             <div className="space-y-2 text-xs text-slate-400 pt-2">
-              {siteConfig.contact.phone && (
-                <a href={`tel:${siteConfig.contact.whatsapp}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              {siteConfig.contact.hotline && (
+                <a
+                  href={`tel:${siteConfig.contact.hotline.replace(/[\s-]/g, "")}`}
+                  className="flex items-center gap-2 hover:text-white transition-colors"
+                >
                   <Phone className="w-4 h-4 text-amber-400" />
-                  <span className="font-semibold text-white">Hotline: {siteConfig.contact.phone}</span>
+                  <span className="font-semibold text-white">Hotline: {siteConfig.contact.hotline}</span>
                 </a>
               )}
               {siteConfig.contact.whatsapp && (
-                <a href={`https://wa.me/88${siteConfig.contact.whatsapp}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                <a
+                  href={`https://wa.me/88${siteConfig.contact.whatsapp.replace(/[\s-]/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 hover:text-white transition-colors"
+                >
                   <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">W</span>
-                  <span className="font-semibold text-white">WhatsApp: {siteConfig.contact.whatsappDisplay || siteConfig.contact.phone}</span>
+                  <span className="font-semibold text-white">WhatsApp: {siteConfig.contact.whatsappDisplay || siteConfig.contact.hotline}</span>
                 </a>
               )}
               {siteConfig.contact.email ? (

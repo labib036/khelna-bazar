@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
-import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
+import { assertPermission } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getProducts } from "@/server/services/product-service";
 import { ToyProduct } from "@/types/store";
+import crypto from "crypto";
 
 const ProductInputSchema = z.object({
   id: z.string().optional(),
@@ -16,14 +16,18 @@ const ProductInputSchema = z.object({
   categorySlug: z.string().default("toys"),
   basePrice: z.number().int().min(1, "Price must be at least ৳1"),
   comparePrice: z.number().int().optional().nullable(),
-  stock: z.number().int().min(0).default(10),
+  stock: z.number().int().min(0, "Stock cannot be negative").default(0),
   shortDesc: z.string().optional(),
-  descriptionHtml: z.string().default("<p>Authentic child-safe toy.</p>"),
+  descriptionHtml: z.string().default(""),
   images: z.array(z.string()).default([]),
-  minAgeMonths: z.number().int().default(36),
-  maxAgeMonths: z.number().int().default(144),
+  minAgeMonths: z.number().int().optional().nullable(),
+  maxAgeMonths: z.number().int().optional().nullable(),
   chokingHazard: z.boolean().default(false),
+  chokingWarning: z.string().optional().nullable(),
+  material: z.string().optional().nullable(),
+  batteryInfo: z.string().optional().nullable(),
   certifications: z.array(z.string()).default([]),
+  status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED"]).default("DRAFT"),
 });
 
 export type ProductInput = z.input<typeof ProductInputSchema>;
@@ -38,18 +42,40 @@ function slugify(text: string): string {
 }
 
 /**
- * Creates or updates a product in the database.
- * Enforces ADMIN or STAFF authorization.
+ * Creates or updates a catalog toy product.
+ * Enforces products.edit permission, variant stability, and atomic image persistence.
  */
 export async function saveProduct(input: ProductInput) {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required to save catalog products." };
+    const perm = await assertPermission("products.edit");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
+    const actor = perm.user;
 
     const data = ProductInputSchema.parse(input);
-    const slug = data.slug || slugify(data.name);
+
+    // Business Rule Validation
+    if (data.status === "ACTIVE" && data.images.length === 0) {
+      return {
+        success: false,
+        error: "Active products must have at least one product photo before publishing.",
+      };
+    }
+
+    if (
+      data.comparePrice !== null &&
+      data.comparePrice !== undefined &&
+      data.comparePrice < data.basePrice
+    ) {
+      return {
+        success: false,
+        error: "Compare price must be greater than or equal to regular price.",
+      };
+    }
+
+    let slug = data.slug || slugify(data.name);
+    if (!slug) slug = `toy-${Date.now()}`;
 
     // Find or create category
     let category = await db.category.findUnique({
@@ -67,7 +93,7 @@ export async function saveProduct(input: ProductInput) {
     }
 
     // Find or create brand
-    const brandSlug = slugify(data.brandName);
+    const brandSlug = slugify(data.brandName) || "khelna-bazar";
     let brand = await db.brand.findUnique({
       where: { slug: brandSlug },
     });
@@ -82,89 +108,188 @@ export async function saveProduct(input: ProductInput) {
     }
 
     if (data.id) {
-      // Update existing
-      const updated = await db.product.update({
+      // -------------------------------------------------------------
+      // UPDATE BRANCH (Fix F-16 & F-17)
+      // -------------------------------------------------------------
+      const existingProduct = await db.product.findUnique({
         where: { id: data.id },
-        data: {
-          name: data.name,
-          slug,
-          basePrice: data.basePrice,
-          comparePrice: data.comparePrice,
-          shortDesc: data.shortDesc,
-          descriptionHtml: data.descriptionHtml,
-          minAgeMonths: data.minAgeMonths,
-          maxAgeMonths: data.maxAgeMonths,
-          chokingHazard: data.chokingHazard,
-          certifications: data.certifications,
-          brandId: brand.id,
-          categories: {
-            set: [{ id: category.id }],
-          },
-        },
+        include: { variants: true },
       });
 
-      // Update default variant
-      await db.productVariant.upsert({
-        where: { sku: `KB-${slug.slice(0, 8).toUpperCase()}-STD` },
-        update: {
-          price: data.basePrice,
-          comparePrice: data.comparePrice,
-          stock: data.stock,
-        },
-        create: {
-          productId: updated.id,
-          sku: `KB-${slug.slice(0, 8).toUpperCase()}-STD`,
-          title: "Standard Edition",
-          price: data.basePrice,
-          comparePrice: data.comparePrice,
-          stock: data.stock,
-        },
-      });
+      if (!existingProduct) {
+        return { success: false, error: "Product not found." };
+      }
 
-      revalidatePath("/admin/products");
-      revalidatePath("/admin/inventory");
-      revalidatePath("/");
-      return { success: true, productId: updated.id };
-    } else {
-      // Create new
-      const created = await db.product.create({
-        data: {
-          name: data.name,
-          slug,
-          basePrice: data.basePrice,
-          comparePrice: data.comparePrice,
-          shortDesc: data.shortDesc || data.name,
-          descriptionHtml: data.descriptionHtml,
-          minAgeMonths: data.minAgeMonths,
-          maxAgeMonths: data.maxAgeMonths,
-          chokingHazard: data.chokingHazard,
-          certifications: data.certifications,
-          brandId: brand.id,
-          categories: {
-            connect: [{ id: category.id }],
+      const updated = await db.$transaction(async (tx) => {
+        // 1. Update product root record with all fields
+        const prod = await tx.product.update({
+          where: { id: data.id },
+          data: {
+            name: data.name,
+            slug,
+            status: data.status as any,
+            basePrice: data.basePrice,
+            comparePrice: data.comparePrice,
+            shortDesc: data.shortDesc || "",
+            descriptionHtml: data.descriptionHtml || `<p>${data.name}</p>`,
+            minAgeMonths: data.minAgeMonths ?? 36,
+            maxAgeMonths: data.maxAgeMonths ?? 144,
+            chokingHazard: data.chokingHazard,
+            chokingWarning: data.chokingWarning || null,
+            material: data.material || null,
+            batteryInfo: data.batteryInfo || null,
+            certifications: data.certifications,
+            brandId: brand.id,
+            categories: {
+              set: [{ id: category.id }],
+            },
           },
-          variants: {
-            create: {
-              sku: `KB-${slug.slice(0, 8).toUpperCase()}-STD`,
+        });
+
+        // 2. Stable variant update (never create a duplicate variant on edit)
+        const primaryVariant = existingProduct.variants[0];
+        if (primaryVariant) {
+          await tx.productVariant.update({
+            where: { id: primaryVariant.id },
+            data: {
+              title: data.name,
+              price: data.basePrice,
+              comparePrice: data.comparePrice,
+              stock: data.stock,
+            },
+          });
+        } else {
+          await tx.productVariant.create({
+            data: {
+              productId: prod.id,
+              sku: `KB-${prod.id.slice(-6).toUpperCase()}-1`,
               title: "Standard Edition",
               price: data.basePrice,
               comparePrice: data.comparePrice,
               stock: data.stock,
             },
-          },
-          images: {
-            create: data.images.map((url, i) => ({
+          });
+        }
+
+        // 3. Atomically persist images in database
+        await tx.productImage.deleteMany({
+          where: { productId: data.id },
+        });
+
+        if (data.images.length > 0) {
+          await tx.productImage.createMany({
+            data: data.images.map((url, i) => ({
+              productId: prod.id,
               url,
               sortOrder: i,
               isPrimary: i === 0,
+              alt: `${data.name} - Photo ${i + 1}`,
             })),
+          });
+        }
+
+        // 4. Audit Log entry
+        await tx.auditLog.create({
+          data: {
+            actorId: actor.id,
+            actorEmail: actor.email,
+            action: "PRODUCT_UPDATED",
+            entityType: "Product",
+            entityId: prod.id,
+            before: {
+              name: existingProduct.name,
+              basePrice: existingProduct.basePrice,
+              status: existingProduct.status,
+            },
+            after: {
+              name: prod.name,
+              basePrice: prod.basePrice,
+              status: prod.status,
+            },
           },
-        },
+        });
+
+        return prod;
       });
 
       revalidatePath("/admin/products");
       revalidatePath("/admin/inventory");
       revalidatePath("/");
+      revalidatePath(`/p/${slug}`);
+      revalidatePath(`/c/${data.categorySlug}`);
+      return { success: true, productId: updated.id };
+    } else {
+      // -------------------------------------------------------------
+      // CREATE BRANCH
+      // -------------------------------------------------------------
+      // Ensure slug uniqueness
+      const existingSlug = await db.product.findUnique({ where: { slug } });
+      if (existingSlug) {
+        slug = `${slug}-${crypto.randomBytes(3).toString("hex")}`;
+      }
+
+      const stableSku = `KB-${crypto.randomBytes(4).toString("hex").toUpperCase()}-1`;
+
+      const created = await db.$transaction(async (tx) => {
+        const prod = await tx.product.create({
+          data: {
+            name: data.name,
+            slug,
+            status: data.status as any,
+            basePrice: data.basePrice,
+            comparePrice: data.comparePrice,
+            shortDesc: data.shortDesc || "",
+            descriptionHtml: data.descriptionHtml || `<p>${data.name}</p>`,
+            minAgeMonths: data.minAgeMonths ?? 36,
+            maxAgeMonths: data.maxAgeMonths ?? 144,
+            chokingHazard: data.chokingHazard,
+            chokingWarning: data.chokingWarning || null,
+            material: data.material || null,
+            batteryInfo: data.batteryInfo || null,
+            certifications: data.certifications,
+            brandId: brand.id,
+            categories: {
+              connect: [{ id: category.id }],
+            },
+            variants: {
+              create: {
+                sku: stableSku,
+                title: data.name,
+                price: data.basePrice,
+                comparePrice: data.comparePrice,
+                stock: data.stock,
+              },
+            },
+            images: {
+              create: data.images.map((url, i) => ({
+                url,
+                sortOrder: i,
+                isPrimary: i === 0,
+                alt: `${data.name} - Photo ${i + 1}`,
+              })),
+            },
+          },
+        });
+
+        // Audit Log
+        await tx.auditLog.create({
+          data: {
+            actorId: actor.id,
+            actorEmail: actor.email,
+            action: "PRODUCT_CREATED",
+            entityType: "Product",
+            entityId: prod.id,
+            after: { name: prod.name, basePrice: prod.basePrice, status: prod.status },
+          },
+        });
+
+        return prod;
+      });
+
+      revalidatePath("/admin/products");
+      revalidatePath("/admin/inventory");
+      revalidatePath("/");
+      revalidatePath(`/c/${data.categorySlug}`);
       return { success: true, productId: created.id };
     }
   } catch (error: any) {
@@ -173,37 +298,52 @@ export async function saveProduct(input: ProductInput) {
 }
 
 /**
- * Deletes a product by ID.
- * Enforces ADMIN-only authorization.
+ * Soft deletes/archives a product.
+ * Preserves historical orders and reviews without foreign key errors.
  */
 export async function deleteProduct(productId: string) {
   try {
-    const session = await auth();
-    if (!session?.user || !isAdminRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin privileges required to delete catalog products." };
+    const perm = await assertPermission("products.delete");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
+    const actor = perm.user;
 
-    await db.product.delete({
+    const updated = await db.product.update({
       where: { id: productId },
+      data: {
+        deletedAt: new Date(),
+        status: "ARCHIVED",
+      },
+    });
+
+    await db.auditLog.create({
+      data: {
+        actorId: actor.id,
+        actorEmail: actor.email,
+        action: "PRODUCT_ARCHIVED",
+        entityType: "Product",
+        entityId: productId,
+      },
     });
 
     revalidatePath("/admin/products");
     revalidatePath("/admin/inventory");
     revalidatePath("/");
-    return { success: true };
+    return { success: true, productId: updated.id };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
 
 /**
- * Fetches all products for admin console management.
+ * Fetches all products for admin console management (excluding soft-deleted).
  */
 export async function getAdminProducts(): Promise<{ products: ToyProduct[]; error?: string }> {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { products: [], error: "Unauthorized: Admin or Staff privileges required." };
+    const perm = await assertPermission("products.view");
+    if (!perm.success) {
+      return { products: [], error: perm.error };
     }
     const { products } = await getProducts({ limit: 100 });
     return { products };
@@ -213,7 +353,7 @@ export async function getAdminProducts(): Promise<{ products: ToyProduct[]; erro
 }
 
 /**
- * Fetches real recommended toys for gift finder quiz.
+ * Fetches recommended toys for gift finder quiz.
  */
 export async function getGiftRecommendations(params: {
   ageRange?: string;
@@ -237,9 +377,9 @@ export async function getGiftRecommendations(params: {
  */
 export async function updateVariantStock(variantId: string, delta: number) {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required." };
+    const perm = await assertPermission("inventory.adjust");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
     const variant = await db.productVariant.findUnique({ where: { id: variantId } });
     if (!variant) return { success: false, error: "Variant not found" };

@@ -28,7 +28,9 @@ export const PlaceOrderSchema = z.object({
     .min(1, "Your cart cannot be empty"),
   couponCode: z.string().optional(),
   idempotencyKey: z.string().optional(),
-  userId: z.string().optional(),
+  userId: z.string().optional(), // Ignored server-side; bound strictly to session.user.id
+  expectedShippingFee: z.number().nonnegative().optional(),
+  expectedTotal: z.number().nonnegative().optional(),
 });
 
 export type PlaceOrderInput = z.infer<typeof PlaceOrderSchema>;

@@ -72,19 +72,19 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div
       data-testid="admin-dashboard-shell"
-      className="min-h-screen bg-[#FAF8F6] dark:bg-[#121318] flex flex-col lg:flex-row font-sans"
+      className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col lg:flex-row font-sans"
     >
       {/* Mobile Top Header */}
-      <header className="lg:hidden bg-[#18191F] text-white px-5 py-3.5 flex items-center justify-between sticky top-0 z-40 border-b border-slate-800 shadow-sm">
+      <header className="lg:hidden bg-stone-900 text-white px-5 py-3.5 flex items-center justify-between sticky top-0 z-40 border-b border-stone-800 shadow-sm">
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="p-2 text-slate-300 hover:text-white rounded-xl focus:outline-none cursor-pointer"
+          className="p-2 text-stone-300 hover:text-white rounded-xl focus:outline-none cursor-pointer"
           aria-label="Open sidebar menu"
         >
           <Menu className="w-6 h-6" />
         </button>
         <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white p-0.5 border border-[#DC012B]/30 shrink-0">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white p-0.5 border border-[var(--primary)]/30 shrink-0">
             <Image
               src="/images/khelna-bazar-logo.png"
               alt="Khelna Bazar"
@@ -93,33 +93,35 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             />
           </div>
           <span className="font-heading font-black text-lg text-white tracking-tight">
-            KHELNA <span className="text-[#DC012B]">ADMIN</span>
+            KHELNA <span className="text-[var(--primary)]">ADMIN</span>
           </span>
         </Link>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <Link
             href="/"
-            className="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 text-[#F59E0B] hover:bg-slate-700 flex items-center gap-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 text-stone-300 hover:text-white rounded-xl focus:outline-none"
+            title="View Storefront"
           >
-            <span>Store</span>
-            <ExternalLink className="w-3 h-3" />
+            <Store className="w-5 h-5 text-amber-400" />
           </Link>
+          <ThemeToggle />
         </div>
       </header>
 
       {/* Spacious Sidebar Navigation */}
       <aside
         data-testid="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#18191F] text-white p-6 flex flex-col justify-between transition-transform duration-200 lg:translate-x-0 lg:static lg:min-h-screen border-r border-slate-800/80 shrink-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-stone-900 text-stone-100 p-6 flex flex-col justify-between transition-transform duration-200 lg:translate-x-0 lg:static lg:min-h-screen border-r border-stone-800 shrink-0 ${
           isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         <div className="space-y-7">
           {/* Brand Header */}
-          <div className="flex items-center justify-between pb-5 border-b border-slate-800">
+          <div className="flex items-center justify-between pb-5 border-b border-stone-800">
             <Link href="/admin/dashboard" className="flex items-center gap-3.5 group">
-              <div className="relative w-11 h-11 rounded-2xl overflow-hidden bg-white p-1 border-2 border-[#DC012B]/40 shadow-md shrink-0">
+              <div className="relative w-11 h-11 rounded-2xl overflow-hidden bg-white p-1 border-2 border-[var(--primary)]/40 shadow-md shrink-0">
                 <Image
                   src="/images/khelna-bazar-logo.png"
                   alt="Khelna Bazar"
@@ -129,7 +131,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               </div>
               <div className="flex flex-col">
                 <span className="font-heading font-black text-lg text-white tracking-tight leading-none">
-                  KHELNA <span className="text-[#DC012B]">BAZAR</span>
+                  KHELNA <span className="text-[var(--primary)]">BAZAR</span>
                 </span>
                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-1">
                   Management Console
@@ -138,7 +140,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 text-slate-400 hover:text-white rounded-lg cursor-pointer"
+              className="lg:hidden p-1.5 text-stone-400 hover:text-white rounded-lg cursor-pointer"
               aria-label="Close sidebar"
             >
               <X className="w-5 h-5" />
@@ -146,15 +148,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
 
           {/* User Profile Card */}
-          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#DC012B] flex items-center justify-center font-black text-sm text-white shadow-xs shrink-0">
+          <div className="p-4 rounded-2xl bg-stone-800/80 border border-stone-700/80 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[var(--primary)] flex items-center justify-center font-black text-sm text-white shadow-xs shrink-0">
               {user?.name?.[0] || user?.email?.[0] || "A"}
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-xs font-bold text-white block truncate">
                 {user?.name || "Administrator"}
               </span>
-              <span className="text-[11px] font-semibold text-slate-400 block truncate">
+              <span className="text-[11px] font-semibold text-stone-400 block truncate">
                 {user?.email || "Admin Console"}
               </span>
               <span
@@ -173,7 +175,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
           {/* Navigation Links */}
           <nav aria-label="Admin Navigation" className="space-y-1.5">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 px-3 block mb-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-stone-400 px-3 block mb-2">
               Store Management
             </span>
             {baseNavItems.map((item) => {
@@ -186,11 +188,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                   onClick={() => setIsSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                     active
-                      ? "bg-[#DC012B] text-white shadow-md shadow-[#DC012B]/20"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/80"
+                      ? "bg-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/20"
+                      : "text-stone-300 hover:text-white hover:bg-stone-800/80"
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${active ? "text-white" : "text-slate-400"}`} />
+                  <Icon className={`w-4 h-4 ${active ? "text-white" : "text-stone-400"}`} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -199,26 +201,28 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Bottom Navigation Actions */}
-        <div className="pt-6 border-t border-slate-800 space-y-2.5">
-          <div className="flex items-center justify-between px-4 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300">
+        <div className="pt-6 border-t border-stone-800 space-y-2.5">
+          <Link
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl bg-stone-800 border border-stone-700 text-xs font-bold text-stone-300 hover:text-white hover:border-stone-600 transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <Store className="w-4 h-4 text-amber-400" />
+              <span>View Storefront</span>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+          </Link>
+
+          <div className="flex items-center justify-between px-4 py-2 rounded-2xl bg-stone-800 border border-stone-700 text-xs font-bold text-stone-300">
             <span>Theme Mode</span>
             <ThemeToggle showDropdown />
           </div>
 
-          <Link
-            href="/"
-            className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold bg-slate-900 text-slate-200 hover:text-white hover:bg-slate-800 transition-colors border border-slate-800"
-          >
-            <div className="flex items-center gap-2">
-              <Store className="w-4 h-4 text-[#F59E0B]" />
-              <span>Live Storefront</span>
-            </div>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-          </Link>
-
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-400 hover:text-rose-400 hover:bg-rose-950/20 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold text-stone-400 hover:text-rose-400 hover:bg-rose-950/20 transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>

@@ -60,4 +60,13 @@ describe("validateProductionConfig", () => {
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
   });
+
+  it("instrumentation register() hook fails closed on misconfiguration in nodejs runtime", async () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = "production";
+    (process.env as Record<string, string | undefined>).NEXT_RUNTIME = "nodejs";
+    delete process.env.DATABASE_URL;
+
+    const { register } = await import("@/instrumentation");
+    await expect(register()).rejects.toThrow(/FATAL: Production launch guard blocked startup/);
+  });
 });

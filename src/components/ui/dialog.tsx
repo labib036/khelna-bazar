@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { useLockBodyScroll } from "@/lib/use-lock-body-scroll";
+import { useAccessibleModal } from "@/lib/modal-stack";
 import { X } from "lucide-react";
 
 export interface DialogProps {
@@ -13,6 +15,7 @@ export interface DialogProps {
   children: React.ReactNode;
   className?: string;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+  initialFocusRef?: React.RefObject<HTMLElement | null>;
 }
 
 export function Dialog({
@@ -23,20 +26,23 @@ export function Dialog({
   children,
   className,
   maxWidth = "md",
+  initialFocusRef,
 }: DialogProps) {
   useLockBodyScroll(isOpen);
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+    setMounted(true);
+  }, []);
 
-  if (!isOpen) return null;
+  const { titleId, descriptionId, containerRef, zIndex } = useAccessibleModal({
+    isOpen,
+    onClose,
+    initialFocusRef,
+    baseZIndex: 50,
+  });
+
+  if (!isOpen || !mounted) return null;
 
   const maxWidthStyles = {
     sm: "max-w-sm",
@@ -46,11 +52,14 @@ export function Dialog({
     "2xl": "max-w-2xl",
   };
 
-  return (
+  const content = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 flex items-center justify-center p-4 sm:p-6"
+      style={{ zIndex }}
       role="dialog"
       aria-modal="true"
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={description ? descriptionId : undefined}
     >
       {/* Backdrop */}
       <div
@@ -61,8 +70,10 @@ export function Dialog({
 
       {/* Modal Dialog Box */}
       <div
+        ref={containerRef}
+        tabIndex={-1}
         className={cn(
-          "relative z-10 w-full rounded-3xl bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] shadow-2xl p-6 overflow-hidden animate-in zoom-in-95 fade-in-0 duration-200",
+          "relative z-10 w-full rounded-3xl bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] shadow-2xl p-6 overflow-hidden animate-in zoom-in-95 fade-in-0 duration-200 outline-none",
           maxWidthStyles[maxWidth],
           className
         )}
@@ -71,12 +82,15 @@ export function Dialog({
         <div className="flex items-start justify-between gap-4 pb-4">
           <div className="space-y-1">
             {title && (
-              <h3 className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)]">
+              <h3
+                id={titleId}
+                className="text-lg sm:text-xl font-bold font-heading text-[var(--text-primary)]"
+              >
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+              <p id={descriptionId} className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
                 {description}
               </p>
             )}
@@ -96,4 +110,6 @@ export function Dialog({
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(content, document.body) : null;
 }

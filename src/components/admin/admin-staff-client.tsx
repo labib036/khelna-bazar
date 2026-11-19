@@ -21,6 +21,7 @@ import {
   getStaffUsersAction,
   createStaffUserAction,
   updateStaffRoleAction,
+  revokeUserSessionsAction,
   StaffRole,
 } from "@/server/actions/admin-staff-actions";
 
@@ -102,6 +103,17 @@ export function AdminStaffClient() {
         );
       } else {
         toast.error(res.error || "Failed to update role");
+      }
+    });
+  };
+
+  const handleRevokeSessions = async (userId: string, memberName: string) => {
+    startTransition(async () => {
+      const res = await revokeUserSessionsAction(userId);
+      if (res.success) {
+        toast.success(`Revoked all active sessions for ${memberName}.`);
+      } else {
+        toast.error(res.error || "Failed to revoke sessions.");
       }
     });
   };
@@ -375,6 +387,16 @@ export function AdminStaffClient() {
                           <option value="ADMIN">ADMIN</option>
                           <option value="SUPER_ADMIN">SUPER_ADMIN</option>
                         </select>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 text-[11px] text-amber-600 border-amber-300 hover:bg-amber-50"
+                          disabled={isPending}
+                          onClick={() => handleRevokeSessions(staff.id, staff.name || staff.email || "User")}
+                          title="Revoke all active JWT sessions immediately"
+                        >
+                          Sign Out Everywhere
+                        </Button>
                       </div>
                     </td>
                   </tr>

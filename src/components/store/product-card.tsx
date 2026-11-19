@@ -107,7 +107,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           <Link href={`/p/${product.slug}`} className="block w-full h-full">
             <Image
               src={
-                isHovered && product.images?.[1] ? product.images[1] : product.images?.[0] || ""
+                isHovered && product.images?.[1]
+                  ? product.images[1]
+                  : product.images?.[0] || "/images/toy-placeholder.svg"
               }
               alt={product.name}
               fill

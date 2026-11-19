@@ -3,16 +3,20 @@
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { getCustomerOrders, updateOrderStatus } from "@/server/actions/order-actions";
+import { getCustomerOrders, cancelCustomerOrderAction } from "@/server/actions/order-actions";
 import { StoreOrder } from "@/types/store";
 import { formatPrice } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import { Package, ArrowRight, Ban, Eye, Loader2, RotateCcw, Truck, Search, ShieldCheck } from "lucide-react";
+import { Package, Ban, Eye, Loader2, Truck, Search } from "lucide-react";
 import { toast } from "sonner";
 
 export default function CustomerOrdersHistoryPage() {
   const { data: session, status } = useSession();
   const user = session?.user;
+  const { t, locale } = useLanguage();
+  const isBn = locale === "bn";
+
   const [orders, setOrders] = useState<StoreOrder[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,7 +27,7 @@ export default function CustomerOrdersHistoryPage() {
       const data = await getCustomerOrders();
       setOrders(data);
     } catch {
-      toast.error("Failed to load your orders.");
+      toast.error(isBn ? "অর্ডার লোড করা যায়নি।" : "Failed to load your orders.");
     } finally {
       setLoading(false);
     }
@@ -41,21 +45,21 @@ export default function CustomerOrdersHistoryPage() {
     return (
       <div className="p-12 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
         <Loader2 className="w-5 h-5 animate-spin text-[var(--primary)]" />
-        <span>Loading your order history...</span>
+        <span>{isBn ? "অর্ডার ইতিহাস লোড হচ্ছে..." : "Loading your order history..."}</span>
       </div>
     );
   }
 
   const handleCancelOrder = (orderId: string, orderNumber: string) => {
-    if (!confirm(`Are you sure you want to cancel order ${orderNumber}?`)) return;
+    if (!confirm(isBn ? `আপনি কি অর্ডার #${orderNumber} বাতিল করতে চান?` : `Are you sure you want to cancel order #${orderNumber}?`)) return;
 
     startTransition(async () => {
-      const res = await updateOrderStatus(orderId, "CANCELLED", user?.name || "Customer");
+      const res = await cancelCustomerOrderAction(orderId, "Customer requested cancellation prior to confirmation.");
       if (res.success) {
-        toast.success(`Order ${orderNumber} has been cancelled.`);
+        toast.success(isBn ? `অর্ডার #${orderNumber} বাতিল করা হয়েছে।` : `Order #${orderNumber} has been cancelled.`);
         await loadOrders();
       } else {
-        toast.error(res.error || "Failed to cancel order");
+        toast.error(res.error || (isBn ? "অর্ডার বাতিল করা সম্ভব হয়নি।" : "Failed to cancel order."));
       }
     });
   };
@@ -76,20 +80,22 @@ export default function CustomerOrdersHistoryPage() {
         <div>
           <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[var(--primary)] bg-[var(--primary)]/10 px-3 py-1 rounded-full mb-1.5">
             <Truck className="w-3.5 h-3.5" />
-            <span>Fulfillment Tracking</span>
+            <span>{isBn ? "ডেলিভারি ট্র্যাকিং" : "Fulfillment Tracking"}</span>
           </div>
           <h1 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
-            My Orders &amp; Delivery History
+            {isBn ? "আমার অর্ডার ও ডেলিভারি ইতিহাস" : "My Orders & Delivery History"}
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-0.5">
-            Track your parcels, view digital receipts, and check Cash on Delivery and inspection status.
+            {isBn
+              ? "আপনার পার্সেল ট্র্যাক করুন, রসিদ দেখুন এবং ক্যাশ অন ডেলিভারি অবস্থা যাচাই করুন।"
+              : "Track your parcels, view digital receipts, and check Cash on Delivery and inspection status."}
           </p>
         </div>
 
         <Link href="/">
           <Button variant="primary" size="sm" className="font-bold text-xs gap-1.5 shadow-xs">
             <Package className="w-4 h-4" />
-            <span>Order New Toy</span>
+            <span>{isBn ? "নতুন খেলনা অর্ডার করুন" : "Order New Toy"}</span>
           </Button>
         </Link>
       </div>
@@ -101,7 +107,7 @@ export default function CustomerOrdersHistoryPage() {
             <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by order number or toy name..."
+              placeholder={isBn ? "অর্ডার নম্বর বা খেলনার নাম দিয়ে খুঁজুন..." : "Search by order number or toy name..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-10 pl-10 pr-4 rounded-2xl border border-[var(--border)] text-xs focus:outline-none focus:border-[var(--primary)] bg-[var(--surface-container-low)] text-[var(--text-primary)]"
@@ -117,11 +123,17 @@ export default function CustomerOrdersHistoryPage() {
             <Package className="w-12 h-12 text-[var(--text-muted)] mx-auto opacity-40" />
             <div className="space-y-1">
               <p className="font-heading font-black text-base text-[var(--text-primary)]">
-                {orders.length === 0 ? "No orders placed yet" : "No matching orders found"}
+                {orders.length === 0
+                  ? isBn ? "এখনও কোনো অর্ডার করা হয়নি" : "No orders placed yet"
+                  : isBn ? "কোনো অর্ডারের মিল পাওয়া যায়নি" : "No matching orders found"}
               </p>
               <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
                 {orders.length === 0
-                  ? "Explore our curated toys and enjoy Cash on Delivery across Bangladesh."
+                  ? isBn
+                    ? "আমাদের খেলনা সংগ্রহ ঘুরে দেখুন এবং ক্যাশ অন ডেলিভারি সুবিধা উপভোগ করুন।"
+                    : "Explore our curated toys and enjoy Cash on Delivery across Bangladesh."
+                  : isBn
+                  ? "অন্য শব্দ বা সঠিক অর্ডার নম্বর দিয়ে চেষ্টা করুন।"
                   : "Try a different search term or order number."}
               </p>
             </div>
@@ -129,7 +141,7 @@ export default function CustomerOrdersHistoryPage() {
               <div className="pt-2">
                 <Link href="/">
                   <Button variant="primary" size="sm" className="font-bold text-xs">
-                    Start Toy Shopping
+                    {isBn ? "কেনাকাটা শুরু করুন" : "Start Toy Shopping"}
                   </Button>
                 </Link>
               </div>
@@ -176,16 +188,18 @@ export default function CustomerOrdersHistoryPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <span className="text-xs font-bold text-[var(--text-primary)] block">
-                    {ord.items?.map((it) => `${it.name} (x${it.quantity})`).join(", ") || "Toy Parcel"}
+                    {ord.items?.map((it) => `${it.name} (x${it.quantity})`).join(", ") || (isBn ? "খেলনার পার্সেল" : "Toy Parcel")}
                   </span>
                   <span className="text-[11px] text-[var(--text-muted)] block">
-                    Address: {ord.shippingAddress?.line1}, {ord.shippingAddress?.city} ({ord.deliveryZone})
+                    {isBn ? "ঠিকানা: " : "Address: "}{ord.shippingAddress?.line1}, {ord.shippingAddress?.city} ({ord.deliveryZone})
                   </span>
                 </div>
 
                 <div className="flex items-center gap-4 self-end sm:self-auto">
                   <div className="text-right">
-                    <span className="text-[10px] text-[var(--text-muted)] block font-semibold">Total Due</span>
+                    <span className="text-[10px] text-[var(--text-muted)] block font-semibold">
+                      {isBn ? "সর্বমোট প্রদেয়" : "Total Due"}
+                    </span>
                     <span className="text-base font-black text-[var(--text-primary)]">
                       {formatPrice(ord.total)}
                     </span>
@@ -199,13 +213,13 @@ export default function CustomerOrdersHistoryPage() {
                         onClick={() => handleCancelOrder(ord.id, ord.orderNumber)}
                         className="px-3 py-1.5 rounded-xl border border-rose-300 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-xs font-bold hover:bg-rose-500/10 cursor-pointer flex items-center gap-1 disabled:opacity-50"
                       >
-                        <Ban className="w-3.5 h-3.5" /> Cancel
+                        <Ban className="w-3.5 h-3.5" /> {isBn ? "বাতিল করুন" : "Cancel"}
                       </button>
                     )}
                     <Link href={`/dashboard/orders/${ord.id}`}>
                       <Button variant="outline" size="sm" className="text-xs font-bold gap-1 rounded-xl">
                         <Eye className="w-3.5 h-3.5" />
-                        <span>View Details</span>
+                        <span>{isBn ? "বিস্তারিত দেখুন" : "View Details"}</span>
                       </Button>
                     </Link>
                   </div>

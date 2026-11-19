@@ -1,27 +1,28 @@
 import { db } from "@/lib/db";
-import { StoreSettings } from "@/types/store";
+import { StoreSettings, PublicStoreSettings } from "@/types/store";
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   storeName: "Khelna Bazar",
   legalName: "Khelna Bazar",
-  hotline: process.env.STORE_HOTLINE || "",
+  hotline: process.env.STORE_HOTLINE || "01712-039707",
   supportEmail: process.env.STORE_EMAIL || "",
   address: process.env.STORE_ADDRESS || "",
   tradeLicense: process.env.STORE_TRADE_LICENSE || "",
   binNumber: process.env.STORE_BIN || "",
   tinNumber: process.env.STORE_TIN || "",
-  insideDhakaRate: 60,
-  outsideDhakaRate: 120,
-  expressDhakaRate: 150,
-  freeShippingThreshold: 1500,
-  giftWrapFee: 50,
-  announcementText: "Free delivery across Bangladesh on orders over ৳1,500 | 100% Authentic Child-Safe Toys",
-  announcementActive: true,
+  insideDhakaRate: null,
+  outsideDhakaRate: null,
+  expressDhakaRate: null,
+  freeShippingThreshold: null,
+  giftWrapFee: null,
+  shippingConfigured: false,
+  announcementText: "Welcome to Khelna Bazar — Quality toys for play, learning, and thoughtful gifting.",
+  announcementActive: false,
   enableCod: true,
   enableBkash: true,
   enableNagad: true,
-  bkashMerchantNumber: process.env.BKASH_MERCHANT_NUMBER || "",
-  nagadMerchantNumber: process.env.NAGAD_MERCHANT_NUMBER || "",
+  bkashMerchantNumber: "01712039707",
+  nagadMerchantNumber: "01712039707",
   maintenanceMode: false,
   facebookUrl: "",
   instagramUrl: "",
@@ -42,10 +43,19 @@ export async function getStoreSettings(): Promise<StoreSettings> {
     });
 
     if (settingRecord && settingRecord.value && typeof settingRecord.value === "object") {
+      const dbValues = settingRecord.value as Record<string, unknown>;
       return {
         ...DEFAULT_STORE_SETTINGS,
-        ...(settingRecord.value as unknown as Partial<StoreSettings>),
-      };
+        ...dbValues,
+        insideDhakaRate: typeof dbValues.insideDhakaRate === "number" ? dbValues.insideDhakaRate : null,
+        outsideDhakaRate: typeof dbValues.outsideDhakaRate === "number" ? dbValues.outsideDhakaRate : null,
+        expressDhakaRate: typeof dbValues.expressDhakaRate === "number" ? dbValues.expressDhakaRate : null,
+        freeShippingThreshold: typeof dbValues.freeShippingThreshold === "number" ? dbValues.freeShippingThreshold : null,
+        giftWrapFee: typeof dbValues.giftWrapFee === "number" ? dbValues.giftWrapFee : null,
+        shippingConfigured: typeof dbValues.shippingConfigured === "boolean" 
+          ? dbValues.shippingConfigured 
+          : (typeof dbValues.insideDhakaRate === "number" && typeof dbValues.outsideDhakaRate === "number"),
+      } as StoreSettings;
     }
   } catch (error) {
     console.error("Failed to read settings from database:", (error as Error).message);
@@ -55,11 +65,48 @@ export async function getStoreSettings(): Promise<StoreSettings> {
 }
 
 /**
+ * Retrieves public safe subset of store settings for customer storefront.
+ * Excludes sensitive fields and internal configurations.
+ */
+export async function getPublicStoreSettings(): Promise<PublicStoreSettings> {
+  const full = await getStoreSettings();
+  return {
+    storeName: full.storeName,
+    legalName: full.legalName,
+    hotline: full.hotline,
+    insideDhakaRate: full.insideDhakaRate,
+    outsideDhakaRate: full.outsideDhakaRate,
+    expressDhakaRate: full.expressDhakaRate,
+    freeShippingThreshold: full.freeShippingThreshold,
+    giftWrapFee: full.giftWrapFee,
+    shippingConfigured: full.shippingConfigured,
+    announcementText: full.announcementText,
+    announcementActive: full.announcementActive,
+    enableCod: full.enableCod,
+    enableBkash: full.enableBkash,
+    enableNagad: full.enableNagad,
+    bkashMerchantNumber: full.bkashMerchantNumber,
+    nagadMerchantNumber: full.nagadMerchantNumber,
+    maintenanceMode: full.maintenanceMode,
+  };
+}
+
+/**
  * Updates store settings in the database.
  */
 export async function updateStoreSettings(updates: Partial<StoreSettings>): Promise<StoreSettings> {
   const current = await getStoreSettings();
-  const merged: StoreSettings = { ...current, ...updates };
+  
+  // Calculate if shipping is configured based on inside & outside rates
+  const newInside = updates.insideDhakaRate !== undefined ? updates.insideDhakaRate : current.insideDhakaRate;
+  const newOutside = updates.outsideDhakaRate !== undefined ? updates.outsideDhakaRate : current.outsideDhakaRate;
+  const shippingConfigured = newInside !== null && newOutside !== null;
+
+  const merged: StoreSettings = {
+    ...current,
+    ...updates,
+    shippingConfigured,
+  };
 
   await db.setting.upsert({
     where: { key: SETTINGS_KEY },

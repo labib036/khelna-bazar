@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useCartStore, SHIPPING_CONFIG } from "@/lib/cart-store";
 import { useLockBodyScroll } from "@/lib/use-lock-body-scroll";
+import { useAccessibleModal } from "@/lib/modal-stack";
 import { formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
@@ -26,6 +29,9 @@ import {
 
 export function MiniCartDrawer() {
   const { t, locale } = useLanguage();
+  const sessionResult = useSession();
+  const userRole = sessionResult?.data?.user?.role;
+  const isPrivileged = userRole && userRole !== "CUSTOMER";
   const {
     items,
     isOpen,
@@ -50,15 +56,17 @@ export function MiniCartDrawer() {
   // Reference counted safe scroll lock
   useLockBodyScroll(isOpen);
 
-  // Close on Escape key
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeCart();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, closeCart]);
+    setMounted(true);
+  }, []);
+
+  const { containerRef, zIndex } = useAccessibleModal({
+    isOpen,
+    onClose: closeCart,
+    baseZIndex: 60,
+  });
 
   const subtotal = getSubtotal();
   const discount = getDiscount();
@@ -74,14 +82,15 @@ export function MiniCartDrawer() {
     if (res.success) setCouponInput("");
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  const content = (
     <div
       role="dialog"
       aria-modal="true"
       aria-label={locale === "bn" ? "আপনার খেলনার কার্ট" : "Your Toy Cart"}
-      className="fixed inset-0 z-50 overflow-hidden"
+      className="fixed inset-0 overflow-hidden"
+      style={{ zIndex }}
     >
       {/* Backdrop */}
       <div
@@ -90,7 +99,11 @@ export function MiniCartDrawer() {
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[var(--surface)] rounded-l-3xl border-l border-[var(--border)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300">
+        <div
+          ref={containerRef}
+          tabIndex={-1}
+          className="w-screen max-w-md bg-[var(--surface)] rounded-l-3xl border-l border-[var(--border)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300 outline-none"
+        >
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-[var(--border)] bg-[var(--surface-container-low)] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -315,12 +328,25 @@ export function MiniCartDrawer() {
 
               {/* Action Buttons */}
               <div className="pt-2 space-y-2">
-                <Link href="/checkout" onClick={closeCart} className="block w-full">
-                  <Button variant="pill-primary" size="lg" className="w-full text-sm font-bold shadow-[0_4px_0_#93000E]">
-                    <span>{locale === "bn" ? "অর্ডার সম্পন্ন করতে এগিয়ে যান" : "Proceed to Cash on Delivery"}</span>
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
+                {isPrivileged ? (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-center space-y-1">
+                    <p className="text-xs font-bold text-amber-700 dark:text-amber-400">
+                      {locale === "bn" ? `ম্যানেজমেন্ট অ্যাকাউন্ট (${userRole})` : `Management Account (${userRole})`}
+                    </p>
+                    <p className="text-[11px] text-[var(--text-muted)]">
+                      {locale === "bn"
+                        ? "অ্যাডমিন বা স্টাফ অ্যাকাউন্ট দিয়ে রিটেল অর্ডার দেওয়া যাবে না।"
+                        : "Store staff & admins cannot place retail orders. Sign out to purchase."}
+                    </p>
+                  </div>
+                ) : (
+                  <Link href="/checkout" onClick={closeCart} className="block w-full">
+                    <Button variant="pill-primary" size="lg" className="w-full text-sm font-bold shadow-[0_4px_0_#93000E]">
+                      <span>{locale === "bn" ? "অর্ডার সম্পন্ন করতে এগিয়ে যান" : "Proceed to Cash on Delivery"}</span>
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                )}
                 <Link href="/cart" onClick={closeCart} className="block w-full text-center">
                   <Button variant="ghost" size="sm" className="w-full text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                     View &amp; Edit Full Cart
@@ -333,4 +359,6 @@ export function MiniCartDrawer() {
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(content, document.body) : null;
 }

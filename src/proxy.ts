@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 export const proxy = auth((req) => {
   const { pathname } = req.nextUrl;
   const user = req.auth?.user;
+  const isPrivileged = user?.role === "STAFF" || user?.role === "ADMIN" || user?.role === "SUPER_ADMIN";
+  const isCustomer = user?.role === "CUSTOMER";
 
   // 0. Block /dev routes in production
   if (pathname.startsWith("/dev")) {
@@ -12,18 +14,27 @@ export const proxy = auth((req) => {
     }
   }
 
-  // 1. Compatibility Redirect: /account/* -> /dashboard/*
+  // 1. Compatibility Redirect: /account/* -> /dashboard/* (or /admin/dashboard for privileged)
   if (pathname === "/account" || pathname === "/account/") {
-    return NextResponse.redirect(new URL("/dashboard", req.url), 307);
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url), 308);
+    }
+    return NextResponse.redirect(new URL("/dashboard", req.url), 308);
   }
   if (pathname.startsWith("/account/")) {
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url), 308);
+    }
     const subpath = pathname.replace(/^\/account\//, "");
-    return NextResponse.redirect(new URL(`/dashboard/${subpath}`, req.url), 307);
+    return NextResponse.redirect(new URL(`/dashboard/${subpath}`, req.url), 308);
   }
 
   // 2. Compatibility Redirect: /dashboard/user -> /dashboard
   if (pathname === "/dashboard/user" || pathname === "/dashboard/user/") {
-    return NextResponse.redirect(new URL("/dashboard", req.url), 307);
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url), 308);
+    }
+    return NextResponse.redirect(new URL("/dashboard", req.url), 308);
   }
 
   // 3. Admin Canonical Redirect: /admin -> /admin/dashboard
@@ -33,7 +44,10 @@ export const proxy = auth((req) => {
       loginUrl.searchParams.set("next", "/admin/dashboard");
       return NextResponse.redirect(loginUrl);
     }
-    return NextResponse.redirect(new URL("/admin/dashboard", req.url), 307);
+    if (isCustomer) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.redirect(new URL("/admin/dashboard", req.url), 308);
   }
 
   // 4. Guard /admin/* routes
@@ -44,22 +58,26 @@ export const proxy = auth((req) => {
       return NextResponse.redirect(loginUrl);
     }
 
-    // Role check: Only STAFF, ADMIN, and SUPER_ADMIN can access admin operations
-    if (user.role !== "STAFF" && user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
+    // Role check: Customers can NEVER access admin operations
+    if (!isPrivileged) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // Settings page restricted exclusively to ADMIN and SUPER_ADMIN
-    if (pathname.startsWith("/admin/settings") && user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    // Staff restrictions: STAFF can only access /admin/dashboard and /admin/orders
+    if (user.role === "STAFF") {
+      const isStaffAllowed =
+        pathname === "/admin/dashboard" ||
+        pathname.startsWith("/admin/orders");
+      if (!isStaffAllowed) {
+        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+      }
     }
 
-    // Staff accounts and audit logs restricted exclusively to SUPER_ADMIN
-    if (
-      (pathname.startsWith("/admin/staff") || pathname.startsWith("/admin/audit-logs")) &&
-      user.role !== "SUPER_ADMIN"
-    ) {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    // Admin restrictions: ADMIN cannot access Super-Admin staff management or audit logs
+    if (user.role === "ADMIN") {
+      if (pathname.startsWith("/admin/staff") || pathname.startsWith("/admin/audit-logs")) {
+        return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+      }
     }
   }
 
@@ -71,9 +89,32 @@ export const proxy = auth((req) => {
       return NextResponse.redirect(loginUrl);
     }
 
-    // If staff/admin lands on customer dashboard, route to admin console
-    if (user.role === "STAFF" || user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
+    // If staff/admin lands on customer dashboard, route to their own admin console
+    if (isPrivileged) {
       return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
+  }
+
+  // 6. Anti-Admin Ordering Guard: Prevent Staff/Admin from customer checkout & cart
+  if (pathname === "/checkout" || pathname.startsWith("/checkout/")) {
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
+  }
+
+  if (pathname === "/cart" || pathname.startsWith("/cart/")) {
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
+  }
+
+  // 7. Auth Pages: If user is already logged in, redirect them to their respective dashboard
+  if (pathname === "/login" || pathname === "/register") {
+    if (isPrivileged) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
+    if (isCustomer) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
   }
 
@@ -83,5 +124,26 @@ export const proxy = auth((req) => {
 export default proxy;
 
 export const config = {
-  matcher: ["/admin/:path*", "/admin", "/dashboard/:path*", "/account/:path*", "/account", "/dev/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/admin",
+    "/dashboard/:path*",
+    "/dashboard",
+    "/account/:path*",
+    "/account",
+    "/checkout/:path*",
+    "/checkout",
+    "/cart/:path*",
+    "/cart",
+    "/login",
+    "/register",
+    "/deals/:path*",
+    "/deals",
+    "/new-arrivals/:path*",
+    "/new-arrivals",
+    "/gift-finder/:path*",
+    "/gift-finder",
+    "/",
+    "/dev/:path*",
+  ],
 };

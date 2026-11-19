@@ -3,99 +3,130 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
-import { getStoreSettings } from "@/server/services/settings-service";
-import { validateCoupon, incrementCouponUsage } from "@/server/services/coupon-service";
-import { adjustVariantStock } from "@/server/services/inventory-service";
-import { getOrderByNumberAndPhone, getOrderById, getOrders, getAdminKPIs } from "@/server/services/order-service";
-import { OrderStatus, CodStatus, StoreOrder } from "@/types/store";
-import { generateOrderAccessToken, verifyOrderAccessToken } from "@/lib/order-token";
-import { normalizeIdentifier, isValidBDPhone } from "@/lib/auth-utils";
+import { assertPermission } from "@/lib/permissions";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getStoreSettings } from "@/server/services/settings-service";
+import { calculateDeliveryQuote } from "@/server/services/delivery-service";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { generateOrderAccessToken, verifyOrderAccessToken } from "@/lib/order-token";
+import { adjustVariantStock } from "@/server/services/inventory-service";
+import { validateCoupon, incrementCouponUsage } from "@/server/services/coupon-service";
+import { getOrders, getAdminKPIs, getOrderById, getOrderByNumberAndPhone } from "@/server/services/order-service";
+import { PlaceOrderSchema, PlaceOrderInput } from "@/lib/order-schema";
+import { OrderStatus, CodStatus } from "@/types/store";
 
-export async function trackOrderAction(orderNumber: string, phone: string) {
-  const rateCheck = checkRateLimit(`track:${orderNumber.trim()}`, { limit: 20, windowMs: 5 * 60 * 1000 });
-  if (!rateCheck.success) {
-    return null;
-  }
-  return await getOrderByNumberAndPhone(orderNumber, phone);
-}
-
-/**
- * Fetches order details with strict IDOR protections:
- * - Admin and Staff can view any order.
- * - Logged-in customers can only view their own orders.
- * - Guests must provide either a cryptographically signed orderAccessToken or matching phone.
- */
-export async function fetchOrderDetails(orderId: string, tokenOrPhone?: string) {
-  const order = await getOrderById(orderId);
-  if (!order) return null;
-
-  const session = await auth();
-
-  // 1. Privileged users: Admin or Staff can inspect any order
-  if (session?.user && isStaffRole(session.user.role)) {
-    return order;
-  }
-
-  // 2. Authenticated customer who owns the order
-  if (session?.user?.id && order.userId && session.user.id === order.userId) {
-    return order;
-  }
-
-  // 3. Guest or direct lookup using cryptographically verified orderAccessToken
-  if (tokenOrPhone && verifyOrderAccessToken(order.id, order.orderNumber, tokenOrPhone)) {
-    return order;
-  }
-
-  // 4. Verification via matching customer phone
-  if (tokenOrPhone) {
-    const normalizedInput = normalizeIdentifier(tokenOrPhone);
-    const normalizedOrderPhone = normalizeIdentifier(order.customerPhone);
-    if (normalizedInput === normalizedOrderPhone) {
-      return order;
-    }
-  }
-
-  // Unauthorized access attempt (IDOR protection)
-  return null;
-}
-
-export async function getCustomerOrders(): Promise<StoreOrder[]> {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return [];
-  }
-  const { orders } = await getOrders({ userId: session.user.id, limit: 50 });
-  return orders;
-}
-
-import { PlaceOrderSchema, type PlaceOrderInput } from "@/lib/order-schema";
 export type { PlaceOrderInput };
 
 /**
- * Generates collision-resistant server-side order sequence: KB-YYMM-XXXXXX
+ * Bangladesh phone number validation:
+ * Valid format: 013XXXXXXXX, 014XXXXXXXX, 015XXXXXXXX, 016XXXXXXXX, 017XXXXXXXX, 018XXXXXXXX, 019XXXXXXXX
  */
-function generateServerOrderNumber(): string {
+function isValidBDPhone(phone: string): boolean {
+  const clean = phone.replace(/[\s-]/g, "");
+  return /^(\+?88)?01[3-9]\d{8}$/.test(clean);
+}
+
+let orderSequenceCounter = 0;
+
+/**
+ * Generate human-friendly, collision-safe order number with date prefix, sequence, and DB uniqueness check
+ * e.g. KB-261119-004273
+ */
+export async function generateServerOrderNumber(dbInstance: any = db): Promise<string> {
   const now = new Date();
   const year = String(now.getFullYear()).slice(-2);
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const randomSeq = Math.floor(100000 + Math.random() * 900000);
-  return `KB-${year}${month}-${randomSeq}`;
+  const day = String(now.getDate()).padStart(2, "0");
+
+  const finder = (dbInstance?.order?.findUnique ? dbInstance : db)?.order?.findUnique;
+
+  for (let attempt = 0; attempt < 10; attempt++) {
+    orderSequenceCounter = (orderSequenceCounter + 1) % 10000;
+    const seqStr = String(orderSequenceCounter).padStart(4, "0");
+    const randSuffix = Math.floor(10 + Math.random() * 90);
+    const candidate = `KB-${year}${month}${day}-${seqStr}${randSuffix}`;
+
+    if (typeof finder === "function") {
+      const existing = await finder({
+        where: { orderNumber: candidate },
+        select: { id: true },
+      });
+
+      if (!existing) {
+        return candidate;
+      }
+    } else {
+      return candidate;
+    }
+  }
+
+  return `KB-${year}${month}${day}-${Date.now().toString().slice(-6)}`;
 }
 
 /**
- * Single transactional order placement action.
- * Atomically validates stock, re-calculates pricing from database records,
- * applies coupon, decrements inventory, and creates order records.
+ * Allowed status transitions state machine
  */
-export async function placeOrder(input: PlaceOrderInput) {
-  try {
-    const validated = PlaceOrderSchema.parse(input);
+const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  PENDING_CONFIRMATION: ["CONFIRMED", "PROCESSING", "CANCELLED"],
+  CONFIRMED: ["PROCESSING", "PACKED", "SHIPPED", "CANCELLED"],
+  PROCESSING: ["PACKED", "SHIPPED", "CANCELLED"],
+  PACKED: ["SHIPPED", "OUT_FOR_DELIVERY", "CANCELLED"],
+  SHIPPED: ["OUT_FOR_DELIVERY", "DELIVERED", "RETURNED"],
+  OUT_FOR_DELIVERY: ["DELIVERED", "RETURNED"],
+  DELIVERED: [], // Terminal
+  CANCELLED: [], // Terminal
+  RETURNED: [],  // Terminal
+};
 
-    // Normalize phone format to 01XXXXXXXXX
-    let normalizedPhone = validated.phone.replace(/[\s\-()]/g, "");
+/**
+ * Public Server Action: Calculates authoritative delivery quote
+ */
+export async function getDeliveryQuoteAction(params: {
+  deliveryZone: string;
+  subtotal: number;
+  giftWrapCount?: number;
+}) {
+  try {
+    const quote = await calculateDeliveryQuote(params);
+    return { success: true, quote };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Creates a verified Order record with atomic transaction, live price verification,
+ * stock decrement, coupon redemption, and server-authoritative delivery fees.
+ * Enforces authenticated session identity (ignoring untrusted client userId).
+ */
+export async function placeOrder(input: unknown) {
+  try {
+    const parsed = PlaceOrderSchema.safeParse(input);
+    if (!parsed.success) {
+      const firstIssue = parsed.error.issues[0];
+      return {
+        success: false,
+        error: firstIssue?.message || "Invalid order information. Please review all fields.",
+      };
+    }
+
+    const validated = parsed.data;
+
+    // Resolve authenticated identity server-side
+    const session = await auth();
+    const userRole = session?.user?.role;
+
+    // Strict Panel Isolation Guard: Admins and staff cannot place customer orders
+    if (userRole && userRole !== "CUSTOMER") {
+      return {
+        success: false,
+        error: "ADMIN_CANNOT_ORDER: Store administrators and staff members cannot place retail customer orders. Please sign out and order as a guest or with a customer account.",
+      };
+    }
+
+    const authenticatedUserId = session?.user?.id || null;
+
+    let normalizedPhone = validated.phone.replace(/[\s-]/g, "");
     if (normalizedPhone.startsWith("+8801")) normalizedPhone = normalizedPhone.slice(3);
     else if (normalizedPhone.startsWith("8801")) normalizedPhone = normalizedPhone.slice(2);
 
@@ -171,7 +202,7 @@ export async function placeOrder(input: PlaceOrderInput) {
       const variantMap = new Map(dbVariants.map((v) => [v.id, v]));
 
       let subtotal = 0;
-      let giftWrapFee = 0;
+      let totalGiftWrapCount = 0;
       const orderItemsData: Array<{
         productId: string;
         variantId: string;
@@ -204,7 +235,7 @@ export async function placeOrder(input: PlaceOrderInput) {
         subtotal += lineTotal;
 
         if (item.giftWrap) {
-          giftWrapFee += settings.giftWrapFee * item.quantity;
+          totalGiftWrapCount += item.quantity;
         }
 
         orderItemsData.push({
@@ -220,17 +251,31 @@ export async function placeOrder(input: PlaceOrderInput) {
         });
       }
 
-      // 2. Shipping calculation from Settings
-      let shippingFee = 0;
-      if (subtotal < settings.freeShippingThreshold) {
-        if (validated.deliveryZone === "outside_dhaka") {
-          shippingFee = settings.outsideDhakaRate;
-        } else if (validated.deliveryZone === "express_dhaka") {
-          shippingFee = settings.expressDhakaRate;
-        } else {
-          shippingFee = settings.insideDhakaRate;
-        }
+      // 2. Authoritative Delivery Quote Calculation
+      const quote = await calculateDeliveryQuote({
+        deliveryZone: validated.deliveryZone,
+        subtotal,
+        giftWrapCount: totalGiftWrapCount,
+      });
+
+      if (!quote.isConfigured || quote.deliveryFee === null) {
+        throw new Error(
+          quote.message ||
+            "DELIVERY_UNCONFIGURED: Delivery rate for the selected zone has not been configured. Please contact support via Call/WhatsApp 01712-039707."
+        );
       }
+
+      if (
+        validated.expectedShippingFee !== undefined &&
+        quote.deliveryFee !== validated.expectedShippingFee
+      ) {
+        throw new Error(
+          `DELIVERY_FEE_MISMATCH: Server calculated delivery fee (৳${quote.deliveryFee}) differs from displayed fee (৳${validated.expectedShippingFee}). Please refresh your cart.`
+        );
+      }
+
+      const shippingFee = quote.deliveryFee;
+      const giftWrapFee = quote.giftWrapFee;
 
       // 3. Coupon validation against database
       let discount = 0;
@@ -248,7 +293,14 @@ export async function placeOrder(input: PlaceOrderInput) {
       }
 
       const total = Math.max(0, subtotal - discount + shippingFee + giftWrapFee);
-      const orderNumber = generateServerOrderNumber();
+
+      if (validated.expectedTotal !== undefined && total !== validated.expectedTotal) {
+        throw new Error(
+          `TOTAL_MISMATCH: Order total has changed (server: ৳${total}, expected: ৳${validated.expectedTotal}). Please refresh your cart.`
+        );
+      }
+
+      const orderNumber = await generateServerOrderNumber(tx);
 
       // 4. Atomically decrement stock for each item & write StockMovement
       for (const item of validated.items) {
@@ -263,14 +315,16 @@ export async function placeOrder(input: PlaceOrderInput) {
         );
       }
 
-      // 5. Create Order record
+      // 5. Create Order record (Customer email is nullable, never synthetic)
+      const customerEmail = validated.email && validated.email.trim() ? validated.email.trim() : null;
+
       const order = await tx.order.create({
         data: {
           orderNumber,
-          userId: validated.userId || null,
+          userId: authenticatedUserId, // Server session derived
           customerName: validated.fullName,
           customerPhone: normalizedPhone,
-          customerEmail: validated.email || `${normalizedPhone}@khelnabazar.internal`,
+          customerEmail,
           status: "PENDING_CONFIRMATION",
           codStatus: "UNCOLLECTED",
           paymentMethod: validated.paymentMethod as any,
@@ -286,7 +340,7 @@ export async function placeOrder(input: PlaceOrderInput) {
           giftWrapFee,
           total,
           currency: "BDT",
-          deliveryZone: validated.deliveryZone === "outside_dhaka" ? "Outside Dhaka" : "Inside Dhaka",
+          deliveryZone: quote.appliedZone,
           shippingAddress: {
             fullName: validated.fullName,
             phone: normalizedPhone,
@@ -341,7 +395,7 @@ export async function placeOrder(input: PlaceOrderInput) {
 }
 
 /**
- * Updates order fulfillment status with state machine rules and audit event logging.
+ * Updates order fulfillment status with state machine transition checks and audit event logging.
  * Enforces ADMIN or STAFF authorization.
  */
 export async function updateOrderStatus(
@@ -350,12 +404,12 @@ export async function updateOrderStatus(
   actorName = "Staff"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required to update order status." };
+    const perm = await assertPermission("orders.updateStatus");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
 
     const order = await db.order.findUnique({
       where: { id: orderId },
@@ -375,6 +429,16 @@ export async function updateOrderStatus(
       return {
         success: false,
         error: `Cannot transition order to ${newStatus}: Manual ${order.paymentMethod} payment must be verified before shipping. Current payment status is "${(order as any).paymentStatus}".`,
+      };
+    }
+
+    // State machine: Check allowed transitions
+    const currentStatus = order.status as OrderStatus;
+    const allowedNext = ALLOWED_TRANSITIONS[currentStatus] || [];
+    if (!allowedNext.includes(newStatus)) {
+      return {
+        success: false,
+        error: `Illegal status transition: Cannot change order status from "${currentStatus}" to "${newStatus}".`,
       };
     }
 
@@ -420,7 +484,7 @@ export async function updateOrderStatus(
           data: {
             orderId,
             type: "STATUS_CHANGE",
-            message: `Status updated to ${newStatus.replace(/_/g, " ")} by ${resolvedActor}.`,
+            message: `Status updated from ${currentStatus} to ${newStatus.replace(/_/g, " ")} by ${resolvedActor}.`,
             actorName: resolvedActor,
           },
         }),
@@ -428,10 +492,81 @@ export async function updateOrderStatus(
     }
 
     revalidatePath("/admin/orders");
-    revalidatePath("/account/orders");
+    revalidatePath("/dashboard/orders");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Customer Action: Cancels an order in PENDING_CONFIRMATION status.
+ */
+export async function cancelCustomerOrderAction(orderId: string, reason?: string) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, error: "Sign-in required to cancel orders." };
+    }
+
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
+
+    if (!order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    if (order.userId !== session.user.id) {
+      return { success: false, error: "Unauthorized: You may only cancel your own orders." };
+    }
+
+    if (order.status !== "PENDING_CONFIRMATION") {
+      return {
+        success: false,
+        error: "This order has already been confirmed and processed. To request cancellation, please contact support via Call/WhatsApp 01712-039707.",
+      };
+    }
+
+    const actor = session.user.name || order.customerName || "Customer";
+
+    await db.$transaction(async (tx) => {
+      for (const item of order.items) {
+        if (item.variantId) {
+          await adjustVariantStock(
+            {
+              variantId: item.variantId,
+              delta: item.quantity,
+              reason: "RETURN_RESTOCK",
+              actorName: actor,
+              orderId: order.id,
+            },
+            tx
+          );
+        }
+      }
+
+      await tx.order.update({
+        where: { id: orderId },
+        data: { status: "CANCELLED" },
+      });
+
+      await tx.orderEvent.create({
+        data: {
+          orderId,
+          type: "ORDER_CANCELLED_BY_CUSTOMER",
+          message: `Order cancelled by customer. Reason: ${reason || "Customer requested cancellation prior to confirmation."}`,
+          actorName: actor,
+        },
+      });
+    });
+
+    revalidatePath("/dashboard/orders");
+    revalidatePath("/admin/orders");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to cancel order." };
   }
 }
 
@@ -446,12 +581,12 @@ export async function updateCodStatus(
   actorName = "Accounts"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user || !isAdminRole(session.user.role)) {
+    const perm = await assertPermission("settings.manage");
+    if (!perm.success) {
       return { success: false, error: "Unauthorized: Admin privileges required for COD financial reconciliation." };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
 
     await db.$transaction([
       db.order.update({
@@ -484,9 +619,9 @@ export async function updateCodStatus(
 
 export async function getAdminOrdersAction(filters?: any) {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required.", orders: [], total: 0 };
+    const perm = await assertPermission("orders.view");
+    if (!perm.success) {
+      return { success: false, error: perm.error, orders: [], total: 0 };
     }
     const res = await getOrders(filters);
     return { success: true, orders: res.orders, total: res.total };
@@ -497,11 +632,11 @@ export async function getAdminOrdersAction(filters?: any) {
 
 export async function getAdminKPIsAction() {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
+    const perm = await assertPermission("reports.view");
+    if (!perm.success) {
       return {
         success: false,
-        error: "Unauthorized",
+        error: perm.error,
         kpis: {
           totalOrders: 0,
           grossSales: 0,
@@ -528,25 +663,123 @@ export async function getAdminKPIsAction() {
   }
 }
 
+/**
+ * Fetches order details with strict IDOR prevention.
+ * Only allows access if:
+ * 1. Actor is Admin or Staff
+ * 2. Actor is the authenticated owner of the order
+ * 3. A valid order HMAC access token or matching customer phone number is supplied
+ */
+export async function fetchOrderDetails(
+  orderIdOrNumber: string,
+  tokenOrPhone?: string
+) {
+  try {
+    const session = await auth();
+    const order = await getOrderById(orderIdOrNumber);
+    if (!order) return null;
+
+    // Staff and Admins can view any order
+    if (session?.user && isStaffRole(session.user.role)) {
+      return order;
+    }
+
+    // Owner authenticated session can view their own order
+    if (session?.user?.id && order.userId && session.user.id === order.userId) {
+      return order;
+    }
+
+    // If tokenOrPhone is provided
+    if (tokenOrPhone) {
+      if (verifyOrderAccessToken(order.id, order.orderNumber, tokenOrPhone)) {
+        return order;
+      }
+      const cleanInput = tokenOrPhone.replace(/[\s-]/g, "").replace(/^(\+?88)/, "");
+      const cleanOrderPhone = (order.customerPhone || "").replace(/[\s-]/g, "").replace(/^(\+?88)/, "");
+      if (cleanInput.length >= 10 && cleanInput === cleanOrderPhone) {
+        return order;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Customer order tracking by order number and checkout phone verification.
+ */
+export async function trackOrderAction(orderNumber: string, phone: string) {
+  try {
+    const cleanNum = (orderNumber || "").trim().toUpperCase();
+    const cleanPhone = (phone || "").replace(/[\s-]/g, "");
+    if (!cleanNum || !cleanPhone) return null;
+
+    const rateCheck = checkRateLimit(`track:${cleanPhone}`, { limit: 10, windowMs: 60 * 1000 });
+    if (!rateCheck.success) {
+      return null;
+    }
+
+    const order = await getOrderByNumberAndPhone(cleanNum, cleanPhone);
+    return order;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Retrieves orders for the authenticated customer account.
+ */
+export async function getCustomerOrders() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return [];
+    }
+
+    const res = await getOrders({ userId: session.user.id, limit: 100 });
+    return res.orders;
+  } catch {
+    return [];
+  }
+}
+
 export async function placeCodOrder(input: Parameters<typeof placeOrder>[0]) {
   return placeOrder(input);
 }
 
 /**
  * Verifies customer manual MFS payment (bKash / Nagad).
- * Enforces ADMIN or STAFF authorization.
+ * Enforces ADMIN or STAFF authorization and guards against illegal verification.
  */
 export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required to verify MFS payments." };
+    const perm = await assertPermission("payments.verify");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
     const order = await db.order.findUnique({ where: { id: orderId } });
     if (!order) {
       return { success: false, error: "Order not found." };
+    }
+
+    if (order.paymentMethod === "CASH_ON_DELIVERY") {
+      return { success: false, error: "Cannot verify MFS payment for a Cash on Delivery order." };
+    }
+
+    if ((order as any).paymentStatus === "VERIFIED") {
+      return { success: false, error: "Payment has already been verified." };
+    }
+
+    if ((order as any).paymentStatus === "REJECTED") {
+      return { success: false, error: "Cannot verify an already rejected payment." };
+    }
+
+    if (order.status === "CANCELLED") {
+      return { success: false, error: "Cannot verify payment for a cancelled order." };
     }
 
     await db.$transaction([
@@ -562,7 +795,7 @@ export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
         data: {
           orderId,
           type: "PAYMENT_VERIFIED",
-          message: `${order.paymentMethod} payment verified by ${resolvedActor}. Order cleared for processing.`,
+          message: `${order.paymentMethod} payment (TrxID: ${order.mfsTrxId || "N/A"}) verified by ${resolvedActor}. Order cleared for processing.`,
           actorName: resolvedActor,
         },
       }),
@@ -578,38 +811,77 @@ export async function verifyMfsPayment(orderId: string, actorName = "Staff") {
 
 /**
  * Rejects customer manual MFS payment with explanation.
- * Enforces ADMIN or STAFF authorization.
+ * Enforces non-empty reason and releases reserved stock.
  */
 export async function rejectMfsPayment(orderId: string, reason: string, actorName = "Staff") {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required to reject MFS payments." };
+    const perm = await assertPermission("payments.verify");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
-    const order = await db.order.findUnique({ where: { id: orderId } });
+    if (!reason || reason.trim().length === 0) {
+      return { success: false, error: "A valid non-empty reason is required to reject an MFS payment." };
+    }
+
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
     if (!order) {
       return { success: false, error: "Order not found." };
     }
 
-    await db.$transaction([
-      db.order.update({
+    if (order.paymentMethod === "CASH_ON_DELIVERY") {
+      return { success: false, error: "Cannot reject MFS payment on a Cash on Delivery order." };
+    }
+
+    if ((order as any).paymentStatus === "VERIFIED") {
+      return { success: false, error: "Cannot reject an already verified payment." };
+    }
+
+    if ((order as any).paymentStatus === "REJECTED") {
+      return { success: false, error: "Payment has already been rejected." };
+    }
+
+    await db.$transaction(async (tx) => {
+      // If order was in PENDING_CONFIRMATION, release reserved stock
+      if (order.status === "PENDING_CONFIRMATION") {
+        for (const item of order.items) {
+          if (item.variantId) {
+            await adjustVariantStock(
+              {
+                variantId: item.variantId,
+                delta: item.quantity,
+                reason: "RETURN_RESTOCK",
+                actorName: resolvedActor,
+                orderId: order.id,
+              },
+              tx
+            );
+          }
+        }
+      }
+
+      await tx.order.update({
         where: { id: orderId },
         data: {
           paymentStatus: "REJECTED",
-          paymentRejectReason: reason,
+          paymentRejectReason: reason.trim(),
+          status: order.status === "PENDING_CONFIRMATION" ? "CANCELLED" : order.status,
         },
-      }),
-      db.orderEvent.create({
+      });
+
+      await tx.orderEvent.create({
         data: {
           orderId,
           type: "PAYMENT_REJECTED",
-          message: `Payment rejected by ${resolvedActor}. Reason: ${reason}`,
+          message: `Payment rejected by ${resolvedActor}. Reason: ${reason.trim()}. Reserved stock released.`,
           actorName: resolvedActor,
         },
-      }),
-    ]);
+      });
+    });
 
     revalidatePath("/admin/orders");
     return { success: true };
@@ -620,17 +892,17 @@ export async function rejectMfsPayment(orderId: string, reason: string, actorNam
 
 /**
  * Records refusal at delivery due to defect reported in front of delivery person.
- * Updates order to RETURNED and restocks inventory.
- * Enforces ADMIN or STAFF authorization.
+ * Updates order to RETURNED and quarantines defective stock as DAMAGE (never sellable).
+ * Enforces one-time execution and valid delivery status.
  */
 export async function recordDefectiveRefusal(orderId: string, notes: string, actorName = "Staff") {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin or Staff privileges required." };
+    const perm = await assertPermission("orders.updateStatus");
+    if (!perm.success) {
+      return { success: false, error: perm.error };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
     const order = await db.order.findUnique({
       where: { id: orderId },
       include: { items: true },
@@ -639,8 +911,19 @@ export async function recordDefectiveRefusal(orderId: string, notes: string, act
       return { success: false, error: "Order not found." };
     }
 
+    if (order.status === "RETURNED") {
+      return { success: false, error: "Order has already been recorded as returned." };
+    }
+
+    if (order.status && order.status !== "SHIPPED" && order.status !== "OUT_FOR_DELIVERY") {
+      return {
+        success: false,
+        error: `Defective refusal can only be recorded at delivery state (current status: ${order.status}).`,
+      };
+    }
+
     await db.$transaction(async (tx) => {
-      // Restock inventory
+      // Quarantine returned defective inventory under DAMAGE (non-sellable)
       for (const item of order.items) {
         if (item.variantId) {
           await adjustVariantStock(
@@ -668,7 +951,7 @@ export async function recordDefectiveRefusal(orderId: string, notes: string, act
         data: {
           orderId,
           type: "RETURN_DEFECTIVE",
-          message: `Package refused at delivery due to reported defect: ${notes}. Verified by ${resolvedActor}.`,
+          message: `Package refused at delivery due to reported defect: ${notes}. Quarantined by ${resolvedActor}.`,
           actorName: resolvedActor,
         },
       });
@@ -683,7 +966,7 @@ export async function recordDefectiveRefusal(orderId: string, notes: string, act
 
 /**
  * Records financial refund to customer (e.g. for MFS prepaid order returned at delivery).
- * Enforces ADMIN-only authorization.
+ * Enforces ADMIN-only authorization, bounds refund by remaining balance, and tracks refund lifecycle.
  */
 export async function recordRefund(
   orderId: string,
@@ -693,23 +976,40 @@ export async function recordRefund(
   actorName = "Accounts"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user || !isAdminRole(session.user.role)) {
+    const perm = await assertPermission("refunds.record");
+    if (!perm.success) {
       return { success: false, error: "Unauthorized: Admin privileges required to record refunds." };
     }
 
-    const resolvedActor = session.user.name || session.user.email || actorName;
+    if (!amount || amount <= 0) {
+      return { success: false, error: "Refund amount must be a positive number." };
+    }
+
+    const resolvedActor = perm.user.name || perm.user.email || actorName;
     const order = await db.order.findUnique({ where: { id: orderId } });
     if (!order) {
       return { success: false, error: "Order not found." };
     }
 
+    const currentRefunded = order.refundAmount || 0;
+    const remainingRefundable = order.total !== undefined ? order.total - currentRefunded : amount;
+
+    if (amount > remainingRefundable) {
+      return {
+        success: false,
+        error: `Refund amount (৳${amount}) exceeds remaining refundable balance (৳${remainingRefundable}).`,
+      };
+    }
+
+    const newTotalRefunded = currentRefunded + amount;
+    const isFullRefund = order.total !== undefined && order.total > 0 ? newTotalRefunded >= order.total : true;
+
     await db.$transaction([
       db.order.update({
         where: { id: orderId },
         data: {
-          refundStatus: "REFUNDED",
-          refundAmount: amount,
+          refundStatus: isFullRefund ? "REFUNDED" : "REFUND_PENDING",
+          refundAmount: newTotalRefunded,
           refundMethod: method,
           refundReference: reference || null,
           refundDate: new Date(),
@@ -718,8 +1018,8 @@ export async function recordRefund(
       db.orderEvent.create({
         data: {
           orderId,
-          type: "REFUND_ISSUED",
-          message: `Refund of ৳${amount} issued via ${method}${reference ? ` (Ref: ${reference})` : ""} by ${resolvedActor}.`,
+          type: isFullRefund ? "REFUND_COMPLETED" : "REFUND_PARTIAL",
+          message: `Refund of ৳${amount} recorded via ${method}${reference ? ` (Ref: ${reference})` : ""} by ${resolvedActor}. Total refunded: ৳${newTotalRefunded}/${order.total}.`,
           actorName: resolvedActor,
         },
       }),
@@ -732,5 +1032,3 @@ export async function recordRefund(
     return { success: false, error: error.message || "Failed to record refund." };
   }
 }
-
-

@@ -8,6 +8,7 @@ import { signIn, getSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Lock, User, ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 function LoginForm() {
   const router = useRouter();
@@ -48,7 +49,14 @@ function LoginForm() {
       });
 
       if (!res || res.error) {
-        const errorMsg = "Invalid credentials. Please verify your phone/email and password.";
+        let errorMsg = "Invalid credentials. Please verify your phone/email and password.";
+        if (
+          res?.error === "account_disabled" ||
+          (res as any)?.code === "account_disabled" ||
+          (typeof res?.error === "string" && res.error.includes("account_disabled"))
+        ) {
+          errorMsg = "This account has been disabled. Please contact customer support on 01712-039707.";
+        }
         setErrorMessage(errorMsg);
         toast.error(errorMsg);
         setIsLoading(false);
@@ -58,12 +66,14 @@ function LoginForm() {
       toast.success("Welcome back to Khelna Bazar!");
 
       const session = await getSession();
-      const isPrivileged = session?.user?.role && session.user.role !== "CUSTOMER";
+      const userRole = session?.user?.role;
+      const isPrivileged = userRole === "STAFF" || userRole === "ADMIN" || userRole === "SUPER_ADMIN";
 
-      if (safeRedirect) {
-        router.push(safeRedirect);
-      } else if (isPrivileged) {
+      if (isPrivileged) {
+        // Privileged management accounts ALWAYS route directly to management console
         router.push("/admin/dashboard");
+      } else if (safeRedirect && !safeRedirect.startsWith("/admin")) {
+        router.push(safeRedirect);
       } else {
         router.push("/dashboard");
       }
@@ -227,6 +237,16 @@ function LoginForm() {
             <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         </form>
+
+        <div className="relative flex items-center justify-center my-2">
+          <div className="border-t border-[var(--border)] w-full" />
+          <span className="bg-[var(--surface)] px-3 text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-muted)] shrink-0">
+            or continue with
+          </span>
+          <div className="border-t border-[var(--border)] w-full" />
+        </div>
+
+        <GoogleSignInButton text="Sign in with Google" callbackUrl={safeRedirect || "/dashboard"} />
 
         <div className="pt-4 text-center text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
           Don&apos;t have an account?{" "}

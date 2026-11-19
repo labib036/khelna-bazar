@@ -1,18 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { registerUser } from "@/server/actions/auth-actions";
 import { isValidBDPhone } from "@/lib/auth-utils";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Lock, ArrowRight, Eye, EyeOff, ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawRedirect = searchParams.get("next") || searchParams.get("redirect") || "";
+
+  // Validate next redirect to prevent open redirect vulnerabilities
+  const safeRedirect =
+    rawRedirect &&
+    rawRedirect.startsWith("/") &&
+    !rawRedirect.startsWith("//") &&
+    !rawRedirect.startsWith("/admin")
+      ? rawRedirect
+      : "/dashboard";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -105,7 +117,7 @@ export default function RegisterPage() {
         redirect: false,
       });
 
-      router.push("/account");
+      router.push(safeRedirect);
       router.refresh();
     } catch {
       const errTxt = "Registration failed due to a network or server error. Please try again.";
@@ -326,6 +338,16 @@ export default function RegisterPage() {
             </Button>
           </form>
 
+          <div className="relative flex items-center justify-center my-2">
+            <div className="border-t border-[var(--border)] w-full" />
+            <span className="bg-[var(--surface)] px-3 text-[10px] font-extrabold uppercase tracking-widest text-[var(--text-muted)] shrink-0">
+              or sign up with
+            </span>
+            <div className="border-t border-[var(--border)] w-full" />
+          </div>
+
+          <GoogleSignInButton text="Sign up with Google" callbackUrl="/dashboard" />
+
           <div className="pt-3 text-center text-xs text-[var(--text-muted)] border-t border-[var(--border)]">
             Already have an account?{" "}
             <Link href="/login" className="font-bold text-[var(--primary)] hover:underline">
@@ -335,5 +357,19 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[85vh] flex items-center justify-center py-12 px-4">
+          <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <RegisterForm />
+    </Suspense>
   );
 }

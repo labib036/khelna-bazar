@@ -80,7 +80,7 @@ Try this test shopping flow:
 ## 6. Accessing the Owner Admin Dashboard
 
 1. In your browser, go to `http://localhost:3000/login`.
-2. Click the quick button: **👑 Admin** (or enter `admin@khelnabazar.com` / `Admin@Khelna123`).
+2. Enter your administrator email and password (provisioned securely via `npm run admin:create`).
 3. You will enter the **Admin Dashboard**!
 4. From here you can:
    * View live gross sales and pending cash in transit.

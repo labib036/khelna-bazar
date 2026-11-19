@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import { Providers } from "@/components/providers";
@@ -38,19 +39,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const initialLang = cookieStore.get("kb_lang")?.value === "bn" ? "bn" : "en";
+
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang={initialLang} className="scroll-smooth" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
+                  var lang = localStorage.getItem('kb_lang');
+                  if (lang) { document.documentElement.lang = lang; }
                   var stored = localStorage.getItem('kb_theme');
                   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   if (stored === 'dark' || (!stored && prefersDark) || (stored === 'system' && prefersDark)) {

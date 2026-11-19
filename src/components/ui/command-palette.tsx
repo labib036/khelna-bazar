@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useLockBodyScroll } from "@/lib/use-lock-body-scroll";
+import { useAccessibleModal } from "@/lib/modal-stack";
 import {
   Search,
   Package,
@@ -13,6 +15,7 @@ import {
   ShoppingBag,
   ShieldCheck,
   ArrowRight,
+  Truck,
 } from "lucide-react";
 
 export interface CommandItem {
@@ -32,6 +35,7 @@ export function CommandPalette({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -39,9 +43,18 @@ export function CommandPalette({
   useLockBodyScroll(isOpen);
 
   React.useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
+    setMounted(true);
+  }, []);
+
+  const { containerRef, zIndex } = useAccessibleModal({
+    isOpen,
+    onClose,
+    initialFocusRef: inputRef,
+    baseZIndex: 60,
+  });
+
+  React.useEffect(() => {
+    if (!isOpen) {
       setQuery("");
       setSelectedIndex(0);
     }
@@ -104,24 +117,24 @@ export function CommandPalette({
       },
     },
     {
-      id: "admin-orders",
-      title: "Admin: Orders & Cash Collection",
-      subtitle: "Manage COD fulfillment and MFS payments",
-      icon: <ShieldCheck className="w-4 h-4 text-[var(--primary)]" />,
-      category: "Admin",
+      id: "track-order",
+      title: "Track Your Order",
+      subtitle: "Check live delivery status for your package",
+      icon: <Truck className="w-4 h-4 text-[var(--accent)]" />,
+      category: "Storefront",
       onSelect: () => {
-        router.push("/admin/orders");
+        router.push("/track-order");
         onClose();
       },
     },
     {
-      id: "admin-inventory",
-      title: "Admin: Inventory & Restock",
-      subtitle: "Stock levels and rapid adjustment ledger",
-      icon: <ShieldCheck className="w-4 h-4 text-[var(--accent)]" />,
-      category: "Admin",
+      id: "help-center",
+      title: "Help & Customer Support",
+      subtitle: "FAQ, delivery timelines, and contact details",
+      icon: <Sparkles className="w-4 h-4 text-[var(--primary)]" />,
+      category: "Storefront",
       onSelect: () => {
-        router.push("/admin/inventory");
+        router.push("/help");
         onClose();
       },
     },
@@ -148,13 +161,15 @@ export function CommandPalette({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  const content = (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 sm:px-6"
+      className="fixed inset-0 flex items-start justify-center pt-20 px-4 sm:px-6"
+      style={{ zIndex }}
       role="dialog"
       aria-modal="true"
+      aria-label="Quick Navigation and Search Commands"
     >
       {/* Backdrop */}
       <div
@@ -165,8 +180,10 @@ export function CommandPalette({
 
       {/* Palette Container */}
       <div
+        ref={containerRef}
+        tabIndex={-1}
         onKeyDown={handleKeyDown}
-        className="relative z-10 w-full max-w-xl rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-xl rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 outline-none"
       >
         {/* Search Input Bar */}
         <div className="flex items-center px-4 border-b border-[var(--border)]">
@@ -247,4 +264,6 @@ export function CommandPalette({
       </div>
     </div>
   );
+
+  return typeof document !== "undefined" ? createPortal(content, document.body) : null;
 }

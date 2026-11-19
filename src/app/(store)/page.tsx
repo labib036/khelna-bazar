@@ -3,7 +3,6 @@ import { getProducts } from "@/server/services/product-service";
 import { StitchHero } from "@/components/store/stitch-hero";
 import { StitchGiftWizard } from "@/components/store/stitch-gift-wizard";
 import { HomeProductsSection } from "@/components/store/home-products-section";
-import { Countdown } from "@/components/ui/countdown";
 import {
   Flame,
   ArrowRight,
@@ -12,8 +11,7 @@ import {
   Truck,
   RotateCcw,
   Sparkles,
-  Star,
-  CheckCircle2,
+  HeartHandshake,
 } from "lucide-react";
 
 export const revalidate = 300; // ISR cache 5 minutes
@@ -36,23 +34,24 @@ export default async function HomePage() {
     { label: "12+ Years", sub: "Robotics & Tech", query: "12+", emoji: "🔬" },
   ];
 
+  // Matched to seeded category taxonomy
   const curatedCategoryBento = [
     { name: "STEM & Robotics", slug: "stem-robotics", icon: "🔬", desc: "Build & Code", bg: "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20" },
-    { name: "Montessori & Wooden", slug: "baby-toddler", icon: "🪵", desc: "Early Learning", bg: "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20" },
-    { name: "Dolls & Plushies", slug: "baby-toddler", icon: "🧸", desc: "Snuggly Wonders", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
-    { name: "RC & Diecast Vehicles", slug: "rc-vehicles", icon: "🏎️", desc: "High Speed Stunts", bg: "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20" },
-    { name: "Creative Arts & Crafts", slug: "creative-arts-crafts", icon: "🎨", desc: "Paints & Slime", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
-    { name: "Board Games & Puzzles", slug: "educational-board-games", icon: "🧩", desc: "Family Brain Play", bg: "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20" },
+    { name: "Baby & Toddler Montessori", slug: "baby-toddler", icon: "🪵", desc: "Early Learning", bg: "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20" },
+    { name: "Action Figures & Dolls", slug: "action-figures-dolls", icon: "🧸", desc: "Pretend Play", bg: "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20" },
+    { name: "RC & Diecast Vehicles", slug: "rc-vehicles", icon: "🏎️", desc: "Speed & Scale", bg: "bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-500/20" },
+    { name: "Arts, Crafts & DIY", slug: "arts-crafts", icon: "🎨", desc: "Paints & Clay", bg: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20" },
+    { name: "Board Games & Puzzles", slug: "board-games-puzzles", icon: "🧩", desc: "Family Brain Play", bg: "bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/20" },
     { name: "Building Blocks & Lego", slug: "building-blocks", icon: "🧱", desc: "Architectural Sets", bg: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20" },
-    { name: "Sensory & Calm", slug: "baby-toddler", icon: "✨", desc: "Quiet Focus Toys", bg: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20" },
+    { name: "Outdoor & Sports Toys", slug: "outdoor-sports", icon: "⚽", desc: "Active Play", bg: "bg-teal-500/10 text-teal-700 dark:text-teal-300 border-teal-500/20" },
   ];
 
   return (
     <div className="space-y-12 sm:space-y-16 pb-16 bg-[var(--bg-primary)]">
-      {/* 1. STITCH SENSORY HERO SHOWCASE */}
-      <StitchHero />
+      {/* 1. STITCH SENSORY HERO SHOWCASE (Backed by database products) */}
+      <StitchHero initialProducts={featuredProducts} />
 
-      {/* 2. SHOP BY AGE GROUP */}
+      {/* 2. SHOP BY AGE GROUP (6 Approved Age Bands) */}
       <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -91,41 +90,43 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3. FLASH DEALS WITH LIVE FLIP COUNTDOWN */}
-      <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-6 sm:p-8 rounded-4xl bg-gradient-to-r from-rose-500/10 via-[var(--surface-container-low)] to-[var(--surface-sun)] border border-[var(--primary)]/20 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-[var(--primary)] text-[var(--on-primary)] shadow-xs">
-                <Flame className="w-6 h-6 fill-current animate-pulse" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="font-heading text-xl sm:text-2xl font-black text-[var(--text-primary)]">
-                    Today&apos;s Flash Deals
-                  </h2>
-                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[var(--primary)] text-[var(--on-primary)] shadow-xs">
-                    Limited Stock
-                  </span>
+      {/* 3. DEALS & SPECIAL OFFERS (Rendered without fake countdowns or unverified claims) */}
+      {dealProducts.length > 0 && (
+        <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-6 sm:p-8 rounded-4xl bg-gradient-to-r from-rose-500/10 via-[var(--surface-container-low)] to-[var(--surface-sun)] border border-[var(--primary)]/20 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-2xl bg-[var(--primary)] text-[var(--on-primary)] shadow-xs">
+                  <Flame className="w-6 h-6 fill-current animate-pulse" />
                 </div>
-                <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                  Save up to 35% on top rated toys. Pay via Cash on Delivery when courier arrives.
-                </p>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="font-heading text-xl sm:text-2xl font-black text-[var(--text-primary)]">
+                      Featured Deals &amp; Offers
+                    </h2>
+                  </div>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                    Selected toys on special offer. Doorstep inspection allowed before payment.
+                  </p>
+                </div>
               </div>
+
+              <Link
+                href="/deals"
+                className="text-xs sm:text-sm font-bold text-[var(--primary)] hover:underline flex items-center gap-1 self-start sm:self-auto"
+              >
+                <span>View All Offers</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
             </div>
 
-            {/* Live Flip Countdown */}
-            <div className="flex items-center gap-2 p-2 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs">
-              <Countdown label="Deals Expire in:" size="md" initialHours={8} initialMinutes={14} initialSeconds={30} />
-            </div>
+            {/* Deal Products Grid */}
+            <HomeProductsSection initialProducts={dealProducts} filterType="deals" limit={4} />
           </div>
+        </section>
+      )}
 
-          {/* Deal Products Grid */}
-          <HomeProductsSection initialProducts={dealProducts} filterType="deals" limit={4} />
-        </div>
-      </section>
-
-      {/* 4. CURATED CATEGORY GRID (8 BENTO TILES) */}
+      {/* 4. CURATED CATEGORY GRID (8 BENTO TILES WITH EXACT SEEDED SLUGS) */}
       <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -171,18 +172,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. INTERACTIVE GIFT FINDER BANNER (30-SECOND WIZARD) */}
+      {/* 5. INTERACTIVE GIFT FINDER BANNER (6-AGE BAND WIZARD) */}
       <StitchGiftWizard />
 
-      {/* 6. TABBED HOT LISTS (BEST SELLERS & NEW ARRIVALS) */}
+      {/* 6. TABBED HOT LISTS (BEST SELLERS) */}
       <section className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--secondary)] uppercase tracking-wider mb-1">
-              <span>⭐ Parent Verified Favorites</span>
+              <span>⭐ Popular Choices</span>
             </div>
             <h2 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)]">
-              Trending Best Sellers
+              Trending Toys
             </h2>
           </div>
           <Link

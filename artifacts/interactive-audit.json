@@ -6,7 +6,7 @@
     "expected": "Show filtered gift recommendations with Start Over option",
     "actual": "Completed wizard flow",
     "status": "PASS",
-    "durationMs": 2563
+    "durationMs": 2679
   },
   {
     "element": "Mini-Cart Drawer Open/Close",
@@ -15,7 +15,7 @@
     "expected": "Drawer slides open showing order summary and closes cleanly",
     "actual": "Drawer opened and closed without layout disruption",
     "status": "PASS",
-    "durationMs": 191
+    "durationMs": 228
   },
   {
     "element": "Search Input & Autocomplete",
@@ -24,7 +24,7 @@
     "expected": "Debounced live suggestions dropdown or query handling",
     "actual": "Query parsed and search state updated smoothly",
     "status": "PASS",
-    "durationMs": 725
+    "durationMs": 844
   },
   {
     "element": "Delivery Zone Selector (Dhaka vs Outside)",
@@ -33,7 +33,7 @@
     "expected": "Recalculates delivery fee to ৳120",
     "actual": "Shipping fee updated accurately according to store policy",
     "status": "PASS",
-    "durationMs": 433
+    "durationMs": 540
   },
   {
     "element": "Doorstep Inspection Consent Checkbox",
@@ -42,7 +42,7 @@
     "expected": "Toggle state reflects consent, satisfies order submission validation",
     "actual": "Checkbox checked, validation passes",
     "status": "PASS",
-    "durationMs": 130
+    "durationMs": 198
   },
   {
     "element": "Admin Order Filter & Status Controls",
@@ -51,7 +51,7 @@
     "expected": "Table filters live records without page reloads",
     "actual": "Order table filtered instantly",
     "status": "PASS",
-    "durationMs": 1229
+    "durationMs": 1374
   },
   {
     "element": "Staff Order Verification View",
@@ -60,6 +60,6 @@
     "expected": "Render orders table with status action dropdowns",
     "actual": "Orders management mounted: Order Fulfillment & Cash on Delivery",
     "status": "PASS",
-    "durationMs": 825
+    "durationMs": 1018
   }
 ]

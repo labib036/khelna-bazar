@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToyProduct, StoreCategory } from "@/types/store";
 import { saveProduct, deleteProduct } from "@/server/actions/product-actions";
+import { ImageUploader, UploadedImageItem } from "@/components/admin/image-uploader";
 import {
   Plus,
   Search,
@@ -41,22 +42,30 @@ export function AdminProductsClient({
   const [newStock, setNewStock] = useState("25");
   const [newMinAge, setNewMinAge] = useState("36");
   const [newChoking, setNewChoking] = useState(false);
-  const [newImagesText, setNewImagesText] = useState("/images/khelna-bazar-logo.png");
+  const [newImages, setNewImages] = useState<UploadedImageItem[]>([]);
 
   // Edit product form states
   const [editName, setEditName] = useState("");
+  const [editCategorySlug, setEditCategorySlug] = useState("");
   const [editPrice, setEditPrice] = useState("");
   const [editStock, setEditStock] = useState("");
   const [editChoking, setEditChoking] = useState(false);
-  const [editImagesText, setEditImagesText] = useState("");
+  const [editImages, setEditImages] = useState<UploadedImageItem[]>([]);
 
   const openEditModal = (prod: ToyProduct) => {
     setEditingProduct(prod);
     setEditName(prod.name);
+    setEditCategorySlug(prod.categorySlug || categories[0]?.slug || "building-blocks");
     setEditPrice(prod.basePrice.toString());
     setEditStock(prod.stock.toString());
     setEditChoking(prod.chokingHazard ?? false);
-    setEditImagesText(prod.images.join("\n"));
+    setEditImages(
+      prod.images.map((url, i) => ({
+        url,
+        isPrimary: i === 0,
+        alt: `${prod.name} - Photo ${i + 1}`,
+      }))
+    );
   };
 
   const handleCreateProduct = (e: React.FormEvent) => {
@@ -66,12 +75,14 @@ export function AdminProductsClient({
       return;
     }
 
+    if (newImages.length === 0) {
+      toast.error("Please upload at least one photo for this toy.");
+      return;
+    }
+
     const priceNum = Math.max(1, parseInt(newPrice) || 1000);
     const stockNum = Math.max(0, parseInt(newStock) || 10);
-    const images = newImagesText
-      .split("\n")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+    const imageUrls = newImages.map((img) => img.url);
 
     startTransition(async () => {
       const res = await saveProduct({
@@ -83,14 +94,15 @@ export function AdminProductsClient({
         minAgeMonths: parseInt(newMinAge) || 36,
         maxAgeMonths: 144,
         chokingHazard: newChoking,
-        images: images.length > 0 ? images : ["/images/khelna-bazar-logo.png"],
+        status: "ACTIVE",
+        images: imageUrls,
       });
 
       if (res.success) {
-        toast.success(`Published "${newName}" to database!`);
+        toast.success(`Published "${newName}" to catalog!`);
         setShowAddModal(false);
         setNewName("");
-        // Reload page or optimistically append
+        setNewImages([]);
         window.location.reload();
       } else {
         toast.error(res.error || "Failed to save product");
@@ -102,23 +114,26 @@ export function AdminProductsClient({
     e.preventDefault();
     if (!editingProduct) return;
 
+    if (editImages.length === 0) {
+      toast.error("Active products must have at least one photo.");
+      return;
+    }
+
     const priceNum = Math.max(1, parseInt(editPrice) || editingProduct.basePrice);
     const stockNum = Math.max(0, parseInt(editStock) || editingProduct.stock);
-    const images = editImagesText
-      .split("\n")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+    const imageUrls = editImages.map((img) => img.url);
 
     startTransition(async () => {
       const res = await saveProduct({
         id: editingProduct.id,
         name: editName.trim(),
-        categorySlug: editingProduct.categorySlug,
+        categorySlug: editCategorySlug || editingProduct.categorySlug,
         basePrice: priceNum,
         comparePrice: editingProduct.comparePrice,
         stock: stockNum,
         chokingHazard: editChoking,
-        images: images.length > 0 ? images : editingProduct.images,
+        status: "ACTIVE",
+        images: imageUrls,
       });
 
       if (res.success) {
@@ -399,16 +414,13 @@ export function AdminProductsClient({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[var(--text-primary)] flex items-center justify-between">
-                <span>Image URLs (One per line)</span>
-                <span className="text-[10px] text-[var(--text-muted)] font-normal">Supports multiple angles</span>
+              <label className="text-xs font-bold text-[var(--text-primary)]">
+                Product Photos &amp; Angles *
               </label>
-              <textarea
-                rows={3}
-                value={newImagesText}
-                onChange={(e) => setNewImagesText(e.target.value)}
-                placeholder="/images/khelna-bazar-logo.png"
-                className="w-full p-3 rounded-2xl border border-[var(--border)] text-xs bg-[var(--surface)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] font-mono"
+              <ImageUploader
+                images={newImages}
+                onChange={setNewImages}
+                disabled={isPending}
               />
             </div>
 
@@ -467,6 +479,21 @@ export function AdminProductsClient({
               />
             </div>
 
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-[var(--text-primary)]">Category</label>
+              <select
+                value={editCategorySlug}
+                onChange={(e) => setEditCategorySlug(e.target.value)}
+                className="w-full h-11 px-3 rounded-2xl border border-[var(--border)] text-xs bg-[var(--surface)] text-[var(--text-primary)]"
+              >
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[var(--text-primary)]">Price (৳ BDT)</label>
@@ -490,12 +517,14 @@ export function AdminProductsClient({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[var(--text-primary)]">Image URLs (One per line)</label>
-              <textarea
-                rows={3}
-                value={editImagesText}
-                onChange={(e) => setEditImagesText(e.target.value)}
-                className="w-full p-3 rounded-2xl border border-[var(--border)] text-xs bg-[var(--surface)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] font-mono"
+              <label className="text-xs font-bold text-[var(--text-primary)]">
+                Product Photos &amp; Angles *
+              </label>
+              <ImageUploader
+                images={editImages}
+                onChange={setEditImages}
+                productId={editingProduct.id}
+                disabled={isPending}
               />
             </div>
 

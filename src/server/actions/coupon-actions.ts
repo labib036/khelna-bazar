@@ -1,14 +1,21 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { auth } from "@/lib/auth";
-import { isStaffRole, isAdminRole } from "@/lib/authorization-guards";
+import { assertPermission } from "@/lib/permissions";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { revalidatePath } from "next/cache";
 import { validateCoupon } from "@/server/services/coupon-service";
 import { CouponType } from "@prisma/client";
 
 export async function validateCouponAction(code: string, subtotal: number, shippingFee = 0) {
   try {
+    const rateCheck = checkRateLimit(`coupon:${code.trim().toUpperCase()}`, { limit: 15, windowMs: 60 * 1000 });
+    if (!rateCheck.success) {
+      return {
+        success: false,
+        message: `Too many attempts. Please wait ${rateCheck.retryAfterSec} seconds before testing another coupon code.`,
+      };
+    }
     const res = await validateCoupon(code, subtotal, shippingFee);
     if (!res.valid) {
       return {
@@ -45,12 +52,9 @@ export async function createCoupon(input: {
   endsAt?: Date | string;
 }) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized: You must be logged in." };
-    }
-    if (!isAdminRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
+    const perm = await assertPermission("coupons.manage");
+    if (perm.error) {
+      return { success: false, error: perm.error };
     }
 
     if (!input.code || input.code.trim().length === 0) {
@@ -94,12 +98,9 @@ export async function createCoupon(input: {
 
 export async function toggleCouponActive(id: string) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized: You must be logged in." };
-    }
-    if (!isAdminRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
+    const perm = await assertPermission("coupons.manage");
+    if (perm.error) {
+      return { success: false, error: perm.error };
     }
 
     const coupon = await db.coupon.findUnique({ where: { id } });
@@ -121,12 +122,9 @@ export async function toggleCouponActive(id: string) {
 
 export async function deleteCoupon(id: string) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized: You must be logged in." };
-    }
-    if (!isAdminRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Admin privileges required to manage coupons." };
+    const perm = await assertPermission("coupons.manage");
+    if (perm.error) {
+      return { success: false, error: perm.error };
     }
 
     await db.coupon.delete({ where: { id } });
@@ -140,9 +138,9 @@ export async function deleteCoupon(id: string) {
 
 export async function getAdminCoupons() {
   try {
-    const session = await auth();
-    if (!session?.user || !isStaffRole(session.user.role)) {
-      return { success: false, error: "Unauthorized: Staff or Admin privileges required." };
+    const perm = await assertPermission("coupons.manage");
+    if (perm.error) {
+      return { success: false, error: perm.error };
     }
 
     const coupons = await db.coupon.findMany({

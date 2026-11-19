@@ -26,9 +26,10 @@ import { toast } from "sonner";
 
 interface CustomerDashboardShellProps {
   children: React.ReactNode;
+  hotline?: string;
 }
 
-export function CustomerDashboardShell({ children }: CustomerDashboardShellProps) {
+export function CustomerDashboardShell({ children, hotline }: CustomerDashboardShellProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user;
@@ -209,28 +210,30 @@ export function CustomerDashboardShell({ children }: CustomerDashboardShellProps
           </nav>
 
           {/* Customer Helpline Card */}
-          <div className="p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-2">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)] block">
-              Helpline &amp; Assistance
-            </span>
-            <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-primary)]">
-              <Phone className="w-4 h-4 text-[var(--primary)]" />
-              <a href="tel:01712039707" className="hover:underline">
-                01712-039707
-              </a>
+          {hotline && hotline.trim().length > 0 && (
+            <div className="p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xs space-y-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--text-muted)] block">
+                Helpline &amp; Assistance
+              </span>
+              <div className="flex items-center gap-2 text-xs font-bold text-[var(--text-primary)]">
+                <Phone className="w-4 h-4 text-[var(--primary)]" />
+                <a href={`tel:${hotline.replace(/[\s-]/g, "")}`} className="hover:underline">
+                  {hotline}
+                </a>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                <MessageCircle className="w-4 h-4" />
+                <a
+                  href={`https://wa.me/88${hotline.replace(/[\s-]/g, "").replace(/^(\+?88)/, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
+                >
+                  WhatsApp Support
+                </a>
+              </div>
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              <MessageCircle className="w-4 h-4" />
-              <a
-                href="https://wa.me/8801712039707"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:underline"
-              >
-                WhatsApp Support
-              </a>
-            </div>
-          </div>
+          )}
         </aside>
 
         {/* Mobile Navigation Drawer */}

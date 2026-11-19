@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { ToyProduct } from "@/types/store";
+import type { ToyProduct, PublicStoreSettings } from "@/types/store";
+import { getPublicSettingsAction } from "@/server/actions/settings-actions";
 import { formatPrice, calculateDiscountPercentage } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { useCartStore } from "@/lib/cart-store";
@@ -64,6 +65,19 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
   const [activeTab, setActiveTab] = useState<"features" | "box" | "specs" | "reviews">("features");
   const [selectedDistrict, setSelectedDistrict] = useState("Dhaka");
   const [isRotating, setIsRotating] = useState(false);
+  const [publicSettings, setPublicSettings] = useState<PublicStoreSettings | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    getPublicSettingsAction().then((res) => {
+      if (active && res.success && res.settings) {
+        setPublicSettings(res.settings);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const currentVariant =
     product.variants?.find((v) => v.id === selectedVariantId) ||
@@ -215,7 +229,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           {/* Main Hero Image Frame */}
           <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-4xl bg-[var(--surface)] overflow-hidden border border-[var(--border)] shadow-md group">
             <Image
-              src={product.images?.[activeImageIndex] || product.images?.[0] || "/images/logo-placeholder.svg"}
+              src={product.images?.[activeImageIndex] || product.images?.[0] || "/images/toy-placeholder.svg"}
               alt={product.name}
               fill
               priority
@@ -340,7 +354,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               {product.name}
             </h1>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1 font-medium">
-              Certified safe, sensory-rich educational play with nationwide Cash on Delivery.
+              {product.shortDesc || (isBn ? "খেলনা বাজার ক্যাশ অন ডেলিভারি কালেকশন।" : "Curated for play, learning and thoughtful gifting.")}
             </p>
           </div>
 
@@ -392,7 +406,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               )}
             </div>
             <p className="text-[11px] text-[var(--text-muted)]">
-              All taxes included &bull; 100% Cash on Delivery &bull; Doorstep inspection allowed
+              {isBn ? "ক্যাশ অন ডেলিভারি • গ্রহণের পূর্বে দেখে নিন • হেল্পলাইন: 01712-039707" : "Cash on Delivery • Doorstep inspection allowed • Helpline: 01712-039707"}
             </p>
           </div>
 
@@ -531,12 +545,18 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-[var(--text-primary)] font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  {selectedDistrict === "Dhaka" ? "Inside Dhaka:" : "Outside Dhaka (All Bangladesh):"}
+                  {selectedDistrict === "Dhaka"
+                    ? isBn ? "ঢাকা মেট্রো:" : "Inside Dhaka:"
+                    : isBn ? "ঢাকার বাইরে:" : "Outside Dhaka:"}
                 </span>
                 <span className="font-bold text-emerald-700 dark:text-emerald-400">
                   {selectedDistrict === "Dhaka"
-                    ? formatPrice(siteConfig.shippingDefaults.insideDhakaRate)
-                    : formatPrice(siteConfig.shippingDefaults.outsideDhakaRate)}
+                    ? publicSettings?.insideDhakaRate !== null && publicSettings?.insideDhakaRate !== undefined
+                      ? formatPrice(publicSettings.insideDhakaRate)
+                      : isBn ? "অসংজ্ঞায়িত" : "To be confirmed"
+                    : publicSettings?.outsideDhakaRate !== null && publicSettings?.outsideDhakaRate !== undefined
+                      ? formatPrice(publicSettings.outsideDhakaRate)
+                      : isBn ? "অসংজ্ঞায়িত" : "To be confirmed"}
                 </span>
               </div>
               <p className="text-[11px] text-[var(--text-muted)] pt-1">
@@ -567,18 +587,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Toy Wonders &amp; Features
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("box")}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition-all whitespace-nowrap cursor-pointer ${
-              activeTab === "box"
-                ? "bg-[var(--primary)] text-[var(--on-primary)] shadow-xs"
-                : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            What&apos;s in the Wonder Box
+            {isBn ? "পণ্যের বিবরণ" : "Product Details"}
           </button>
           <button
             type="button"
@@ -589,7 +598,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Tech Specifications
+            {isBn ? "বৈশিষ্ট্য ও স্পেকস" : "Specifications"}
           </button>
           <button
             type="button"
@@ -600,121 +609,42 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 : "bg-[var(--surface-container-low)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
-            Parent Reviews ({product.ratingCount || 0})
+            {isBn ? `গ্রাহক মতামত (${product.ratingCount || 0})` : `Customer Reviews (${product.ratingCount || 0})`}
           </button>
         </div>
 
-        {/* Tab 1: Features */}
+        {/* Tab 1: Features & Description */}
         {activeTab === "features" && (
           <div className="pt-6 space-y-6">
             <div
               className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-[var(--text-primary)] leading-relaxed"
               dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-              <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs flex flex-col gap-2">
-                <div className="w-10 h-10 rounded-2xl bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center font-bold">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <h3 className="font-heading font-black text-sm text-[var(--text-primary)]">Bilingual Voice Guidance</h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Greets and coaches little learners with warm encouraging phrases in both Bangla and English phonetics.
-                </p>
+            {product.attributes && product.attributes.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-4">
+                {product.attributes.map((attr, idx) => (
+                  <div key={idx} className="p-4 rounded-2xl bg-[var(--surface-container-low)] border border-[var(--border)]">
+                    <span className="text-[11px] font-bold text-[var(--text-muted)] block uppercase">{attr.name}</span>
+                    <span className="text-xs font-bold text-[var(--text-primary)] mt-0.5 block">{attr.value}</span>
+                  </div>
+                ))}
               </div>
-              <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs flex flex-col gap-2">
-                <div className="w-10 h-10 rounded-2xl bg-[var(--secondary-container)]/20 text-[var(--secondary)] flex items-center justify-center font-bold">
-                  <Cpu className="w-5 h-5" />
-                </div>
-                <h3 className="font-heading font-black text-sm text-[var(--text-primary)]">Intelligent Obstacle Avoidance</h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Dual optical sonars detect room corners, toys, and pets up to 15cm away, calculating playful escape paths.
-                </p>
-              </div>
-              <div className="p-5 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs flex flex-col gap-2">
-                <div className="w-10 h-10 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center font-bold">
-                  <Layers className="w-5 h-5" />
-                </div>
-                <h3 className="font-heading font-black text-sm text-[var(--text-primary)]">Tactile Sequencing &amp; Loops</h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Hands-on tangible magnetic tiles turn computer science coding principles into lively floor adventures.
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         )}
 
-        {/* Tab 2: What's in the box */}
-        {activeTab === "box" && (
-          <div className="pt-6">
-            <div className="p-6 sm:p-8 rounded-4xl bg-[var(--surface-container-low)] border border-[var(--border)] shadow-xs">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)]">
-                  <div className="w-9 h-9 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-black text-xs flex items-center justify-center shrink-0">
-                    1x
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">{product.name} Main Unit</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">Reinforced ABS shell with integrated motor wheels &amp; LED eyes.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)]">
-                  <div className="w-9 h-9 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-black text-xs flex items-center justify-center shrink-0">
-                    36x
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">Tactile Sequencing Tiles</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">Forward, Reverse, Left 90°, Right 90°, Loop &amp; Action command cards.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--accent)] text-white font-black text-xs flex items-center justify-center shrink-0">
-                  1x
-                </div>
-                <div>
-                  <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">Giant Floor Play Map</h4>
-                  <p className="text-[11px] text-[var(--text-muted)]">Durable spill-resistant activity mat (85cm x 85cm) with double-sided grid.</p>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)]">
-                  <div className="w-9 h-9 rounded-full bg-[var(--surface-container-high)] text-[var(--text-primary)] font-black text-xs flex items-center justify-center shrink-0">
-                    1x
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">Braided USB-C Safe Cable</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">Tangle-resistant child-safe reinforced cord for rapid recharging.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)]">
-                  <div className="w-9 h-9 rounded-full bg-[var(--primary)] text-[var(--on-primary)] font-black text-xs flex items-center justify-center shrink-0">
-                    24x
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">Wonder Mission Stickers</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">Holographic badges and reward stickers for completed challenges.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-4 rounded-3xl bg-[var(--surface)] border border-[var(--border)]">
-                  <div className="w-9 h-9 rounded-full bg-[var(--secondary-container)] text-[var(--on-secondary-container)] font-black text-xs flex items-center justify-center shrink-0">
-                    1x
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs text-[var(--text-primary)]">Bilingual Parent Guide</h4>
-                    <p className="text-[11px] text-[var(--text-muted)]">28-page colorful curriculum designed by early childhood educators.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Tech Specs */}
+        {/* Tab 2: Specs */}
         {activeTab === "specs" && (
           <div className="pt-6">
             <div className="max-w-2xl divide-y divide-[var(--border)] text-xs rounded-3xl bg-[var(--surface-container-low)] p-6 border border-[var(--border)]">
-              <div className="py-3 flex justify-between">
-                <span className="text-[var(--text-muted)] font-medium">Recommended Age</span>
-                <span className="font-bold text-[var(--text-primary)]">
-                  {Math.floor(product.minAgeMonths / 12)} to {Math.floor(product.maxAgeMonths / 12)} Years
-                </span>
-              </div>
+              {product.minAgeMonths !== undefined && product.maxAgeMonths !== undefined && (
+                <div className="py-3 flex justify-between">
+                  <span className="text-[var(--text-muted)] font-medium">Recommended Age</span>
+                  <span className="font-bold text-[var(--text-primary)]">
+                    {Math.floor(product.minAgeMonths / 12)} to {Math.floor(product.maxAgeMonths / 12)} Years
+                  </span>
+                </div>
+              )}
               {product.material && (
                 <div className="py-3 flex justify-between">
                   <span className="text-[var(--text-muted)] font-medium">Materials</span>
@@ -731,6 +661,12 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                 <span className="text-[var(--text-muted)] font-medium">Model / SKU</span>
                 <span className="font-mono text-[var(--text-primary)] font-bold">{currentVariant.sku}</span>
               </div>
+              {product.chokingHazard && (
+                <div className="py-3 flex justify-between text-amber-600">
+                  <span className="font-medium">Safety Advisory</span>
+                  <span className="font-bold">{product.chokingWarning || "Choking hazard: Contains small parts."}</span>
+                </div>
+              )}
               {product.attributes?.map((a, i) => (
                 <div key={i} className="py-3 flex justify-between">
                   <span className="text-[var(--text-muted)] font-medium">{a.name}</span>
@@ -741,7 +677,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
           </div>
         )}
 
-        {/* Tab 5: Reviews */}
+        {/* Tab 3: Reviews */}
         {activeTab === "reviews" && (
           <div id="reviews-section" className="pt-6 space-y-6 max-w-3xl">
             {product.ratingCount > 0 ? (
@@ -763,24 +699,18 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
                     </div>
                   </div>
                 </div>
-                <Button variant="pill-primary" size="sm" onClick={() => toast.info(isBn ? "ডেলিভারি সম্পন্ন হওয়ার পর রিভিউ দেওয়া যাবে।" : "Review form will open after order delivery verification.")}>
-                  Write a Review
-                </Button>
               </div>
             ) : (
               <div className="p-8 rounded-3xl bg-[var(--surface-container-low)] border border-[var(--border)] text-center space-y-3">
                 <Star className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto" />
                 <p className="font-heading font-black text-base text-[var(--text-primary)]">
-                  {t("product.noReviews") || "No reviews yet"}
+                  {t("product.noReviews") || (isBn ? "কোনো মতামত নেই" : "No reviews yet")}
                 </p>
                 <p className="text-xs text-[var(--text-muted)] max-w-md mx-auto">
                   {isBn
-                    ? "এই পণ্যে এখনও কোনো গ্রাহক মতামত দেননি। ডেলিভারি সম্পন্ন হওয়ার পর গ্রাহকরা রিভিউ লিখতে পারেন।"
+                    ? "এই পণ্যে এখনও কোনো গ্রাহক রিভিউ দেননি। ডেলিভারি সম্পন্ন হওয়ার পর যাচাইকৃত ক্রেতারা রিভিউ দিতে পারেন।"
                     : "No reviews have been submitted for this toy yet. Verified purchasers can submit reviews after delivery."}
                 </p>
-                <Button variant="outline" size="sm" onClick={() => toast.info(isBn ? "ডেলিভারি সম্পন্ন হওয়ার পর রিভিউ দেওয়া যাবে।" : "Review form opens after verified order delivery.")}>
-                  {isBn ? "মতামত লিখুন" : "Write First Review"}
-                </Button>
               </div>
             )}
           </div>
@@ -821,7 +751,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
       >
         <div className="relative aspect-square w-full max-h-[70vh] rounded-3xl overflow-hidden bg-[var(--surface-container-low)]">
           <Image
-            src={product.images?.[activeImageIndex] || product.images?.[0] || ""}
+            src={product.images?.[activeImageIndex] || product.images?.[0] || "/images/toy-placeholder.svg"}
             alt={product.name}
             fill
             className="object-contain p-4"

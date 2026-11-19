@@ -160,7 +160,7 @@ export async function saveAddress(input: AddressInput) {
       });
     }
 
-    revalidatePath("/account/addresses");
+    revalidatePath("/dashboard/addresses");
     revalidatePath("/checkout");
     return { success: true };
   } catch (error: any) {
@@ -209,7 +209,7 @@ export async function deleteAddress(addressId: string) {
       }
     });
 
-    revalidatePath("/account/addresses");
+    revalidatePath("/dashboard/addresses");
     revalidatePath("/checkout");
     return { success: true };
   } catch (error: any) {
@@ -247,7 +247,7 @@ export async function setDefaultAddress(addressId: string) {
       }),
     ]);
 
-    revalidatePath("/account/addresses");
+    revalidatePath("/dashboard/addresses");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to set default address." };

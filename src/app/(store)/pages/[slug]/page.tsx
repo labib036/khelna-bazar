@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { Metadata } from "next";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
 interface CmsPageProps {
   params: Promise<{
@@ -8,8 +9,25 @@ interface CmsPageProps {
   }>;
 }
 
+const CANONICAL_SLUG_MAP: Record<string, string> = {
+  "shipping-policy": "shipping",
+  "shipping": "shipping",
+  "returns-policy": "returns",
+  "return-refund-policy": "returns",
+  "return-refund": "returns",
+  "returns": "returns",
+  "privacy-policy": "privacy",
+  "privacy": "privacy",
+  "terms-and-conditions": "terms",
+  "terms": "terms",
+  "about-us": "about",
+  "about": "about",
+  "toy-safety": "toy-safety",
+  "contact": "contact",
+};
+
 const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
-  "about-us": {
+  about: {
     title: "About Khelna Bazar / খেলনা বাজার পরিচিতি",
     html: `
       <h2>About Khelna Bazar / আমাদের কথা</h2>
@@ -42,7 +60,7 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       </ul>
     `,
   },
-  "shipping-policy": {
+  shipping: {
     title: "Delivery Information / ডেলিভারি তথ্য",
     html: `
       <h2>Delivery Information / ডেলিভারি তথ্য</h2>
@@ -52,15 +70,15 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <ul>
         <li><strong>Cash on Delivery (COD):</strong> Pay the delivery person when your order arrives.</li>
         <li><strong>ক্যাশ অন ডেলিভারি:</strong> পণ্য পৌঁছালে ডেলিভারি প্রতিনিধিকে পেমেন্ট করুন।</li>
-        <li><strong>bKash &amp; Nagad:</strong> Send Money to our official number <strong>01712-039707</strong> and provide the sender number and Transaction ID (TrxID) at checkout. Manual verification is conducted prior to dispatch.</li>
-        <li><strong>বিকাশ ও নগদ:</strong> আমাদের অফিসিয়াল নম্বর <strong>01712-039707</strong>-এ টাকা পাঠিয়ে প্রেরক নম্বর ও TrxID প্রদান করুন। পাঠানোর আগে ম্যানুয়ালি যাচাই করা হবে।</li>
+        <li><strong>bKash &amp; Nagad:</strong> Send payment to our official number <strong>01712-039707</strong> and provide the sender number and Transaction ID (TrxID) at checkout. Manual verification is conducted prior to dispatch.</li>
+        <li><strong>বিকাশ ও নগদ:</strong> আমাদের অফিসিয়াল নম্বর <strong>01712-039707</strong>-এ পেমেন্ট পাঠিয়ে প্রেরক নম্বর ও TrxID প্রদান করুন। পাঠানোর আগে ম্যানুয়ালি যাচাই করা হবে।</li>
       </ul>
       <h3>Mandatory Doorstep Inspection / ডেলিভারির সময় পরীক্ষা</h3>
       <p>Please inspect the product in front of the delivery person before accepting it. Report any defect at the time of delivery.</p>
       <p>পণ্য গ্রহণ করার আগে ডেলিভারি প্রতিনিধির সামনে পরীক্ষা করুন। কোনো ত্রুটি থাকলে ডেলিভারির সময়ই জানান।</p>
     `,
   },
-  "returns-policy": {
+  returns: {
     title: "Returns and Refunds / পণ্য ফেরত ও রিফান্ড",
     html: `
       <h2>Returns and Refunds / পণ্য ফেরত ও রিফান্ড</h2>
@@ -80,7 +98,7 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <p><strong>যোগাযোগ।</strong> সহায়তার জন্য <strong>01712-039707</strong> নম্বরে কল বা WhatsApp করুন।</p>
     `,
   },
-  "privacy-policy": {
+  privacy: {
     title: "Privacy Policy / গোপনীয়তা নীতি",
     html: `
       <h2>Privacy Policy / গোপনীয়তা নীতি</h2>
@@ -91,7 +109,7 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <p>For privacy queries, contact <strong>01712-039707</strong>.</p>
     `,
   },
-  "terms": {
+  terms: {
     title: "Terms and Conditions / শর্তাবলি",
     html: `
       <h2>Terms and Conditions / ব্যবহারিক শর্তাবলি</h2>
@@ -109,7 +127,7 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
       <p>For assistance, call or WhatsApp <strong>01712-039707</strong>.</p>
     `,
   },
-  "contact": {
+  contact: {
     title: "Contact Us / যোগাযোগ করুন",
     html: `
       <h2>Contact Customer Support / যোগাযোগ</h2>
@@ -124,16 +142,19 @@ const STATIC_FALLBACK_PAGES: Record<string, { title: string; html: string }> = {
   },
 };
 
-// Aliases for common routing variations
-STATIC_FALLBACK_PAGES["shipping"] = STATIC_FALLBACK_PAGES["shipping-policy"];
-STATIC_FALLBACK_PAGES["returns"] = STATIC_FALLBACK_PAGES["returns-policy"];
-STATIC_FALLBACK_PAGES["return-refund-policy"] = STATIC_FALLBACK_PAGES["returns-policy"];
-STATIC_FALLBACK_PAGES["privacy"] = STATIC_FALLBACK_PAGES["privacy-policy"];
+// Aliases mapped to canonical keys
+STATIC_FALLBACK_PAGES["about-us"] = STATIC_FALLBACK_PAGES["about"];
+STATIC_FALLBACK_PAGES["shipping-policy"] = STATIC_FALLBACK_PAGES["shipping"];
+STATIC_FALLBACK_PAGES["returns-policy"] = STATIC_FALLBACK_PAGES["returns"];
+STATIC_FALLBACK_PAGES["return-refund-policy"] = STATIC_FALLBACK_PAGES["returns"];
+STATIC_FALLBACK_PAGES["return-refund"] = STATIC_FALLBACK_PAGES["returns"];
+STATIC_FALLBACK_PAGES["privacy-policy"] = STATIC_FALLBACK_PAGES["privacy"];
 STATIC_FALLBACK_PAGES["terms-and-conditions"] = STATIC_FALLBACK_PAGES["terms"];
 
 export async function generateMetadata({ params }: CmsPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = STATIC_FALLBACK_PAGES[slug];
+  const canonical = CANONICAL_SLUG_MAP[slug] || slug;
+  const page = STATIC_FALLBACK_PAGES[canonical];
   return {
     title: page ? page.title : "Policy",
   };
@@ -141,17 +162,24 @@ export async function generateMetadata({ params }: CmsPageProps): Promise<Metada
 
 export default async function CmsPage({ params }: CmsPageProps) {
   const { slug } = await params;
+  const canonicalSlug = CANONICAL_SLUG_MAP[slug] || slug;
 
   let pageData: { title: string; html: string } | null = null;
 
   try {
-    const dbPage = await db.page.findUnique({
-      where: { slug },
+    const dbPage = await db.page.findFirst({
+      where: {
+        OR: [
+          { slug: canonicalSlug },
+          { slug: slug },
+        ],
+      },
     });
+
     if (dbPage) {
       pageData = {
         title: dbPage.title,
-        html: dbPage.contentHtml,
+        html: sanitizeHtml(dbPage.contentHtml),
       };
     }
   } catch {
@@ -159,7 +187,13 @@ export default async function CmsPage({ params }: CmsPageProps) {
   }
 
   if (!pageData) {
-    pageData = STATIC_FALLBACK_PAGES[slug] || null;
+    const fallback = STATIC_FALLBACK_PAGES[canonicalSlug] || STATIC_FALLBACK_PAGES[slug];
+    if (fallback) {
+      pageData = {
+        title: fallback.title,
+        html: sanitizeHtml(fallback.html),
+      };
+    }
   }
 
   if (!pageData) {

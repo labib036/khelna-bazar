@@ -7,15 +7,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "*.public.blob.vercel-storage.com",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-      },
-      {
-        protocol: "https",
-        hostname: "via.placeholder.com",
       },
     ],
   },
@@ -42,7 +38,18 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'none';",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com https://res.cloudinary.com https://*.googleusercontent.com",
+              "font-src 'self' data:",
+              "connect-src 'self' https://*.public.blob.vercel-storage.com https://accounts.google.com",
+              "frame-src 'self' https://accounts.google.com",
+              "frame-ancestors 'none'",
+              "form-action 'self' https://accounts.google.com",
+              "base-uri 'self'",
+            ].join("; "),
           },
           {
             key: "Referrer-Policy",

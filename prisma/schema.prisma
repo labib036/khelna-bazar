@@ -34,9 +34,10 @@ model User {
   birthday         DateTime?
   marketingConsent Boolean   @default(false)
   totpSecret       String?
-  loyaltyPoints    Int       @default(100) // 100 welcome bonus points
+  loyaltyPoints    Int       @default(0) // No unapproved signup bonus points
   tier             String    @default("BRONZE") // BRONZE, SILVER, GOLD
   blocked          Boolean   @default(false)
+  tokenVersion     Int       @default(0)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   deletedAt        DateTime?
@@ -133,7 +134,7 @@ model Product {
   brandId         String?
   shortDesc       String?
   descriptionHtml String
-  status          ProductStatus @default(ACTIVE)
+  status          ProductStatus @default(DRAFT)
   
   // Pricing in BDT (stored as integer Taka)
   basePrice       Int
@@ -195,7 +196,7 @@ model ProductVariant {
   optionValues      Json?    // e.g. { "Color": "Blue", "Size": "Large" }
   price             Int      // Price in Taka
   comparePrice      Int?
-  stock             Int      @default(10)
+  stock             Int      @default(0)
   lowStockThreshold Int      @default(5)
   barcode           String?
   imageUrl          String?
@@ -341,7 +342,7 @@ model Order {
   orderNumber        String                 @unique // e.g. KB-2611-100245
   userId             String?
   customerName       String
-  customerEmail      String
+  customerEmail      String?
   customerPhone      String
   
   // Statuses

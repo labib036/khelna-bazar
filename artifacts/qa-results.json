@@ -7,7 +7,7 @@
       "persona": "Guest",
       "route": "/",
       "status": "PASS",
-      "durationMs": 470
+      "durationMs": 1124
     },
     {
       "id": "SF-002",
@@ -16,7 +16,7 @@
       "persona": "Guest",
       "route": "/c/stem-robotics",
       "status": "PASS",
-      "durationMs": 389
+      "durationMs": 512
     },
     {
       "id": "SF-003",
@@ -25,7 +25,7 @@
       "persona": "Guest",
       "route": "/p/space-explorer-rocket-launch-facility",
       "status": "PASS",
-      "durationMs": 228
+      "durationMs": 406
     },
     {
       "id": "SF-004",
@@ -34,7 +34,7 @@
       "persona": "Guest",
       "route": "/cart",
       "status": "PASS",
-      "durationMs": 923
+      "durationMs": 1320
     },
     {
       "id": "SF-005",
@@ -43,7 +43,7 @@
       "persona": "Guest",
       "route": "/checkout",
       "status": "PASS",
-      "durationMs": 187
+      "durationMs": 339
     },
     {
       "id": "SF-006",
@@ -52,7 +52,7 @@
       "persona": "Guest",
       "route": "/track-order",
       "status": "PASS",
-      "durationMs": 1676
+      "durationMs": 1848
     },
     {
       "id": "SF-007",
@@ -61,7 +61,7 @@
       "persona": "Guest",
       "route": "/pages/returns-policy",
       "status": "PASS",
-      "durationMs": 91
+      "durationMs": 129
     },
     {
       "id": "SF-008",
@@ -70,7 +70,7 @@
       "persona": "Guest",
       "route": "/",
       "status": "PASS",
-      "durationMs": 175
+      "durationMs": 301
     },
     {
       "id": "CUST-001",
@@ -79,16 +79,16 @@
       "persona": "Customer A",
       "route": "/dashboard",
       "status": "PASS",
-      "durationMs": 897
+      "durationMs": 1065
     },
     {
       "id": "CUST-002",
       "name": "Customer A Order List & Detail Scoping",
       "panel": "Customer",
       "persona": "Customer A",
-      "route": "/dashboard/orders/cmwl8hldg000aolb0xy88zf1x",
+      "route": "/dashboard/orders/cmwmjbvrx000aolv4vshfamch",
       "status": "PASS",
-      "durationMs": 314
+      "durationMs": 528
     },
     {
       "id": "CUST-003",
@@ -97,16 +97,16 @@
       "persona": "Customer A",
       "route": "/dashboard/addresses",
       "status": "PASS",
-      "durationMs": 76
+      "durationMs": 330
     },
     {
       "id": "SEC-001",
       "name": "Zero IDOR Protection: Cross-Customer Order Isolation",
       "panel": "Customer",
       "persona": "Customer B",
-      "route": "/dashboard/orders/cmwl8hldg000aolb0xy88zf1x",
+      "route": "/dashboard/orders/cmwmjbvrx000aolv4vshfamch",
       "status": "PASS",
-      "durationMs": 1108
+      "durationMs": 1160
     },
     {
       "id": "STAFF-001",
@@ -115,7 +115,7 @@
       "persona": "Staff",
       "route": "/admin/orders",
       "status": "PASS",
-      "durationMs": 2059
+      "durationMs": 2511
     },
     {
       "id": "ADMIN-001",
@@ -124,7 +124,7 @@
       "persona": "Admin",
       "route": "/admin/dashboard",
       "status": "PASS",
-      "durationMs": 2301
+      "durationMs": 2611
     },
     {
       "id": "SUPER-001",
@@ -133,7 +133,7 @@
       "persona": "Super Admin",
       "route": "/admin/staff",
       "status": "PASS",
-      "durationMs": 2094
+      "durationMs": 2484
     }
   ],
   "consoleErrors": [
@@ -144,27 +144,35 @@
     {
       "url": "http://localhost:3000/pages/returns-policy",
       "text": "Uncaught Exception: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
-    },
-    {
-      "url": "http://localhost:3000/",
-      "text": "Uncaught Exception: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
     }
   ],
   "failedRequests": [
     {
-      "url": "http://localhost:3000/c/all?age=1-2y&_rsc=tXyZJ52UQVBCVsD3",
+      "url": "http://localhost:3000/pages/return-refund?_rsc=tXyZJ52UQVBCVsD3",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?age=3-4y&_rsc=tXyZJ52UQVBCVsD3",
+      "url": "http://localhost:3000/track-order?_rsc=tXyZJ52UQVBCVsD3",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?age=5-7y&_rsc=tXyZJ52UQVBCVsD3",
+      "url": "http://localhost:3000/c/all?_rsc=tXyZJ52UQVBCVsD3",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?age=8-11y&_rsc=tXyZJ52UQVBCVsD3",
+      "url": "http://localhost:3000/c/building-blocks?_rsc=tXyZJ52UQVBCVsD3",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/wishlist?_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/all?sort=newest&_rsc=m7DM1zZMcr3yC4zC",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/c/rc-vehicles?_rsc=m7DM1zZMcr3yC4zC",
       "failure": "net::ERR_ABORTED"
     },
     {
@@ -172,15 +180,7 @@
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?age=1-2y&_rsc=m7DM1zZMcr3yC4zC",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/c/all?age=3-4y&_rsc=m7DM1zZMcr3yC4zC",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/c/all?age=5-7y&_rsc=m7DM1zZMcr3yC4zC",
+      "url": "http://localhost:3000/c/all?age=0-12m&_rsc=7t6lXWKhwMZi91v-",
       "failure": "net::ERR_ABORTED"
     },
     {
@@ -196,10 +196,6 @@
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?age=8-11y&_rsc=7t6lXWKhwMZi91v-",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
       "url": "http://localhost:3000/c/all?_rsc=r_rvrX66yC04LCWN",
       "failure": "net::ERR_ABORTED"
     },
@@ -212,19 +208,55 @@
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/baby-toddler?_rsc=r_rvrX66yC04LCWN",
+      "url": "http://localhost:3000/search?_rsc=r_rvrX66yC04LCWN",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/c/all?sort=deals&_rsc=r_rvrX66yC04LCWN",
+      "url": "http://localhost:3000/dashboard?_rsc=r_rvrX66yC04LCWN",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/wishlist?_rsc=r_rvrX66yC04LCWN",
+      "url": "http://localhost:3000/dashboard/orders/cmwmjbvrx000aolv4vshfamch?_rsc=IOe_mmh6jQxP6_Ru",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/dashboard/orders/cmwl8hldg000aolb0xy88zf1x?_rsc=hZHbZgupmk38S9G-",
+      "url": "http://localhost:3000/dashboard?_rsc=FxX27-sEeQF4v0fv",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/?_rsc=FxX27-sEeQF4v0fv",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/orders?_rsc=FxX27-sEeQF4v0fv",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/addresses?_rsc=FxX27-sEeQF4v0fv",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/api/auth/session",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/orders?_rsc=IOe_mmh6jQxP6_Ru",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/addresses?_rsc=IOe_mmh6jQxP6_Ru",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/profile?_rsc=IOe_mmh6jQxP6_Ru",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:3000/dashboard/rewards?_rsc=IOe_mmh6jQxP6_Ru",
       "failure": "net::ERR_ABORTED"
     },
     {
@@ -232,75 +264,59 @@
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/_next/static/chunks/2v0zzhphd3w0w.js",
+      "url": "http://localhost:3000/admin/dashboard",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=DRRNH34_TOXg37Uq",
+      "url": "http://localhost:3000/admin/coupons?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=P1qeTwrxUbDIk5oG",
+      "url": "http://localhost:3000/admin/settings?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=LWcpc6NJZmryPvjQ",
+      "url": "http://localhost:3000/admin/orders?_rsc=9wOvdo_vgRszByxa",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1594787318286-3d835c1d207f%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "url": "http://localhost:3000/api/auth/session",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1596461404969-9ae70f2830c1%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "url": "http://localhost:3000/admin/inventory",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1581092160607-ee22621dd758%3Fauto%3Dformat%26fit%3Dcrop%26w%3D800%26q%3D80&w=48&q=75",
+      "url": "http://localhost:3000/api/auth/session",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/admin/settings?_rsc=r_BZZrAuJgm6tgMG",
+      "url": "http://localhost:3000/admin/coupons",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/admin/dashboard?_rsc=5ZWrLv--zChKS6q6",
+      "url": "http://localhost:3000/api/auth/session",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/admin/orders?_rsc=u39SP-6DcCKlaNxg",
+      "url": "http://localhost:3000/admin/orders?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=Yo697U6QSXvNPCQI",
+      "url": "http://localhost:3000/admin/dashboard",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=P1qeTwrxUbDIk5oG",
+      "url": "http://localhost:3000/admin/products?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/?_rsc=LWcpc6NJZmryPvjQ",
+      "url": "http://localhost:3000/admin/inventory?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     },
     {
-      "url": "http://localhost:3000/admin/staff?_rsc=cduDTPtv0UIYlG9Y",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/admin/audit-logs?_rsc=cduDTPtv0UIYlG9Y",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/admin/inventory?_rsc=Gv4uY088-Lwa5wvz",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/_next/static/chunks/0q3_kw_3ptixf.js",
-      "failure": "net::ERR_ABORTED"
-    },
-    {
-      "url": "http://localhost:3000/admin/coupons?_rsc=jb7JtnBipss8XAyp",
+      "url": "http://localhost:3000/admin/coupons?_rsc=L8H_kjkQuRZYxv9n",
       "failure": "net::ERR_ABORTED"
     }
   ]

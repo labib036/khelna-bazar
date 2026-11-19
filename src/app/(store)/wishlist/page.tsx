@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useWishlistStore } from "@/lib/wishlist-store";
 import { useCartStore } from "@/lib/cart-store";
 import { useMounted } from "@/lib/use-mounted";
+import { useLanguage } from "@/lib/i18n";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,13 +17,16 @@ import { toast } from "sonner";
 
 export default function WishlistPage() {
   const mounted = useMounted();
+  const { t, locale } = useLanguage();
+  const isBn = locale === "bn";
+
   const { items, removeItem, clearWishlist } = useWishlistStore();
   const { addItem, openCart } = useCartStore();
 
   if (!mounted) {
     return (
       <div className="max-w-md mx-auto py-20 px-4 text-center text-xs text-[var(--text-muted)] animate-pulse">
-        Loading wishlist...
+        {isBn ? "পছন্দের তালিকা লোড হচ্ছে..." : "Loading wishlist..."}
       </div>
     );
   }
@@ -41,7 +45,7 @@ export default function WishlistPage() {
       maxStock: 50,
     });
     removeItem(item.productId);
-    toast.success(`Moved ${item.name} to basket!`);
+    toast.success(isBn ? `"${item.name}" কার্টে যোগ করা হয়েছে!` : `Moved ${item.name} to basket!`);
     openCart();
   };
 
@@ -61,7 +65,7 @@ export default function WishlistPage() {
       });
     });
     clearWishlist();
-    toast.success("Moved all wishlist items to basket!");
+    toast.success(isBn ? "পছন্দের সব পণ্য কার্টে যোগ করা হয়েছে!" : "Moved all wishlist items to basket!");
     openCart();
   };
 
@@ -72,14 +76,16 @@ export default function WishlistPage() {
           <Heart className="w-10 h-10" />
         </div>
         <h1 className="font-heading text-2xl font-black text-[var(--text-primary)]">
-          Your Wishlist is Empty
+          {isBn ? "আপনার পছন্দের তালিকা খালি" : "Your Wishlist is Empty"}
         </h1>
         <p className="text-xs sm:text-sm text-[var(--text-muted)]">
-          Save your favorite toys by tapping the heart icon on any product card while browsing.
+          {isBn
+            ? "ব্রাউজ করার সময় খেলনা পছন্দের তালিকায় রাখতে পণ্যের কার্ডে থাকা হার্ট আইকনে চাপ দিন।"
+            : "Save your favorite toys by tapping the heart icon on any product card while browsing."}
         </p>
         <Link href="/c/all" className="inline-block pt-2">
           <Button variant="primary" size="md">
-            Explore Toys
+            {isBn ? "খেলনা দেখুন" : "Explore Toys"}
           </Button>
         </Link>
       </div>
@@ -92,10 +98,12 @@ export default function WishlistPage() {
         <div>
           <h1 className="font-heading text-2xl sm:text-3xl font-black text-[var(--text-primary)] flex items-center gap-2.5">
             <Heart className="w-6 h-6 text-[var(--danger)] fill-[var(--danger)]" />
-            <span>My Saved Toys ({items.length})</span>
+            <span>{isBn ? `পছন্দের খেলনা (${items.length})` : `My Saved Toys (${items.length})`}</span>
           </h1>
           <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1">
-            Keep track of toys for upcoming birthdays, holidays, or gift surprises.
+            {isBn
+              ? "জন্মদিন, ছুটির দিন বা উপহার দেওয়ার জন্য আপনার পছন্দের খেলনা সংরক্ষণ করে রাখুন।"
+              : "Keep track of toys for upcoming birthdays, holidays, or gift surprises."}
           </p>
         </div>
 
@@ -108,7 +116,7 @@ export default function WishlistPage() {
             className="gap-1.5 font-black text-xs h-9 shadow-xs"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span>Move All to Basket</span>
+            <span>{isBn ? "সব কার্টে যোগ করুন" : "Move All to Basket"}</span>
           </Button>
           <Button
             type="button"
@@ -117,7 +125,7 @@ export default function WishlistPage() {
             size="sm"
             className="rounded-full text-xs font-bold h-9"
           >
-            Clear Wishlist
+            {isBn ? "তালিকা মুছুন" : "Clear Wishlist"}
           </Button>
         </div>
       </div>
@@ -135,7 +143,7 @@ export default function WishlistPage() {
                   type="button"
                   onClick={() => removeItem(item.productId)}
                   className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-[var(--surface)]/90 text-[var(--text-muted)] hover:text-[var(--danger)] flex items-center justify-center transition-colors cursor-pointer shadow-xs border border-[var(--border)]"
-                  title="Remove from wishlist"
+                  title={isBn ? "তালিকা থেকে সরান" : "Remove from wishlist"}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -168,7 +176,7 @@ export default function WishlistPage() {
                 className="w-full text-xs font-black h-9 shadow-xs"
               >
                 <ShoppingBag className="w-3.5 h-3.5 mr-1" />
-                <span>Move to Basket</span>
+                <span>{isBn ? "কার্টে যোগ করুন" : "Move to Basket"}</span>
               </Button>
             </div>
           </div>

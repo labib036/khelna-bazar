@@ -1,4 +1,6 @@
 import { CustomerDashboardShell } from "@/components/customer/customer-dashboard-shell";
+import { requireCustomer } from "@/lib/authorization-guards";
+import { getPublicStoreSettings } from "@/server/services/settings-service";
 
 export const metadata = {
   title: "Customer Dashboard | Khelna Bazar",
@@ -8,10 +10,16 @@ export const metadata = {
   },
 };
 
-export default function CustomerDashboardLayout({
+export default async function CustomerDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <CustomerDashboardShell>{children}</CustomerDashboardShell>;
+  await requireCustomer("/dashboard");
+  const settings = await getPublicStoreSettings();
+  return (
+    <CustomerDashboardShell hotline={settings?.hotline || ""}>
+      {children}
+    </CustomerDashboardShell>
+  );
 }

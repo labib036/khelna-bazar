@@ -17,6 +17,7 @@ export async function getProducts(params?: {
     // Attempt Prisma database lookup
     const whereClause: any = {
       status: "ACTIVE",
+      deletedAt: null,
     };
 
     if (params?.category) {
@@ -112,7 +113,7 @@ export async function getProducts(params?: {
         minAgeMonths: p.minAgeMonths,
         maxAgeMonths: p.maxAgeMonths,
         material: p.material || undefined,
-        batteryInfo: p.batteryInfo || "None required",
+        batteryInfo: p.batteryInfo || undefined,
         chokingHazard: p.chokingHazard,
         chokingWarning: p.chokingWarning || undefined,
         certifications: p.certifications,
@@ -146,8 +147,8 @@ export async function getProducts(params?: {
 
 export async function getProductBySlug(slug: string): Promise<ToyProduct | null> {
   try {
-    const dbProduct = await db.product.findUnique({
-      where: { slug },
+    const dbProduct = await db.product.findFirst({
+      where: { slug, deletedAt: null },
       include: {
         brand: true,
         categories: true,
@@ -172,7 +173,7 @@ export async function getProductBySlug(slug: string): Promise<ToyProduct | null>
         minAgeMonths: dbProduct.minAgeMonths,
         maxAgeMonths: dbProduct.maxAgeMonths,
         material: dbProduct.material || undefined,
-        batteryInfo: dbProduct.batteryInfo || "None required",
+        batteryInfo: dbProduct.batteryInfo || undefined,
         chokingHazard: dbProduct.chokingHazard,
         chokingWarning: dbProduct.chokingWarning || undefined,
         certifications: dbProduct.certifications,
