@@ -49,16 +49,14 @@ export function ThemeToggle({ className = "", showDropdown = false }: ThemeToggl
     return (
       <button
         onClick={toggleTheme}
-        className={`p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface-elevated)] border border-transparent hover:border-[var(--border)] transition-colors cursor-pointer flex items-center justify-center ${className}`}
-        aria-label={`Current theme: ${resolvedTheme}. Click to switch to ${
-          resolvedTheme === "dark" ? "light" : "dark"
-        } mode.`}
-        title={`Switch to ${resolvedTheme === "dark" ? "Light" : "Dark"} mode`}
+        className={`p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] border border-transparent hover:border-[var(--border)] transition-all cursor-pointer flex items-center justify-center ${className}`}
+        aria-label={`Theme: ${resolvedTheme === "dark" ? "Dark Mode" : "Light Mode"}. Click to toggle.`}
+        title={resolvedTheme === "dark" ? "Dark theme active — Click for Light theme" : "Light theme active — Click for Dark theme"}
       >
         {resolvedTheme === "dark" ? (
-          <Sun className="w-4 h-4 text-[var(--warning)] transition-transform duration-200 hover:rotate-45" />
+          <Moon className="w-4 h-4 text-amber-400 fill-amber-400/20 transition-transform duration-200 hover:rotate-12" />
         ) : (
-          <Moon className="w-4 h-4 text-[var(--text-primary)] transition-transform duration-200 hover:-rotate-12" />
+          <Sun className="w-4 h-4 text-amber-500 fill-amber-500/20 transition-transform duration-200 hover:rotate-45" />
         )}
       </button>
     );
@@ -74,15 +72,16 @@ export function ThemeToggle({ className = "", showDropdown = false }: ThemeToggl
     <div className={`relative inline-block text-left ${className}`} ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface-elevated)] border border-[var(--border)] transition-colors cursor-pointer flex items-center justify-center"
+        className="p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] border border-[var(--border)] transition-all cursor-pointer flex items-center justify-center gap-1.5"
         aria-label={`Theme appearance: ${theme} mode. Click to choose theme.`}
         aria-haspopup="true"
         aria-expanded={isOpen}
+        title={`Current theme: ${theme} (${resolvedTheme})`}
       >
         {resolvedTheme === "dark" ? (
-          <Moon className="w-4 h-4 text-[var(--warning)]" />
+          <Moon className="w-4 h-4 text-amber-400 fill-amber-400/20" />
         ) : (
-          <Sun className="w-4 h-4 text-[var(--warning)]" />
+          <Sun className="w-4 h-4 text-amber-500 fill-amber-500/20" />
         )}
       </button>
 

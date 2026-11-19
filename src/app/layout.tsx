@@ -59,10 +59,17 @@ export default async function RootLayout({
                   if (lang) { document.documentElement.lang = lang; }
                   var stored = localStorage.getItem('kb_theme');
                   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (stored === 'dark' || (!stored && prefersDark) || (stored === 'system' && prefersDark)) {
+                  var isDark = stored === 'dark' || ((!stored || stored === 'system') && prefersDark);
+                  if (isDark) {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    document.documentElement.style.colorScheme = 'dark';
                   } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    document.documentElement.style.colorScheme = 'light';
                   }
                 } catch (e) {}
               })();
@@ -70,7 +77,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#FAF8F6] dark:bg-[#121318] text-[#18191F] dark:text-[#F3F6FF] antialiased selection:bg-[#DC012B] selection:text-white">
+      <body className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased selection:bg-[var(--primary)] selection:text-white transition-colors duration-150">
         <Providers>
           {children}
           <Toaster position="top-center" richColors closeButton />

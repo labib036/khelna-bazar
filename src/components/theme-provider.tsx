@@ -54,8 +54,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const root = document.documentElement;
       if (target === "dark") {
         root.classList.add("dark");
+        root.classList.remove("light");
+        root.setAttribute("data-theme", "dark");
+        root.style.colorScheme = "dark";
       } else {
         root.classList.remove("dark");
+        root.classList.add("light");
+        root.setAttribute("data-theme", "light");
+        root.style.colorScheme = "light";
       }
     };
 

@@ -132,7 +132,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
+  :root:not([data-theme='light']):not(.light) {
     /* ----------------------------------------------------------------------
        2. COLOR SYSTEM - SYSTEM DARK THEME (Luminous Warm Glow)
     ---------------------------------------------------------------------- */
@@ -226,7 +226,10 @@
   }
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='dark'],
+:root.dark,
+html.dark,
+.dark {
   --bg-primary: #1A1110;
   --surface: #241A18;
   --surface-dim: #18100F;
@@ -315,7 +318,11 @@
   color-scheme: dark;
 }
 
-:root[data-theme='light'] {
+:root[data-theme='light'],
+:root.light,
+html.light,
+:root:not(.dark):not([data-theme='dark']),
+html:not(.dark):not([data-theme='dark']) {
   --bg-primary: #FFF8F6;
   --surface: #FFFFFF;
   --surface-dim: #E7D6D3;
@@ -503,6 +510,21 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-heading), 'Fredoka', 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.015em;
+}
+
+/* Base Form Control Typography & Contrast Reset */
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.75;
 }
 
 /* Bengali Typography - tuned line height to prevent matra clipping */

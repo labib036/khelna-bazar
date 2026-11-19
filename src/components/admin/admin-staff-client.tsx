@@ -197,19 +197,19 @@ export function AdminStaffClient() {
       {showAddForm && (
         <form
           onSubmit={handleCreateStaff}
-          className="bg-white border-2 border-purple-200 rounded-2xl p-6 shadow-sm space-y-4"
+          className="bg-[var(--surface)] text-[var(--text-primary)] border-2 border-purple-400/30 rounded-2xl p-6 shadow-sm space-y-4"
         >
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <h3 className="font-heading font-bold text-lg text-gray-900 flex items-center gap-2">
+          <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+            <h3 className="font-heading font-bold text-lg text-[var(--text-primary)] flex items-center gap-2">
               <UserPlus className="w-5 h-5 text-purple-600" />
               Provision New Internal Staff
             </h3>
-            <span className="text-xs text-gray-400">Password will be provided or defaulted</span>
+            <span className="text-xs text-[var(--text-muted)]">Password will be provided or defaulted</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1.5">
                 Full Name *
               </label>
               <Input
@@ -221,7 +221,7 @@ export function AdminStaffClient() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1.5">
                 Work Email *
               </label>
               <Input
@@ -234,7 +234,7 @@ export function AdminStaffClient() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1.5">
                 Contact Phone (Optional)
               </label>
               <Input
@@ -245,12 +245,12 @@ export function AdminStaffClient() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1.5">
                 Assign Role *
               </label>
               <select
                 aria-label="Assign Role"
-                className="w-full h-10 px-3 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full h-10 px-3 border border-[var(--border)] rounded-lg text-sm bg-[var(--surface)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500"
                 value={role}
                 onChange={(e) => setRole(e.target.value as StaffRole)}
               >
@@ -261,7 +261,7 @@ export function AdminStaffClient() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1.5">
                 Temporary Password
               </label>
               <Input
@@ -270,7 +270,7 @@ export function AdminStaffClient() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Default: KhelnaStaff2026!"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[var(--text-muted)] mt-1">
                 Provide this password to the employee. They should change it upon first login.
               </p>
             </div>
@@ -299,8 +299,8 @@ export function AdminStaffClient() {
       )}
 
       {/* Staff Directory Table */}
-      <div className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm">
-        <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between bg-gray-50/50">
+      <div className="bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm">
+        <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--surface-elevated)]/50">
           <div>
             <h2 className="font-heading font-bold text-base text-[var(--text-primary)]">
               Internal Personnel ({users.length})
@@ -312,19 +312,19 @@ export function AdminStaffClient() {
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-gray-500">
+          <div className="p-12 text-center text-[var(--text-muted)]">
             <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-purple-600" />
             <p className="text-sm">Loading staff directory...</p>
           </div>
         ) : users.length === 0 ? (
-          <div className="p-12 text-center text-gray-500">
-            <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <div className="p-12 text-center text-[var(--text-muted)]">
+            <Users className="w-12 h-12 text-[var(--text-muted)]/40 mx-auto mb-3" />
             <p className="font-medium">No staff accounts found.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-[var(--border)]">
+              <thead className="bg-[var(--surface-elevated)] text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider border-b border-[var(--border)]">
                 <tr>
                   <th className="py-3 px-4">Member</th>
                   <th className="py-3 px-4">Contact</th>
@@ -333,27 +333,27 @@ export function AdminStaffClient() {
                   <th className="py-3 px-4 text-right">Role Management</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-[var(--border)]">
                 {users.map((staff) => (
-                  <tr key={staff.id} className="hover:bg-gray-50/80 transition-colors">
+                  <tr key={staff.id} className="hover:bg-[var(--surface-elevated)]/80 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold text-[var(--text-primary)]">
                         {staff.name || "Unnamed Staff"}
                       </div>
-                      <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                        <Mail className="w-3 h-3 text-gray-400" />
+                      <div className="text-xs text-[var(--text-muted)] flex items-center gap-1 mt-0.5">
+                        <Mail className="w-3 h-3 text-[var(--text-muted)]" />
                         {staff.email}
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-gray-600">
+                    <td className="py-3.5 px-4 text-[var(--text-muted)]">
                       {staff.phone ? (
                         <div className="flex items-center gap-1 text-xs">
-                          <Phone className="w-3 h-3 text-gray-400" />
+                          <Phone className="w-3 h-3 text-[var(--text-muted)]" />
                           {staff.phone}
                         </div>
                       ) : (
-                        <span className="text-xs text-gray-400">Not recorded</span>
+                        <span className="text-xs text-[var(--text-muted)]">Not recorded</span>
                       )}
                     </td>
 
@@ -361,9 +361,9 @@ export function AdminStaffClient() {
                       {getRoleBadge(staff.role)}
                     </td>
 
-                    <td className="py-3.5 px-4 text-xs text-gray-500">
+                    <td className="py-3.5 px-4 text-xs text-[var(--text-muted)]">
                       <div className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-gray-400" />
+                        <Calendar className="w-3.5 h-3.5 text-[var(--text-muted)]" />
                         {new Date(staff.createdAt).toLocaleDateString("en-GB", {
                           day: "numeric",
                           month: "short",
@@ -376,7 +376,7 @@ export function AdminStaffClient() {
                       <div className="inline-flex items-center gap-2">
                         <select
                           aria-label="Change role for this staff member"
-                          className="h-8 px-2 border border-gray-300 rounded-md text-xs bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="h-8 px-2 border border-[var(--border)] rounded-md text-xs bg-[var(--surface)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500"
                           value={staff.role}
                           disabled={isPending}
                           onChange={(e) =>
@@ -390,7 +390,7 @@ export function AdminStaffClient() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-8 text-[11px] text-amber-600 border-amber-300 hover:bg-amber-50"
+                          className="h-8 text-[11px] text-amber-600 border-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/30"
                           disabled={isPending}
                           onClick={() => handleRevokeSessions(staff.id, staff.name || staff.email || "User")}
                           title="Revoke all active JWT sessions immediately"
