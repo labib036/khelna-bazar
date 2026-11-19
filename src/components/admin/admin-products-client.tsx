@@ -339,7 +339,7 @@ export function AdminProductsClient({
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setShowAddModal(false)} />
           <form
             onSubmit={handleCreateProduct}
-            className="relative w-full max-w-lg bg-[var(--surface-elevated)] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[var(--border)] z-10 space-y-4 max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-2xl sm:max-w-3xl bg-[var(--surface-elevated)] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[var(--border)] z-10 space-y-4 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
               <h3 className="font-heading font-black text-lg text-[var(--text-primary)]">
@@ -455,7 +455,7 @@ export function AdminProductsClient({
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setEditingProduct(null)} />
           <form
             onSubmit={handleUpdateProduct}
-            className="relative w-full max-w-lg bg-[var(--surface-elevated)] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[var(--border)] z-10 space-y-4 max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-2xl sm:max-w-3xl bg-[var(--surface-elevated)] rounded-3xl p-6 sm:p-8 shadow-2xl border border-[var(--border)] z-10 space-y-4 max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
               <h3 className="font-heading font-black text-lg text-[var(--text-primary)]">
