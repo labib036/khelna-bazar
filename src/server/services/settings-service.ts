@@ -121,3 +121,68 @@ export async function updateStoreSettings(updates: Partial<StoreSettings>): Prom
 
   return merged;
 }
+
+export interface DeliveryQuote {
+  status: "CONFIRMED" | "NEEDS_CONFIRMATION";
+  fee: number | null;
+  reason?: string;
+}
+
+/**
+ * Authoritative Delivery Quote Engine
+ * Returns confirmed rate or explicit confirmation requirement for unconfigured rates.
+ */
+export async function getDeliveryQuote(
+  zone: "inside_dhaka" | "outside_dhaka" | "express_dhaka" | string,
+  subtotal: number
+): Promise<DeliveryQuote> {
+  const settings = await getStoreSettings();
+  const zoneNormalized = (zone || "").toLowerCase();
+
+  const isExpress = zoneNormalized.includes("express");
+  const isInside =
+    !isExpress &&
+    (zoneNormalized === "inside_dhaka" ||
+      zoneNormalized.includes("inside") ||
+      zoneNormalized.includes("dhaka city") ||
+      zoneNormalized === "dhaka");
+
+  let rate: number | null = null;
+  if (isExpress) {
+    rate = settings.expressDhakaRate;
+  } else if (isInside) {
+    rate = settings.insideDhakaRate;
+  } else {
+    rate = settings.outsideDhakaRate;
+  }
+
+  const hotline = settings.hotline || "01712-039707";
+
+  if (rate === null || rate === undefined) {
+    return {
+      status: "NEEDS_CONFIRMATION",
+      fee: null,
+      reason: `Delivery rate for this location is not configured yet. Please contact support via Call/WhatsApp ${hotline}.`,
+    };
+  }
+
+  if (
+    !isExpress &&
+    settings.freeShippingThreshold !== null &&
+    settings.freeShippingThreshold !== undefined &&
+    settings.freeShippingThreshold > 0 &&
+    subtotal >= settings.freeShippingThreshold
+  ) {
+    return {
+      status: "CONFIRMED",
+      fee: 0,
+      reason: "Free shipping threshold met",
+    };
+  }
+
+  return {
+    status: "CONFIRMED",
+    fee: rate,
+  };
+}
+

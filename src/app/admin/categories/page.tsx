@@ -17,10 +17,8 @@ export default function AdminCategoriesPage() {
   // Form State
   const [editId, setEditId] = useState<string | undefined>();
   const [name, setName] = useState("");
-  const [nameBn, setNameBn] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [descriptionBn, setDescriptionBn] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [isFeatured, setIsFeatured] = useState(false);
 
@@ -42,10 +40,8 @@ export default function AdminCategoriesPage() {
   const openAddModal = () => {
     setEditId(undefined);
     setName("");
-    setNameBn("");
     setSlug("");
     setDescription("");
-    setDescriptionBn("");
     setSortOrder("0");
     setIsFeatured(false);
     setModalOpen(true);
@@ -54,10 +50,8 @@ export default function AdminCategoriesPage() {
   const openEditModal = (cat: any) => {
     setEditId(cat.id);
     setName(cat.name);
-    setNameBn(cat.nameBn || "");
     setSlug(cat.slug);
     setDescription(cat.description || "");
-    setDescriptionBn(cat.descriptionBn || "");
     setSortOrder(cat.sortOrder.toString());
     setIsFeatured(cat.isFeatured);
     setModalOpen(true);
@@ -74,10 +68,8 @@ export default function AdminCategoriesPage() {
     const res = await saveCategoryAction({
       id: editId,
       name: name.trim(),
-      nameBn: nameBn.trim() || null,
       slug: slug.trim(),
       description: description.trim() || null,
-      descriptionBn: descriptionBn.trim() || null,
       sortOrder: parseInt(sortOrder) || 0,
       isFeatured,
     });
@@ -142,8 +134,7 @@ export default function AdminCategoriesPage() {
               <thead className="bg-[var(--surface-container-low)] text-[var(--text-muted)] uppercase tracking-wider font-extrabold border-b border-[var(--border)]">
                 <tr>
                   <th className="py-3 px-4">Order</th>
-                  <th className="py-3 px-4">Name (EN)</th>
-                  <th className="py-3 px-4">Name (BN)</th>
+                  <th className="py-3 px-4">Name</th>
                   <th className="py-3 px-4">Slug</th>
                   <th className="py-3 px-4">Products</th>
                   <th className="py-3 px-4">Featured</th>
@@ -155,7 +146,6 @@ export default function AdminCategoriesPage() {
                   <tr key={cat.id} className="hover:bg-[var(--surface-container-low)]/50 transition-colors">
                     <td className="py-3 px-4 font-bold text-[var(--text-muted)]">{cat.sortOrder}</td>
                     <td className="py-3 px-4 font-bold text-[var(--text-primary)]">{cat.name}</td>
-                    <td className="py-3 px-4 text-[var(--text-primary)]">{cat.nameBn || "—"}</td>
                     <td className="py-3 px-4 font-mono text-[11px] text-[var(--text-muted)]">{cat.slug}</td>
                     <td className="py-3 px-4">
                       <span className="inline-flex items-center gap-1 font-bold text-[var(--text-primary)]">
@@ -207,34 +197,26 @@ export default function AdminCategoriesPage() {
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[var(--text-primary)]">Name (English) *</label>
+              <label className="text-xs font-bold text-[var(--text-primary)]">Name *</label>
               <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. STEM & Robotics" required />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-[var(--text-primary)]">Name (Bangla)</label>
-              <Input value={nameBn} onChange={(e) => setNameBn(e.target.value)} placeholder="যেমন: এসটিইএম ও রোবোটিক্স" />
             </div>
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-[var(--text-primary)]">URL Slug *</label>
               <Input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="stem-robotics" required />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-[var(--text-primary)]">Description</label>
+              <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description of category" />
+            </div>
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-[var(--text-primary)]">Sort Order</label>
               <Input type="number" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} />
             </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-[var(--text-primary)]">Description (English)</label>
-            <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description of category" />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-[var(--text-primary)]">Description (Bangla)</label>
-            <Input value={descriptionBn} onChange={(e) => setDescriptionBn(e.target.value)} placeholder="ক্যাটাগরির সংক্ষিপ্ত বিবরণ" />
           </div>
 
           <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[var(--text-primary)] pt-1">

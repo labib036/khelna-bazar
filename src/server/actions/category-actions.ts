@@ -9,10 +9,8 @@ import { z } from "zod";
 const CategoryInputSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2, "Name must be at least 2 characters"),
-  nameBn: z.string().optional().nullable(),
   slug: z.string().min(2, "Slug must be at least 2 characters"),
   description: z.string().optional().nullable(),
-  descriptionBn: z.string().optional().nullable(),
   sortOrder: z.number().int().default(0),
   isFeatured: z.boolean().default(false),
   imageUrl: z.string().optional().nullable(),
@@ -42,10 +40,8 @@ export async function getCategoriesAction() {
       categories: categories.map((c) => ({
         id: c.id,
         name: c.name,
-        nameBn: c.nameBn,
         slug: c.slug,
         description: c.description,
-        descriptionBn: c.descriptionBn,
         sortOrder: c.sortOrder,
         isFeatured: c.isFeatured,
         image: c.image,
@@ -73,10 +69,8 @@ export async function saveCategoryAction(input: CategoryInput) {
         where: { id: data.id },
         data: {
           name: data.name,
-          nameBn: data.nameBn,
           slug: cleanSlug,
           description: data.description,
-          descriptionBn: data.descriptionBn,
           sortOrder: data.sortOrder,
           isFeatured: data.isFeatured,
           image,
@@ -86,10 +80,8 @@ export async function saveCategoryAction(input: CategoryInput) {
       await db.category.create({
         data: {
           name: data.name,
-          nameBn: data.nameBn,
           slug: cleanSlug,
           description: data.description,
-          descriptionBn: data.descriptionBn,
           sortOrder: data.sortOrder,
           isFeatured: data.isFeatured,
           image,
